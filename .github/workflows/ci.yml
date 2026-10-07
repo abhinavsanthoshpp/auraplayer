@@ -1,0 +1,59 @@
+name: AuraPlayer CI & Build Release
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build & Verify AuraPlayer (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          cmake \
+          pkg-config \
+          qt6-base-dev \
+          libgl1-mesa-dev \
+          libmpv-dev \
+          mpv
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -S . \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_CXX_STANDARD=20
+
+    - name: Compile AuraPlayer
+      run: |
+        cmake --build build -j$(nproc)
+
+    - name: Test AuraPlayer Binary
+      run: |
+        ./build/auraplayer --version
+        ./build/auraplayer --help
+
+    - name: Package Release Tarball
+      run: |
+        mkdir -p dist/auraplayer-linux-x86_64
+        cp build/auraplayer dist/auraplayer-linux-x86_64/
+        cp install.sh dist/auraplayer-linux-x86_64/
+        cp -r resources dist/auraplayer-linux-x86_64/
+        cp README.md LICENSE dist/auraplayer-linux-x86_64/
+        tar -czvf auraplayer-v1.0.0-linux-x86_64.tar.gz -C dist auraplayer-linux-x86_64
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: auraplayer-v1.0.0-linux-x86_64
+        path: auraplayer-v1.0.0-linux-x86_64.tar.gz
