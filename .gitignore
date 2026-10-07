@@ -1,0 +1,25 @@
+# Build directories
+build/
+bin/
+*.o
+*.obj
+*.so
+*.so.*
+*.a
+*.dylib
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# User configurations / temporary files
+*.log
+/tmp/
