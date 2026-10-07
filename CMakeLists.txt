@@ -34,10 +34,12 @@ include_directories(
 set(SOURCES
     src/main.cpp
     src/AuraEngine.cpp
+    src/AuraVideoWidget.cpp
 )
 
 set(HEADERS
     include/AuraEngine.h
+    include/AuraVideoWidget.h
 )
 
 add_executable(auraplayer
