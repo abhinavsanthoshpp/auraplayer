@@ -35,16 +35,33 @@ set(SOURCES
     src/main.cpp
     src/AuraEngine.cpp
     src/AuraVideoWidget.cpp
+    src/AuraControls.cpp
+    src/AuraPlaylist.cpp
+    src/AuraEqualizerDialog.cpp
+    src/AuraMediaInfoDialog.cpp
+    src/AuraStreamDialog.cpp
+    src/MainWindow.cpp
 )
 
 set(HEADERS
     include/AuraEngine.h
     include/AuraVideoWidget.h
+    include/AuraControls.h
+    include/AuraPlaylist.h
+    include/AuraEqualizerDialog.h
+    include/AuraMediaInfoDialog.h
+    include/AuraStreamDialog.h
+    include/MainWindow.h
+)
+
+set(RESOURCES
+    resources/resources.qrc
 )
 
 add_executable(auraplayer
     ${SOURCES}
     ${HEADERS}
+    ${RESOURCES}
 )
 
 target_link_libraries(auraplayer PRIVATE
