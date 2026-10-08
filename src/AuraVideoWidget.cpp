@@ -111,31 +111,75 @@ void AuraVideoWidget::paintGL() {
 
         mpv_render_context_render(m_renderCtx, params);
     } else {
-        // Draw modern idle / splash screen
-        glClearColor(0.06f, 0.07f, 0.09f, 1.0f);
+        // Draw futuristic Ambient Cyber Cinema idle canvas
+        glClearColor(0.035f, 0.045f, 0.07f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
 
-        // Center typography and icon
         QRect r = rect();
-        painter.setPen(QColor(180, 190, 210));
-        QFont titleFont("Inter", 22, QFont::Bold);
-        painter.setFont(titleFont);
-        painter.drawText(r.adjusted(0, -50, 0, -50), Qt::AlignCenter, "⚡ AuraPlayer");
+        QPoint center = r.center();
 
-        painter.setPen(QColor(130, 140, 160));
+        // 1. Central Radial Ambient Glow
+        QRadialGradient glow(center, std::min(r.width(), r.height()) * 0.45);
+        glow.setColorAt(0.0, QColor(0, 240, 255, 38));
+        glow.setColorAt(0.5, QColor(31, 111, 235, 18));
+        glow.setColorAt(1.0, QColor(7, 9, 14, 0));
+        painter.fillRect(r, glow);
+
+        // 2. Neon Orbital Halo Rings
+        painter.setPen(QPen(QColor(0, 240, 255, 60), 2, Qt::DashLine));
+        painter.setBrush(Qt::NoBrush);
+        int ringR = 68;
+        painter.drawEllipse(center + QPoint(0, -35), ringR, ringR);
+
+        painter.setPen(QPen(QColor(139, 92, 246, 120), 1.5));
+        painter.drawEllipse(center + QPoint(0, -35), ringR - 14, ringR - 14);
+
+        // Glowing center core play icon
+        painter.setPen(Qt::NoPen);
+        QLinearGradient coreGrad(center.x() - 15, center.y() - 50, center.x() + 20, center.y() - 20);
+        coreGrad.setColorAt(0.0, QColor(0, 240, 255));
+        coreGrad.setColorAt(1.0, QColor(31, 111, 235));
+        painter.setBrush(coreGrad);
+
+        QPolygon playPoly;
+        playPoly << QPoint(center.x() - 10, center.y() - 50)
+                 << QPoint(center.x() + 18, center.y() - 35)
+                 << QPoint(center.x() - 10, center.y() - 20);
+        painter.drawPolygon(playPoly);
+
+        // 3. Futuristic Typography & Badges
+        painter.setPen(QColor(255, 255, 255));
+        QFont titleFont("Inter", 24, QFont::Bold);
+        painter.setFont(titleFont);
+        painter.drawText(r.adjusted(0, 50, 0, 0), Qt::AlignHCenter | Qt::AlignTop, "AuraPlayer");
+
+        // Pill badge
+        QRect badgeRect(center.x() - 140, center.y() + 90, 280, 24);
+        painter.setPen(QPen(QColor(0, 240, 255, 90), 1));
+        painter.setBrush(QColor(0, 240, 255, 20));
+        painter.drawRoundedRect(badgeRect, 12, 12);
+
+        painter.setPen(QColor(0, 240, 255));
+        QFont badgeFont("Inter", 9, QFont::Bold);
+        painter.setFont(badgeFont);
+        painter.drawText(badgeRect, Qt::AlignCenter, "HARDWARE ACCELERATED • ZERO-CHROME CANVAS");
+
+        // Drag and drop guidance
+        painter.setPen(QColor(139, 148, 158));
         QFont subFont("Inter", 12);
         painter.setFont(subFont);
-        painter.drawText(r.adjusted(0, 20, 0, 20), Qt::AlignCenter, 
-                         "Drop video or audio files here\nor click Open Media (Ctrl+O)");
+        painter.drawText(r.adjusted(0, 130, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
+                         "Drag and drop any video or stream here to start playing");
 
-        painter.setPen(QColor(80, 95, 120));
+        // Keyboard hotkey pills row
+        painter.setPen(QColor(100, 110, 130));
         QFont hintFont("Inter", 10);
         painter.setFont(hintFont);
-        painter.drawText(r.adjusted(0, 80, 0, 80), Qt::AlignCenter,
-                         "Hardware Accelerated (VA-API / NVDEC) • 4K/8K 60fps Ready");
+        painter.drawText(r.adjusted(0, 170, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
+                         "[Space] Play/Pause    [←/→] Keyframe Seek    [↑/↓] 200% Vol    [Tab] Studio Drawer");
     }
 }
 
