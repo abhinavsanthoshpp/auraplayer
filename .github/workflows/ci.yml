@@ -1,4 +1,4 @@
-name: AuraPlayer CI & Build Release
+name: OrionPlayer CI & Build Release
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-linux:
-    name: Build & Verify AuraPlayer (Linux)
+    name: Build & Verify OrionPlayer (Linux)
     runs-on: ubuntu-latest
 
     steps:
@@ -34,26 +34,26 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_CXX_STANDARD=20
 
-    - name: Compile AuraPlayer
+    - name: Compile OrionPlayer
       run: |
         cmake --build build -j$(nproc)
 
-    - name: Test AuraPlayer Binary
+    - name: Test OrionPlayer Binary
       run: |
-        ./build/auraplayer --version
-        ./build/auraplayer --help
+        ./build/orionplayer --version
+        ./build/orionplayer --help
 
     - name: Package Release Tarball
       run: |
-        mkdir -p dist/auraplayer-linux-x86_64
-        cp build/auraplayer dist/auraplayer-linux-x86_64/
-        cp install.sh dist/auraplayer-linux-x86_64/
-        cp -r resources dist/auraplayer-linux-x86_64/
-        cp README.md LICENSE dist/auraplayer-linux-x86_64/
-        tar -czvf auraplayer-v1.0.0-linux-x86_64.tar.gz -C dist auraplayer-linux-x86_64
+        mkdir -p dist/orionplayer-linux-x86_64
+        cp build/orionplayer dist/orionplayer-linux-x86_64/
+        cp install.sh dist/orionplayer-linux-x86_64/
+        cp -r resources dist/orionplayer-linux-x86_64/
+        cp README.md LICENSE dist/orionplayer-linux-x86_64/
+        tar -czvf orionplayer-v1.0.0-linux-x86_64.tar.gz -C dist orionplayer-linux-x86_64
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: auraplayer-v1.0.0-linux-x86_64
-        path: auraplayer-v1.0.0-linux-x86_64.tar.gz
+        name: orionplayer-v1.0.0-linux-x86_64
+        path: orionplayer-v1.0.0-linux-x86_64.tar.gz

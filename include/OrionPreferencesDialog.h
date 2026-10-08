@@ -7,13 +7,13 @@
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QPushButton>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraPreferencesDialog : public QDialog {
+class OrionPreferencesDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AuraPreferencesDialog(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionPreferencesDialog(OrionEngine *engine, QWidget *parent = nullptr);
 
 private slots:
     void onCategoryChanged(int index);
@@ -28,7 +28,7 @@ private:
     QWidget *createSubtitlesPage();
     QWidget *createCodecsPage();
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
 
     QListWidget *m_categoryList = nullptr;
     QStackedWidget *m_pages = nullptr;

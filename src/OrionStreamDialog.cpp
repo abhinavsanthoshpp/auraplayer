@@ -1,8 +1,8 @@
-#include "AuraStreamDialog.h"
+#include "OrionStreamDialog.h"
 
-AuraStreamDialog::AuraStreamDialog(QWidget *parent)
+OrionStreamDialog::OrionStreamDialog(QWidget *parent)
     : QDialog(parent) {
-    setWindowTitle("Open Network Stream — AuraPlayer");
+    setWindowTitle("Open Network Stream — OrionPlayer");
     resize(480, 160);
 
     auto *layout = new QVBoxLayout(this);
@@ -39,6 +39,6 @@ AuraStreamDialog::AuraStreamDialog(QWidget *parent)
     connect(m_urlEdit, &QLineEdit::returnPressed, this, &QDialog::accept);
 }
 
-QString AuraStreamDialog::streamUrl() const {
+QString OrionStreamDialog::streamUrl() const {
     return m_urlEdit->text().trimmed();
 }

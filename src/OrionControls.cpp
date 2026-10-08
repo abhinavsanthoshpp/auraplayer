@@ -1,23 +1,23 @@
-#include "AuraControls.h"
+#include "OrionControls.h"
 #include <QToolTip>
 #include <cmath>
 
-// ================= AuraTimeline =================
+// ================= OrionTimeline =================
 
-AuraTimeline::AuraTimeline(Qt::Orientation orientation, QWidget *parent)
+OrionTimeline::OrionTimeline(Qt::Orientation orientation, QWidget *parent)
     : QSlider(orientation, parent) {
     setMouseTracking(true);
     setRange(0, 1000);
     setCursor(Qt::PointingHandCursor);
-    setObjectName("AuraHoloTimeline");
+    setObjectName("OrionHoloTimeline");
 }
 
-double AuraTimeline::ratioFromX(int x) const {
+double OrionTimeline::ratioFromX(int x) const {
     if (width() <= 0) return 0.0;
     return std::clamp(static_cast<double>(x) / static_cast<double>(width()), 0.0, 1.0);
 }
 
-void AuraTimeline::mousePressEvent(QMouseEvent *event) {
+void OrionTimeline::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         double pct = ratioFromX(event->pos().x());
         setValue(static_cast<int>(pct * 1000.0));
@@ -26,36 +26,36 @@ void AuraTimeline::mousePressEvent(QMouseEvent *event) {
     QSlider::mousePressEvent(event);
 }
 
-void AuraTimeline::mouseMoveEvent(QMouseEvent *event) {
+void OrionTimeline::mouseMoveEvent(QMouseEvent *event) {
     double pct = ratioFromX(event->pos().x());
     emit hoverPercent(pct, event->globalPosition().toPoint());
     QSlider::mouseMoveEvent(event);
 }
 
-void AuraTimeline::leaveEvent(QEvent *event) {
+void OrionTimeline::leaveEvent(QEvent *event) {
     QToolTip::hideText();
     QSlider::leaveEvent(event);
 }
 
-// ================= AuraControls (Cyber Deck) =================
+// ================= OrionControls (Cyber Deck) =================
 
-AuraControls::AuraControls(AuraEngine *engine, QWidget *parent)
+OrionControls::OrionControls(OrionEngine *engine, QWidget *parent)
     : QWidget(parent), m_engine(engine) {
     setupUi();
 
     if (m_engine) {
-        connect(m_engine, &AuraEngine::positionChanged, this, &AuraControls::setPosition);
-        connect(m_engine, &AuraEngine::durationChanged, this, &AuraControls::setDuration);
-        connect(m_engine, &AuraEngine::playbackPaused, this, &AuraControls::setPaused);
-        connect(m_engine, &AuraEngine::volumeChanged, this, &AuraControls::setVolume);
-        connect(m_engine, &AuraEngine::muteChanged, this, &AuraControls::setMuted);
-        connect(m_engine, &AuraEngine::speedChanged, this, &AuraControls::setSpeed);
-        connect(m_engine, &AuraEngine::tracksChanged, this, &AuraControls::updateTrackMenus);
+        connect(m_engine, &OrionEngine::positionChanged, this, &OrionControls::setPosition);
+        connect(m_engine, &OrionEngine::durationChanged, this, &OrionControls::setDuration);
+        connect(m_engine, &OrionEngine::playbackPaused, this, &OrionControls::setPaused);
+        connect(m_engine, &OrionEngine::volumeChanged, this, &OrionControls::setVolume);
+        connect(m_engine, &OrionEngine::muteChanged, this, &OrionControls::setMuted);
+        connect(m_engine, &OrionEngine::speedChanged, this, &OrionControls::setSpeed);
+        connect(m_engine, &OrionEngine::tracksChanged, this, &OrionControls::updateTrackMenus);
     }
 }
 
-void AuraControls::setupUi() {
-    setObjectName("AuraCyberDeck");
+void OrionControls::setupUi() {
+    setObjectName("OrionCyberDeck");
     setAttribute(Qt::WA_StyledBackground, true);
 
     auto *dockLayout = new QVBoxLayout(this);
@@ -66,9 +66,9 @@ void AuraControls::setupUi() {
     auto *timelineRow = new QHBoxLayout();
     timelineRow->setSpacing(12);
 
-    m_timeline = new AuraTimeline(Qt::Horizontal, this);
+    m_timeline = new OrionTimeline(Qt::Horizontal, this);
     m_timeLabel = new QLabel("00:00 / 00:00", this);
-    m_timeLabel->setObjectName("AuraTimeBadge");
+    m_timeLabel->setObjectName("OrionTimeBadge");
     m_timeLabel->setCursor(Qt::PointingHandCursor);
     m_timeLabel->setToolTip("Click to toggle remaining time countdown");
 
@@ -82,25 +82,25 @@ void AuraControls::setupUi() {
 
     // Left Wing: Sound Capsule
     auto *soundCapsule = new QWidget(this);
-    soundCapsule->setObjectName("AuraSoundCapsule");
+    soundCapsule->setObjectName("OrionSoundCapsule");
     auto *soundLayout = new QHBoxLayout(soundCapsule);
     soundLayout->setContentsMargins(8, 2, 10, 2);
     soundLayout->setSpacing(6);
 
     m_muteBtn = new QPushButton("🔊", soundCapsule);
-    m_muteBtn->setObjectName("AuraMutePill");
+    m_muteBtn->setObjectName("OrionMutePill");
     m_muteBtn->setFixedSize(28, 28);
     m_muteBtn->setToolTip("Mute / Unmute (M)");
 
     m_volumeSlider = new QSlider(Qt::Horizontal, soundCapsule);
-    m_volumeSlider->setObjectName("AuraFluidVolSlider");
+    m_volumeSlider->setObjectName("OrionFluidVolSlider");
     m_volumeSlider->setRange(0, 200);
     m_volumeSlider->setValue(100);
     m_volumeSlider->setFixedWidth(75);
     m_volumeSlider->setToolTip("Volume (0% - 200% Supercharged Boost)");
 
     m_volumeBadge = new QLabel("100%", soundCapsule);
-    m_volumeBadge->setObjectName("AuraVolBadge");
+    m_volumeBadge->setObjectName("OrionVolBadge");
     m_volumeBadge->setFixedWidth(36);
 
     soundLayout->addWidget(m_muteBtn);
@@ -110,35 +110,35 @@ void AuraControls::setupUi() {
 
     controlsRow->addStretch(1);
 
-    // Center Core: Transport Navigation & Pulsing Aura Core Play Button
+    // Center Core: Transport Navigation & Pulsing Orion Core Play Button
     auto *coreCluster = new QWidget(this);
-    coreCluster->setObjectName("AuraCoreCluster");
+    coreCluster->setObjectName("OrionCoreCluster");
     auto *coreLayout = new QHBoxLayout(coreCluster);
     coreLayout->setContentsMargins(6, 2, 6, 2);
     coreLayout->setSpacing(8);
 
     m_prevBtn = new QPushButton("⏮", coreCluster);
-    m_prevBtn->setObjectName("AuraNavBtn");
+    m_prevBtn->setObjectName("OrionNavBtn");
     m_prevBtn->setToolTip("Previous Track (P)");
     m_prevBtn->setFixedSize(30, 30);
 
     m_stepBackBtn = new QPushButton("‹", coreCluster);
-    m_stepBackBtn->setObjectName("AuraStepBtn");
+    m_stepBackBtn->setObjectName("OrionStepBtn");
     m_stepBackBtn->setToolTip("Step Frame Backward");
     m_stepBackBtn->setFixedSize(26, 26);
 
     m_playPauseBtn = new QPushButton("▶", coreCluster);
-    m_playPauseBtn->setObjectName("AuraPlayCore");
+    m_playPauseBtn->setObjectName("OrionPlayCore");
     m_playPauseBtn->setToolTip("Play / Pause (Space)");
     m_playPauseBtn->setFixedSize(48, 48);
 
     m_stepFwdBtn = new QPushButton("›", coreCluster);
-    m_stepFwdBtn->setObjectName("AuraStepBtn");
+    m_stepFwdBtn->setObjectName("OrionStepBtn");
     m_stepFwdBtn->setToolTip("Step Frame Forward");
     m_stepFwdBtn->setFixedSize(26, 26);
 
     m_nextBtn = new QPushButton("⏭", coreCluster);
-    m_nextBtn->setObjectName("AuraNavBtn");
+    m_nextBtn->setObjectName("OrionNavBtn");
     m_nextBtn->setToolTip("Next Track (N)");
     m_nextBtn->setFixedSize(30, 30);
 
@@ -153,7 +153,7 @@ void AuraControls::setupUi() {
 
     // Right Wing: Stream Pills & Studio Toggle
     m_speedPill = new QComboBox(this);
-    m_speedPill->setObjectName("AuraPillCombo");
+    m_speedPill->setObjectName("OrionPillCombo");
     m_speedPill->setToolTip("Playback Speed Multiplier");
     m_speedPill->addItem("0.5x", 0.5);
     m_speedPill->addItem("0.75x", 0.75);
@@ -167,28 +167,28 @@ void AuraControls::setupUi() {
     m_speedPill->setFixedWidth(68);
 
     m_audioPill = new QComboBox(this);
-    m_audioPill->setObjectName("AuraPillCombo");
+    m_audioPill->setObjectName("OrionPillCombo");
     m_audioPill->setToolTip("Audio Stream Track");
     m_audioPill->addItem("Audio", -1);
     m_audioPill->setMaximumWidth(88);
 
     m_subPill = new QComboBox(this);
-    m_subPill->setObjectName("AuraPillCombo");
+    m_subPill->setObjectName("OrionPillCombo");
     m_subPill->setToolTip("Subtitle Track");
     m_subPill->addItem("Subs", -1);
     m_subPill->setMaximumWidth(88);
 
     m_studioBtn = new QPushButton("⚡ Studio", this);
-    m_studioBtn->setObjectName("AuraStudioLaunchPill");
-    m_studioBtn->setToolTip("Toggle Aura Studio Panel (L / Tab)");
+    m_studioBtn->setObjectName("OrionStudioLaunchPill");
+    m_studioBtn->setToolTip("Toggle Orion Studio Panel (L / Tab)");
 
     m_pipBtn = new QPushButton("📌", this);
-    m_pipBtn->setObjectName("AuraUtilityPill");
+    m_pipBtn->setObjectName("OrionUtilityPill");
     m_pipBtn->setToolTip("Always on Top (Picture-in-Picture)");
     m_pipBtn->setFixedSize(32, 32);
 
     m_fullscreenBtn = new QPushButton("⛶", this);
-    m_fullscreenBtn->setObjectName("AuraUtilityPill");
+    m_fullscreenBtn->setObjectName("OrionUtilityPill");
     m_fullscreenBtn->setToolTip("Immersive Fullscreen (F / F11)");
     m_fullscreenBtn->setFixedSize(32, 32);
 
@@ -202,8 +202,8 @@ void AuraControls::setupUi() {
     dockLayout->addLayout(controlsRow);
 
     // Timeline event connections
-    connect(m_timeline, &AuraTimeline::seekPercent, this, &AuraControls::onSeekRequested);
-    connect(m_timeline, &AuraTimeline::hoverPercent, this, [this](double pct, const QPoint &pos) {
+    connect(m_timeline, &OrionTimeline::seekPercent, this, &OrionControls::onSeekRequested);
+    connect(m_timeline, &OrionTimeline::hoverPercent, this, [this](double pct, const QPoint &pos) {
         if (m_duration > 0.0) {
             double hoverSecs = pct * m_duration;
             QToolTip::showText(pos, formatTime(hoverSecs), m_timeline);
@@ -232,12 +232,12 @@ void AuraControls::setupUi() {
         emit stepForwardClicked();
     });
 
-    connect(m_muteBtn, &QPushButton::clicked, this, &AuraControls::onMuteBtnClicked);
-    connect(m_volumeSlider, &QSlider::valueChanged, this, &AuraControls::onVolumeSliderChanged);
+    connect(m_muteBtn, &QPushButton::clicked, this, &OrionControls::onMuteBtnClicked);
+    connect(m_volumeSlider, &QSlider::valueChanged, this, &OrionControls::onVolumeSliderChanged);
 
-    connect(m_speedPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraControls::onSpeedSelected);
-    connect(m_audioPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraControls::onAudioTrackSelected);
-    connect(m_subPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraControls::onSubtitleTrackSelected);
+    connect(m_speedPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OrionControls::onSpeedSelected);
+    connect(m_audioPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OrionControls::onAudioTrackSelected);
+    connect(m_subPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OrionControls::onSubtitleTrackSelected);
 
     connect(m_studioBtn, &QPushButton::clicked, this, [this]() {
         emit userInteracted();
@@ -256,11 +256,11 @@ void AuraControls::setupUi() {
     m_timeLabel->setMouseTracking(true);
 }
 
-void AuraControls::setPaused(bool paused) {
+void OrionControls::setPaused(bool paused) {
     m_playPauseBtn->setText(paused ? "▶" : "⏸");
 }
 
-void AuraControls::setPosition(double seconds) {
+void OrionControls::setPosition(double seconds) {
     m_currentPosition = seconds;
     if (!m_timeline->isSliderDown() && m_duration > 0.0) {
         int sliderVal = static_cast<int>((m_currentPosition / m_duration) * 1000.0);
@@ -275,12 +275,12 @@ void AuraControls::setPosition(double seconds) {
     }
 }
 
-void AuraControls::setDuration(double seconds) {
+void OrionControls::setDuration(double seconds) {
     m_duration = seconds;
     setPosition(m_currentPosition);
 }
 
-void AuraControls::setVolume(double volume) {
+void OrionControls::setVolume(double volume) {
     m_volumeSlider->blockSignals(true);
     m_volumeSlider->setValue(static_cast<int>(volume));
     m_volumeSlider->blockSignals(false);
@@ -298,11 +298,11 @@ void AuraControls::setVolume(double volume) {
     }
 }
 
-void AuraControls::setMuted(bool muted) {
+void OrionControls::setMuted(bool muted) {
     m_muteBtn->setText(muted ? "🔇" : "🔊");
 }
 
-void AuraControls::setSpeed(double speed) {
+void OrionControls::setSpeed(double speed) {
     for (int i = 0; i < m_speedPill->count(); ++i) {
         if (std::abs(m_speedPill->itemData(i).toDouble() - speed) < 0.05) {
             m_speedPill->blockSignals(true);
@@ -313,14 +313,14 @@ void AuraControls::setSpeed(double speed) {
     }
 }
 
-void AuraControls::onSeekRequested(double percent) {
+void OrionControls::onSeekRequested(double percent) {
     emit userInteracted();
     if (m_engine && m_duration > 0.0) {
         m_engine->seek(percent * m_duration);
     }
 }
 
-void AuraControls::onVolumeSliderChanged(int val) {
+void OrionControls::onVolumeSliderChanged(int val) {
     emit userInteracted();
     setVolume(static_cast<double>(val));
     if (m_engine) {
@@ -328,21 +328,21 @@ void AuraControls::onVolumeSliderChanged(int val) {
     }
 }
 
-void AuraControls::onMuteBtnClicked() {
+void OrionControls::onMuteBtnClicked() {
     emit userInteracted();
     if (m_engine) {
         m_engine->toggleMute();
     }
 }
 
-void AuraControls::onSpeedSelected(int index) {
+void OrionControls::onSpeedSelected(int index) {
     emit userInteracted();
     if (m_engine && index >= 0) {
         m_engine->setSpeed(m_speedPill->itemData(index).toDouble());
     }
 }
 
-void AuraControls::updateTrackMenus() {
+void OrionControls::updateTrackMenus() {
     if (!m_engine) return;
     auto tracks = m_engine->getTracks();
 
@@ -375,31 +375,31 @@ void AuraControls::updateTrackMenus() {
     m_subPill->blockSignals(false);
 }
 
-void AuraControls::onAudioTrackSelected(int index) {
+void OrionControls::onAudioTrackSelected(int index) {
     emit userInteracted();
     if (m_engine && index >= 0) {
         m_engine->setAudioTrack(m_audioPill->itemData(index).toInt());
     }
 }
 
-void AuraControls::onSubtitleTrackSelected(int index) {
+void OrionControls::onSubtitleTrackSelected(int index) {
     emit userInteracted();
     if (m_engine && index >= 0) {
         m_engine->setSubtitleTrack(m_subPill->itemData(index).toInt());
     }
 }
 
-void AuraControls::onAspectRatioSelected(int index) {
+void OrionControls::onAspectRatioSelected(int index) {
     Q_UNUSED(index);
 }
 
-void AuraControls::onTimeLabelClicked() {
+void OrionControls::onTimeLabelClicked() {
     emit userInteracted();
     m_showRemaining = !m_showRemaining;
     setPosition(m_currentPosition);
 }
 
-QString AuraControls::formatTime(double seconds) {
+QString OrionControls::formatTime(double seconds) {
     if (seconds < 0.0) seconds = 0.0;
     int total = static_cast<int>(seconds);
     int h = total / 3600;

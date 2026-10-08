@@ -1,17 +1,17 @@
 [Desktop Entry]
-Name=AuraPlayer
+Name=OrionPlayer
 GenericName=Ultra-Fast Media Player
 Comment=High-performance hardware-accelerated media player for Linux
-Exec=auraplayer %U
-Icon=auraplayer
+Exec=orionplayer %U
+Icon=orionplayer
 Terminal=false
 Type=Application
 Categories=AudioVideo;Player;Video;Audio;Qt;
-MimeType=video/mp4;video/x-matroska;video/webm;video/quicktime;video/x-msvideo;video/x-flv;audio/mpeg;audio/x-wav;audio/flac;audio/ogg;audio/opus;audio/aac;x-scheme-handler/aura;
+MimeType=video/mp4;video/x-matroska;video/webm;video/quicktime;video/x-msvideo;video/x-flv;audio/mpeg;audio/x-wav;audio/flac;audio/ogg;audio/opus;audio/aac;x-scheme-handler/orion;
 Keywords=Video;Audio;Player;Media;VLC;MPV;Hardware Acceleration;VAAPI;
 StartupNotify=true
 Actions=OpenStream;
 
 [Desktop Action OpenStream]
 Name=Open Network Stream...
-Exec=auraplayer --stream
+Exec=orionplayer --stream

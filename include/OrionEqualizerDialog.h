@@ -6,13 +6,13 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QVector>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraEqualizerDialog : public QDialog {
+class OrionEqualizerDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AuraEqualizerDialog(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionEqualizerDialog(OrionEngine *engine, QWidget *parent = nullptr);
 
 private slots:
     void onBandChanged(int index, int value);
@@ -29,7 +29,7 @@ private:
     void setupUi();
     void applyPreset(const QVector<double> &values);
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
 
     // Audio Equalizer
     QVector<QSlider *> m_bandSliders;

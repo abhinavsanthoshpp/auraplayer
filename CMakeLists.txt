@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(AuraPlayer VERSION 1.0.0 LANGUAGES C CXX)
+project(OrionPlayer VERSION 1.0.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -33,26 +33,26 @@ include_directories(
 
 set(SOURCES
     src/main.cpp
-    src/AuraEngine.cpp
-    src/AuraVideoWidget.cpp
-    src/AuraVlcToolbar.cpp
-    src/AuraEffectsDialog.cpp
-    src/AuraPlaylistView.cpp
-    src/AuraPreferencesDialog.cpp
-    src/AuraMediaInfoDialog.cpp
-    src/AuraStreamDialog.cpp
+    src/OrionEngine.cpp
+    src/OrionVideoWidget.cpp
+    src/OrionVlcToolbar.cpp
+    src/OrionEffectsDialog.cpp
+    src/OrionPlaylistView.cpp
+    src/OrionPreferencesDialog.cpp
+    src/OrionMediaInfoDialog.cpp
+    src/OrionStreamDialog.cpp
     src/MainWindow.cpp
 )
 
 set(HEADERS
-    include/AuraEngine.h
-    include/AuraVideoWidget.h
-    include/AuraVlcToolbar.h
-    include/AuraEffectsDialog.h
-    include/AuraPlaylistView.h
-    include/AuraPreferencesDialog.h
-    include/AuraMediaInfoDialog.h
-    include/AuraStreamDialog.h
+    include/OrionEngine.h
+    include/OrionVideoWidget.h
+    include/OrionVlcToolbar.h
+    include/OrionEffectsDialog.h
+    include/OrionPlaylistView.h
+    include/OrionPreferencesDialog.h
+    include/OrionMediaInfoDialog.h
+    include/OrionStreamDialog.h
     include/MainWindow.h
 )
 
@@ -60,13 +60,13 @@ set(RESOURCES
     resources/resources.qrc
 )
 
-add_executable(auraplayer
+add_executable(orionplayer
     ${SOURCES}
     ${HEADERS}
     ${RESOURCES}
 )
 
-target_link_libraries(auraplayer PRIVATE
+target_link_libraries(orionplayer PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
@@ -77,7 +77,7 @@ target_link_libraries(auraplayer PRIVATE
 
 # Compiler optimization flags for maximum performance
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(auraplayer PRIVATE
+    target_compile_options(orionplayer PRIVATE
         -O3
         -march=native
         -pipe
@@ -87,4 +87,4 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     )
 endif()
 
-install(TARGETS auraplayer RUNTIME DESTINATION bin)
+install(TARGETS orionplayer RUNTIME DESTINATION bin)

@@ -7,11 +7,11 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-class AuraStreamDialog : public QDialog {
+class OrionStreamDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AuraStreamDialog(QWidget *parent = nullptr);
+    explicit OrionStreamDialog(QWidget *parent = nullptr);
 
     QString streamUrl() const;
 

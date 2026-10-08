@@ -4,13 +4,13 @@
 #include <QTableWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraMediaInfoDialog : public QDialog {
+class OrionMediaInfoDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AuraMediaInfoDialog(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionMediaInfoDialog(OrionEngine *engine, QWidget *parent = nullptr);
 
     void refresh();
 
@@ -18,6 +18,6 @@ private:
     void addRow(int &row, const QString &property, const QString &value);
     static QString formatBytes(int64_t bytes);
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
     QTableWidget *m_table = nullptr;
 };

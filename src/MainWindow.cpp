@@ -18,22 +18,22 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
-    setWindowTitle("AuraPlayer — VLC-Grade Professional Media Player");
+    setWindowTitle("OrionPlayer — VLC-Grade Professional Media Player");
     resize(1000, 680);
     setAcceptDrops(true);
 
-    m_engine = new AuraEngine(this);
+    m_engine = new OrionEngine(this);
     m_engine->initialize();
 
     createCentralLayout();
     createMenuBar();
     applyVlcTheme();
 
-    connect(m_engine, &AuraEngine::playbackStarted, this, &MainWindow::onPlaybackStarted);
-    connect(m_engine, &AuraEngine::playbackStopped, this, &MainWindow::onPlaybackStopped);
-    connect(m_engine, &AuraEngine::playbackPaused, this, &MainWindow::onPlaybackPaused);
-    connect(m_engine, &AuraEngine::speedChanged, this, &MainWindow::onSpeedChanged);
-    connect(m_engine, &AuraEngine::videoReconfigured, this, [this](int w, int h) {
+    connect(m_engine, &OrionEngine::playbackStarted, this, &MainWindow::onPlaybackStarted);
+    connect(m_engine, &OrionEngine::playbackStopped, this, &MainWindow::onPlaybackStopped);
+    connect(m_engine, &OrionEngine::playbackPaused, this, &MainWindow::onPlaybackPaused);
+    connect(m_engine, &OrionEngine::speedChanged, this, &MainWindow::onSpeedChanged);
+    connect(m_engine, &OrionEngine::videoReconfigured, this, [this](int w, int h) {
         Q_UNUSED(w); Q_UNUSED(h);
         updateStatusBar();
     });
@@ -51,8 +51,8 @@ void MainWindow::createCentralLayout() {
     // Stacked widget: Index 0 = Video canvas, Index 1 = Playlist view
     m_stackedWidget = new QStackedWidget(centralContainer);
 
-    m_videoWidget = new AuraVideoWidget(m_engine, m_stackedWidget);
-    m_playlistView = new AuraPlaylistView(m_stackedWidget);
+    m_videoWidget = new OrionVideoWidget(m_engine, m_stackedWidget);
+    m_playlistView = new OrionPlaylistView(m_stackedWidget);
 
     m_stackedWidget->addWidget(m_videoWidget);   // 0
     m_stackedWidget->addWidget(m_playlistView);  // 1
@@ -61,7 +61,7 @@ void MainWindow::createCentralLayout() {
     layout->addWidget(m_stackedWidget, 1);
 
     // VLC Toolbar at the bottom
-    m_toolbar = new AuraVlcToolbar(m_engine, centralContainer);
+    m_toolbar = new OrionVlcToolbar(m_engine, centralContainer);
     layout->addWidget(m_toolbar, 0);
 
     setCentralWidget(centralContainer);
@@ -81,38 +81,38 @@ void MainWindow::createCentralLayout() {
     sb->addPermanentWidget(m_statusSpeed);
 
     // Toolbar connections
-    connect(m_toolbar, &AuraVlcToolbar::playPauseClicked, this, &MainWindow::onTogglePlayPause);
-    connect(m_toolbar, &AuraVlcToolbar::stopClicked, this, &MainWindow::onStop);
-    connect(m_toolbar, &AuraVlcToolbar::prevClicked, this, &MainWindow::onPrevious);
-    connect(m_toolbar, &AuraVlcToolbar::nextClicked, this, &MainWindow::onNext);
-    connect(m_toolbar, &AuraVlcToolbar::fullscreenClicked, this, &MainWindow::onToggleFullscreen);
-    connect(m_toolbar, &AuraVlcToolbar::extendedSettingsClicked, this, &MainWindow::onShowEffects);
-    connect(m_toolbar, &AuraVlcToolbar::playlistClicked, this, &MainWindow::onTogglePlaylist);
-    connect(m_toolbar, &AuraVlcToolbar::snapshotClicked, this, &MainWindow::onTakeSnapshot);
-    connect(m_toolbar, &AuraVlcToolbar::frameStepClicked, this, &MainWindow::onFrameStep);
-    connect(m_toolbar, &AuraVlcToolbar::loopModeChanged, this, [this](AuraVlcToolbar::LoopMode mode) {
-        if (mode == AuraVlcToolbar::LoopMode::RepeatAll) {
-            m_playlistView->setLoopMode(AuraPlaylistView::LoopMode::RepeatAll);
-        } else if (mode == AuraVlcToolbar::LoopMode::RepeatOne) {
-            m_playlistView->setLoopMode(AuraPlaylistView::LoopMode::RepeatOne);
+    connect(m_toolbar, &OrionVlcToolbar::playPauseClicked, this, &MainWindow::onTogglePlayPause);
+    connect(m_toolbar, &OrionVlcToolbar::stopClicked, this, &MainWindow::onStop);
+    connect(m_toolbar, &OrionVlcToolbar::prevClicked, this, &MainWindow::onPrevious);
+    connect(m_toolbar, &OrionVlcToolbar::nextClicked, this, &MainWindow::onNext);
+    connect(m_toolbar, &OrionVlcToolbar::fullscreenClicked, this, &MainWindow::onToggleFullscreen);
+    connect(m_toolbar, &OrionVlcToolbar::extendedSettingsClicked, this, &MainWindow::onShowEffects);
+    connect(m_toolbar, &OrionVlcToolbar::playlistClicked, this, &MainWindow::onTogglePlaylist);
+    connect(m_toolbar, &OrionVlcToolbar::snapshotClicked, this, &MainWindow::onTakeSnapshot);
+    connect(m_toolbar, &OrionVlcToolbar::frameStepClicked, this, &MainWindow::onFrameStep);
+    connect(m_toolbar, &OrionVlcToolbar::loopModeChanged, this, [this](OrionVlcToolbar::LoopMode mode) {
+        if (mode == OrionVlcToolbar::LoopMode::RepeatAll) {
+            m_playlistView->setLoopMode(OrionPlaylistView::LoopMode::RepeatAll);
+        } else if (mode == OrionVlcToolbar::LoopMode::RepeatOne) {
+            m_playlistView->setLoopMode(OrionPlaylistView::LoopMode::RepeatOne);
         } else {
-            m_playlistView->setLoopMode(AuraPlaylistView::LoopMode::None);
+            m_playlistView->setLoopMode(OrionPlaylistView::LoopMode::None);
         }
     });
-    connect(m_toolbar, &AuraVlcToolbar::shuffleClicked, this, [this]() {
+    connect(m_toolbar, &OrionVlcToolbar::shuffleClicked, this, [this]() {
         m_playlistView->shuffle();
     });
 
     // Video canvas event connections
-    connect(m_videoWidget, &AuraVideoWidget::doubleClicked, this, &MainWindow::onToggleFullscreen);
-    connect(m_videoWidget, &AuraVideoWidget::singleClicked, this, &MainWindow::onTogglePlayPause);
-    connect(m_videoWidget, &AuraVideoWidget::fileDropped, this, &MainWindow::openMedia);
-    connect(m_videoWidget, &AuraVideoWidget::wheelScrolled, this, [this](int delta) {
+    connect(m_videoWidget, &OrionVideoWidget::doubleClicked, this, &MainWindow::onToggleFullscreen);
+    connect(m_videoWidget, &OrionVideoWidget::singleClicked, this, &MainWindow::onTogglePlayPause);
+    connect(m_videoWidget, &OrionVideoWidget::fileDropped, this, &MainWindow::openMedia);
+    connect(m_videoWidget, &OrionVideoWidget::wheelScrolled, this, [this](int delta) {
         onVolumeDelta(delta > 0 ? 5.0 : -5.0);
     });
 
     // Playlist connections
-    connect(m_playlistView, &AuraPlaylistView::trackSelected, this, &MainWindow::openMedia);
+    connect(m_playlistView, &OrionPlaylistView::trackSelected, this, &MainWindow::openMedia);
 }
 
 void MainWindow::createMenuBar() {
@@ -221,7 +221,7 @@ void MainWindow::createMenuBar() {
 
     // ================= 8. HELP MENU =================
     auto *helpMenu = mb->addMenu("&Help");
-    helpMenu->addAction("&About AuraPlayer", this, &MainWindow::onAbout, QKeySequence("Shift+F1"));
+    helpMenu->addAction("&About OrionPlayer", this, &MainWindow::onAbout, QKeySequence("Shift+F1"));
 }
 
 void MainWindow::applyVlcTheme() {
@@ -241,7 +241,7 @@ void MainWindow::openMedia(const QString &path) {
     m_engine->play();
 
     m_stackedWidget->setCurrentIndex(0); // Switch to video display
-    setWindowTitle(QString("AuraPlayer — %1").arg(QFileInfo(path).fileName()));
+    setWindowTitle(QString("OrionPlayer — %1").arg(QFileInfo(path).fileName()));
     updateStatusBar();
 }
 
@@ -281,7 +281,7 @@ void MainWindow::onOpenFolder() {
 }
 
 void MainWindow::onOpenNetworkStream() {
-    if (!m_streamDialog) m_streamDialog = new AuraStreamDialog(this);
+    if (!m_streamDialog) m_streamDialog = new OrionStreamDialog(this);
     if (m_streamDialog->exec() == QDialog::Accepted) {
         QString url = m_streamDialog->streamUrl();
         if (!url.isEmpty()) openMedia(url);
@@ -390,7 +390,7 @@ void MainWindow::onVolumeDelta(double delta) {
 }
 
 void MainWindow::onShowEffects() {
-    if (!m_effectsDialog) m_effectsDialog = new AuraEffectsDialog(m_engine, this);
+    if (!m_effectsDialog) m_effectsDialog = new OrionEffectsDialog(m_engine, this);
     m_effectsDialog->refreshFromEngine();
     m_effectsDialog->show();
     m_effectsDialog->raise();
@@ -398,7 +398,7 @@ void MainWindow::onShowEffects() {
 }
 
 void MainWindow::onShowMediaInfo() {
-    if (!m_mediaInfoDialog) m_mediaInfoDialog = new AuraMediaInfoDialog(m_engine, this);
+    if (!m_mediaInfoDialog) m_mediaInfoDialog = new OrionMediaInfoDialog(m_engine, this);
     m_mediaInfoDialog->refresh();
     m_mediaInfoDialog->show();
     m_mediaInfoDialog->raise();
@@ -406,7 +406,7 @@ void MainWindow::onShowMediaInfo() {
 }
 
 void MainWindow::onShowPreferences() {
-    if (!m_prefsDialog) m_prefsDialog = new AuraPreferencesDialog(m_engine, this);
+    if (!m_prefsDialog) m_prefsDialog = new OrionPreferencesDialog(m_engine, this);
     m_prefsDialog->show();
     m_prefsDialog->raise();
     m_prefsDialog->activateWindow();
@@ -427,8 +427,8 @@ void MainWindow::onToggleAdvancedControls() {
 }
 
 void MainWindow::onAbout() {
-    QMessageBox::about(this, "About AuraPlayer",
-        "<h3>AuraPlayer 1.0</h3>"
+    QMessageBox::about(this, "About OrionPlayer",
+        "<h3>OrionPlayer 1.0</h3>"
         "<p>Professional Open-Source Media Player for Linux.</p>"
         "<p>Designed with the full versatility and professional controls of VLC Media Player, "
         "powered by Intel VA-API zero-copy hardware acceleration and libmpv engine.</p>"

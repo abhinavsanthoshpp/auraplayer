@@ -1,4 +1,4 @@
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 #include "mpv/client.h"
 
 #include <QDebug>
@@ -8,11 +8,11 @@
 #include <clocale>
 #include <cmath>
 
-AuraEngine::AuraEngine(QObject *parent)
+OrionEngine::OrionEngine(QObject *parent)
     : QObject(parent) {
 }
 
-AuraEngine::~AuraEngine() {
+OrionEngine::~OrionEngine() {
     if (m_mpv) {
         mpv_set_wakeup_callback(m_mpv, nullptr, nullptr);
         mpv_destroy(m_mpv);
@@ -20,14 +20,14 @@ AuraEngine::~AuraEngine() {
     }
 }
 
-void AuraEngine::wakeupCallback(void *ctx) {
-    auto *engine = static_cast<AuraEngine *>(ctx);
+void OrionEngine::wakeupCallback(void *ctx) {
+    auto *engine = static_cast<OrionEngine *>(ctx);
     if (engine) {
         QMetaObject::invokeMethod(engine, "onMpvEvents", Qt::QueuedConnection);
     }
 }
 
-bool AuraEngine::initialize() {
+bool OrionEngine::initialize() {
     // mpv strictly requires LC_NUMERIC set to "C" for consistent float formatting
     std::setlocale(LC_NUMERIC, "C");
 
@@ -69,7 +69,7 @@ bool AuraEngine::initialize() {
     return true;
 }
 
-void AuraEngine::setupHardwareAcceleration() {
+void OrionEngine::setupHardwareAcceleration() {
     if (!m_mpv) return;
 
     // Detect and prioritize VA-API for Intel Tiger Lake / AMD, NVDEC for NVIDIA
@@ -78,7 +78,7 @@ void AuraEngine::setupHardwareAcceleration() {
     mpv_set_option_string(m_mpv, "scale", "bilinear");
 }
 
-void AuraEngine::observeProperties() {
+void OrionEngine::observeProperties() {
     if (!m_mpv) return;
 
     mpv_observe_property(m_mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
@@ -92,7 +92,7 @@ void AuraEngine::observeProperties() {
     mpv_observe_property(m_mpv, 0, "dheight", MPV_FORMAT_INT64);
 }
 
-void AuraEngine::onMpvEvents() {
+void OrionEngine::onMpvEvents() {
     if (!m_mpv) return;
 
     while (true) {
@@ -104,7 +104,7 @@ void AuraEngine::onMpvEvents() {
     }
 }
 
-void AuraEngine::handleMpvEvent(void *eventPtr) {
+void OrionEngine::handleMpvEvent(void *eventPtr) {
     auto *event = static_cast<mpv_event *>(eventPtr);
 
     switch (event->event_id) {
@@ -159,7 +159,7 @@ void AuraEngine::handleMpvEvent(void *eventPtr) {
     }
 }
 
-void AuraEngine::loadFile(const QString &pathOrUrl, bool append) {
+void OrionEngine::loadFile(const QString &pathOrUrl, bool append) {
     if (!m_mpv) return;
 
     m_currentFile = pathOrUrl;
@@ -169,31 +169,31 @@ void AuraEngine::loadFile(const QString &pathOrUrl, bool append) {
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::play() {
+void OrionEngine::play() {
     if (!m_mpv) return;
     int flag = 0;
     mpv_set_property_async(m_mpv, 0, "pause", MPV_FORMAT_FLAG, &flag);
 }
 
-void AuraEngine::pause() {
+void OrionEngine::pause() {
     if (!m_mpv) return;
     int flag = 1;
     mpv_set_property_async(m_mpv, 0, "pause", MPV_FORMAT_FLAG, &flag);
 }
 
-void AuraEngine::togglePause() {
+void OrionEngine::togglePause() {
     if (!m_mpv) return;
     const char *args[] = {"cycle", "pause", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::stop() {
+void OrionEngine::stop() {
     if (!m_mpv) return;
     const char *args[] = {"stop", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::seek(double seconds, bool exact) {
+void OrionEngine::seek(double seconds, bool exact) {
     if (!m_mpv) return;
     QByteArray posStr = QByteArray::number(seconds, 'f', 2);
     const char *mode = exact ? "exact" : "keyframes";
@@ -201,50 +201,50 @@ void AuraEngine::seek(double seconds, bool exact) {
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::seekRelative(double deltaSeconds) {
+void OrionEngine::seekRelative(double deltaSeconds) {
     if (!m_mpv) return;
     QByteArray deltaStr = QByteArray::number(deltaSeconds, 'f', 2);
     const char *args[] = {"seek", deltaStr.constData(), "relative", "exact", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::frameStep() {
+void OrionEngine::frameStep() {
     if (!m_mpv) return;
     const char *args[] = {"frame-step", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::frameBackStep() {
+void OrionEngine::frameBackStep() {
     if (!m_mpv) return;
     const char *args[] = {"frame-back-step", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::setVolume(double volume) {
+void OrionEngine::setVolume(double volume) {
     if (!m_mpv) return;
     volume = std::clamp(volume, 0.0, 200.0);
     mpv_set_property_async(m_mpv, 0, "volume", MPV_FORMAT_DOUBLE, &volume);
 }
 
-void AuraEngine::setMuted(bool mute) {
+void OrionEngine::setMuted(bool mute) {
     if (!m_mpv) return;
     int flag = mute ? 1 : 0;
     mpv_set_property_async(m_mpv, 0, "mute", MPV_FORMAT_FLAG, &flag);
 }
 
-void AuraEngine::toggleMute() {
+void OrionEngine::toggleMute() {
     if (!m_mpv) return;
     const char *args[] = {"cycle", "mute", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::setSpeed(double speed) {
+void OrionEngine::setSpeed(double speed) {
     if (!m_mpv) return;
     speed = std::clamp(speed, 0.25, 4.0);
     mpv_set_property_async(m_mpv, 0, "speed", MPV_FORMAT_DOUBLE, &speed);
 }
 
-QVector<MediaTrack> AuraEngine::getTracks() const {
+QVector<MediaTrack> OrionEngine::getTracks() const {
     QVector<MediaTrack> result;
     if (!m_mpv) return result;
 
@@ -283,7 +283,7 @@ QVector<MediaTrack> AuraEngine::getTracks() const {
     return result;
 }
 
-void AuraEngine::setAudioTrack(int trackId) {
+void OrionEngine::setAudioTrack(int trackId) {
     if (!m_mpv) return;
     if (trackId < 0) {
         const char *val = "no";
@@ -294,7 +294,7 @@ void AuraEngine::setAudioTrack(int trackId) {
     }
 }
 
-void AuraEngine::setSubtitleTrack(int trackId) {
+void OrionEngine::setSubtitleTrack(int trackId) {
     if (!m_mpv) return;
     if (trackId < 0) {
         const char *val = "no";
@@ -305,55 +305,55 @@ void AuraEngine::setSubtitleTrack(int trackId) {
     }
 }
 
-void AuraEngine::setSubtitleDelay(double deltaSeconds) {
+void OrionEngine::setSubtitleDelay(double deltaSeconds) {
     if (!m_mpv) return;
     mpv_set_property_async(m_mpv, 0, "sub-delay", MPV_FORMAT_DOUBLE, &deltaSeconds);
 }
 
-double AuraEngine::subtitleDelay() const {
+double OrionEngine::subtitleDelay() const {
     if (!m_mpv) return 0.0;
     double d = 0.0;
     mpv_get_property(m_mpv, "sub-delay", MPV_FORMAT_DOUBLE, &d);
     return d;
 }
 
-void AuraEngine::setAudioDelay(double deltaSeconds) {
+void OrionEngine::setAudioDelay(double deltaSeconds) {
     if (!m_mpv) return;
     mpv_set_property_async(m_mpv, 0, "audio-delay", MPV_FORMAT_DOUBLE, &deltaSeconds);
 }
 
-double AuraEngine::audioDelay() const {
+double OrionEngine::audioDelay() const {
     if (!m_mpv) return 0.0;
     double d = 0.0;
     mpv_get_property(m_mpv, "audio-delay", MPV_FORMAT_DOUBLE, &d);
     return d;
 }
 
-void AuraEngine::setBrightness(int value) {
+void OrionEngine::setBrightness(int value) {
     if (!m_mpv) return;
     int64_t v = std::clamp(value, -100, 100);
     mpv_set_property_async(m_mpv, 0, "brightness", MPV_FORMAT_INT64, &v);
 }
 
-void AuraEngine::setContrast(int value) {
+void OrionEngine::setContrast(int value) {
     if (!m_mpv) return;
     int64_t v = std::clamp(value, -100, 100);
     mpv_set_property_async(m_mpv, 0, "contrast", MPV_FORMAT_INT64, &v);
 }
 
-void AuraEngine::setSaturation(int value) {
+void OrionEngine::setSaturation(int value) {
     if (!m_mpv) return;
     int64_t v = std::clamp(value, -100, 100);
     mpv_set_property_async(m_mpv, 0, "saturation", MPV_FORMAT_INT64, &v);
 }
 
-void AuraEngine::setGamma(int value) {
+void OrionEngine::setGamma(int value) {
     if (!m_mpv) return;
     int64_t v = std::clamp(value, -100, 100);
     mpv_set_property_async(m_mpv, 0, "gamma", MPV_FORMAT_INT64, &v);
 }
 
-void AuraEngine::setAspectRatio(const QString &ratio) {
+void OrionEngine::setAspectRatio(const QString &ratio) {
     if (!m_mpv) return;
     if (ratio == "default" || ratio == "-1") {
         const char *val = "-1";
@@ -364,26 +364,26 @@ void AuraEngine::setAspectRatio(const QString &ratio) {
     }
 }
 
-void AuraEngine::loadSubtitleFile(const QString &path) {
+void OrionEngine::loadSubtitleFile(const QString &path) {
     if (!m_mpv || path.isEmpty()) return;
     QByteArray bytes = path.toUtf8();
     const char *args[] = {"sub-add", bytes.constData(), "select", nullptr};
     mpv_command_async(m_mpv, 0, args);
 }
 
-void AuraEngine::setHue(int value) {
+void OrionEngine::setHue(int value) {
     if (!m_mpv) return;
     int64_t v = std::clamp(value, -100, 100);
     mpv_set_property_async(m_mpv, 0, "hue", MPV_FORMAT_INT64, &v);
 }
 
-void AuraEngine::setDeinterlace(bool enable) {
+void OrionEngine::setDeinterlace(bool enable) {
     if (!m_mpv) return;
     const char *val = enable ? "yes" : "no";
     mpv_set_property_string(m_mpv, "deinterlace", val);
 }
 
-void AuraEngine::setEqualizerBands(const QVector<double> &bands, double preamp) {
+void OrionEngine::setEqualizerBands(const QVector<double> &bands, double preamp) {
     if (!m_mpv) return;
     static const double freqs[] = {31.25, 62.5, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
     QStringList filters;
@@ -401,12 +401,12 @@ void AuraEngine::setEqualizerBands(const QVector<double> &bands, double preamp) 
     mpv_set_property_string(m_mpv, "af", bytes.constData());
 }
 
-void AuraEngine::takeScreenshot(const QString &destinationPath) {
+void OrionEngine::takeScreenshot(const QString &destinationPath) {
     if (!m_mpv) return;
     QString target = destinationPath;
     if (target.isEmpty()) {
         QString timeStr = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss_zzz");
-        target = QDir::homePath() + QString("/Pictures/AuraPlayer_%1.png").arg(timeStr);
+        target = QDir::homePath() + QString("/Pictures/OrionPlayer_%1.png").arg(timeStr);
     }
     QDir().mkpath(QFileInfo(target).absolutePath());
     QByteArray bytes = target.toUtf8();
@@ -415,7 +415,7 @@ void AuraEngine::takeScreenshot(const QString &destinationPath) {
     emit screenshotTaken(target);
 }
 
-MediaMetadata AuraEngine::getMetadata() const {
+MediaMetadata OrionEngine::getMetadata() const {
     MediaMetadata meta;
     if (!m_mpv) return meta;
 
@@ -457,7 +457,7 @@ MediaMetadata AuraEngine::getMetadata() const {
     return meta;
 }
 
-int AuraEngine::executeCommand(const QStringList &args) {
+int OrionEngine::executeCommand(const QStringList &args) {
     if (!m_mpv || args.isEmpty()) return -1;
     QVector<QByteArray> utf8Args;
     QVector<const char *> cArgs;

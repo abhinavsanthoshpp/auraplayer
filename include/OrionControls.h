@@ -8,13 +8,13 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMouseEvent>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraTimeline : public QSlider {
+class OrionTimeline : public QSlider {
     Q_OBJECT
 
 public:
-    explicit AuraTimeline(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit OrionTimeline(Qt::Orientation orientation, QWidget *parent = nullptr);
 
 signals:
     void seekPercent(double percent);
@@ -29,11 +29,11 @@ private:
     double ratioFromX(int x) const;
 };
 
-class AuraControls : public QWidget {
+class OrionControls : public QWidget {
     Q_OBJECT
 
 public:
-    explicit AuraControls(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionControls(OrionEngine *engine, QWidget *parent = nullptr);
 
     void setPaused(bool paused);
     void setPosition(double seconds);
@@ -69,11 +69,11 @@ private:
     void setupUi();
     static QString formatTime(double seconds);
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
 
-    AuraTimeline *m_timeline = nullptr;
+    OrionTimeline *m_timeline = nullptr;
     QLabel *m_timeLabel = nullptr;
-    QPushButton *m_playPauseBtn = nullptr; // Central Aura Core
+    QPushButton *m_playPauseBtn = nullptr; // Central Orion Core
     QPushButton *m_prevBtn = nullptr;
     QPushButton *m_nextBtn = nullptr;
     QPushButton *m_stepBackBtn = nullptr;

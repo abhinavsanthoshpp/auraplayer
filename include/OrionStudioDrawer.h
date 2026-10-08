@@ -8,13 +8,13 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QVector>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraStudioDrawer : public QWidget {
+class OrionStudioDrawer : public QWidget {
     Q_OBJECT
 
 public:
-    explicit AuraStudioDrawer(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionStudioDrawer(OrionEngine *engine, QWidget *parent = nullptr);
 
     void addFile(const QString &filePath);
     void addFiles(const QStringList &filePaths);
@@ -55,7 +55,7 @@ private:
     QWidget *createVideoTab();
     QWidget *createTelemetryTab();
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
     QTabWidget *m_tabs = nullptr;
 
     // Queue tab elements

@@ -1,4 +1,4 @@
-#include "AuraStudioDrawer.h"
+#include "OrionStudioDrawer.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -8,29 +8,29 @@
 #include <QRandomGenerator>
 #include <QHeaderView>
 
-AuraStudioDrawer::AuraStudioDrawer(AuraEngine *engine, QWidget *parent)
+OrionStudioDrawer::OrionStudioDrawer(OrionEngine *engine, QWidget *parent)
     : QWidget(parent), m_engine(engine) {
-    setObjectName("AuraStudioDrawer");
+    setObjectName("OrionStudioDrawer");
     setFixedWidth(330);
     setupUi();
 }
 
-void AuraStudioDrawer::setupUi() {
+void OrionStudioDrawer::setupUi() {
     auto *rootLayout = new QVBoxLayout(this);
     rootLayout->setContentsMargins(12, 14, 12, 14);
     rootLayout->setSpacing(10);
 
     // Top Header Row
     auto *topRow = new QHBoxLayout();
-    auto *titleLabel = new QLabel("⚡ Aura <strong>Studio</strong>", this);
-    titleLabel->setObjectName("AuraStudioHeaderTitle");
+    auto *titleLabel = new QLabel("⚡ Orion <strong>Studio</strong>", this);
+    titleLabel->setObjectName("OrionStudioHeaderTitle");
     titleLabel->setTextFormat(Qt::RichText);
 
     auto *closeBtn = new QPushButton("✕", this);
-    closeBtn->setObjectName("AuraStudioCloseBtn");
+    closeBtn->setObjectName("OrionStudioCloseBtn");
     closeBtn->setFixedSize(28, 28);
     closeBtn->setToolTip("Close Studio Panel (Tab / L)");
-    connect(closeBtn, &QPushButton::clicked, this, &AuraStudioDrawer::closeRequested);
+    connect(closeBtn, &QPushButton::clicked, this, &OrionStudioDrawer::closeRequested);
 
     topRow->addWidget(titleLabel);
     topRow->addStretch(1);
@@ -39,7 +39,7 @@ void AuraStudioDrawer::setupUi() {
 
     // Tabs container
     m_tabs = new QTabWidget(this);
-    m_tabs->setObjectName("AuraStudioTabs");
+    m_tabs->setObjectName("OrionStudioTabs");
 
     m_tabs->addTab(createQueueTab(), "Queue");
     m_tabs->addTab(createAudioTab(), "Sound FX");
@@ -49,7 +49,7 @@ void AuraStudioDrawer::setupUi() {
     rootLayout->addWidget(m_tabs, 1);
 }
 
-QWidget *AuraStudioDrawer::createQueueTab() {
+QWidget *OrionStudioDrawer::createQueueTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(4, 10, 4, 4);
@@ -57,16 +57,16 @@ QWidget *AuraStudioDrawer::createQueueTab() {
 
     // Filter / Search input
     m_searchEdit = new QLineEdit(tab);
-    m_searchEdit->setObjectName("AuraStudioSearch");
+    m_searchEdit->setObjectName("OrionStudioSearch");
     m_searchEdit->setPlaceholderText("🔍 Filter queue...");
-    connect(m_searchEdit, &QLineEdit::textChanged, this, &AuraStudioDrawer::onFilterTextChanged);
+    connect(m_searchEdit, &QLineEdit::textChanged, this, &OrionStudioDrawer::onFilterTextChanged);
     layout->addWidget(m_searchEdit);
 
     // Queue list
     m_queueList = new QListWidget(tab);
-    m_queueList->setObjectName("AuraStudioQueueList");
+    m_queueList->setObjectName("OrionStudioQueueList");
     m_queueList->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(m_queueList, &QListWidget::itemDoubleClicked, this, &AuraStudioDrawer::onQueueItemDoubleClicked);
+    connect(m_queueList, &QListWidget::itemDoubleClicked, this, &OrionStudioDrawer::onQueueItemDoubleClicked);
     layout->addWidget(m_queueList, 1);
 
     // Controls row
@@ -82,14 +82,14 @@ QWidget *AuraStudioDrawer::createQueueTab() {
     btnRow->addWidget(clearBtn);
     layout->addLayout(btnRow);
 
-    connect(addBtn, &QPushButton::clicked, this, &AuraStudioDrawer::onAddMediaClicked);
-    connect(m_shuffleBtn, &QPushButton::clicked, this, &AuraStudioDrawer::onShuffleClicked);
-    connect(clearBtn, &QPushButton::clicked, this, &AuraStudioDrawer::onClearQueueClicked);
+    connect(addBtn, &QPushButton::clicked, this, &OrionStudioDrawer::onAddMediaClicked);
+    connect(m_shuffleBtn, &QPushButton::clicked, this, &OrionStudioDrawer::onShuffleClicked);
+    connect(clearBtn, &QPushButton::clicked, this, &OrionStudioDrawer::onClearQueueClicked);
 
     return tab;
 }
 
-QWidget *AuraStudioDrawer::createAudioTab() {
+QWidget *OrionStudioDrawer::createAudioTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(4, 10, 4, 4);
@@ -106,7 +106,7 @@ QWidget *AuraStudioDrawer::createAudioTab() {
     QStringList presets = {"Flat", "Bass+", "Cinema", "Vocal+", "Lo-Fi"};
     for (const auto &p : presets) {
         auto *btn = new QPushButton(p, tab);
-        btn->setObjectName("AuraPresetPill");
+        btn->setObjectName("OrionPresetPill");
         connect(btn, &QPushButton::clicked, this, [this, p]() {
             onEqPresetClicked(p);
         });
@@ -134,7 +134,7 @@ QWidget *AuraStudioDrawer::createAudioTab() {
         m_eqValueLabels[i] = valLbl;
 
         auto *slider = new QSlider(Qt::Vertical, bandsBox);
-        slider->setObjectName("AuraEqSlider");
+        slider->setObjectName("OrionEqSlider");
         slider->setRange(-12, 12);
         slider->setValue(0);
         m_eqSliders[i] = slider;
@@ -156,13 +156,13 @@ QWidget *AuraStudioDrawer::createAudioTab() {
     layout->addWidget(bandsBox, 1);
 
     auto *resetBtn = new QPushButton("↺ Reset Audio Signature", tab);
-    connect(resetBtn, &QPushButton::clicked, this, &AuraStudioDrawer::onResetEqClicked);
+    connect(resetBtn, &QPushButton::clicked, this, &OrionStudioDrawer::onResetEqClicked);
     layout->addWidget(resetBtn);
 
     return tab;
 }
 
-QWidget *AuraStudioDrawer::createVideoTab() {
+QWidget *OrionStudioDrawer::createVideoTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(4, 10, 4, 4);
@@ -220,18 +220,18 @@ QWidget *AuraStudioDrawer::createVideoTab() {
     layout->addStretch(1);
 
     auto *resetBtn = new QPushButton("↺ Reset Color Engine", tab);
-    connect(resetBtn, &QPushButton::clicked, this, &AuraStudioDrawer::onResetVideoClicked);
+    connect(resetBtn, &QPushButton::clicked, this, &OrionStudioDrawer::onResetVideoClicked);
     layout->addWidget(resetBtn);
 
-    connect(m_brightSlider, &QSlider::valueChanged, this, &AuraStudioDrawer::onBrightnessChanged);
-    connect(m_contrastSlider, &QSlider::valueChanged, this, &AuraStudioDrawer::onContrastChanged);
-    connect(m_satSlider, &QSlider::valueChanged, this, &AuraStudioDrawer::onSaturationChanged);
-    connect(m_gammaSlider, &QSlider::valueChanged, this, &AuraStudioDrawer::onGammaChanged);
+    connect(m_brightSlider, &QSlider::valueChanged, this, &OrionStudioDrawer::onBrightnessChanged);
+    connect(m_contrastSlider, &QSlider::valueChanged, this, &OrionStudioDrawer::onContrastChanged);
+    connect(m_satSlider, &QSlider::valueChanged, this, &OrionStudioDrawer::onSaturationChanged);
+    connect(m_gammaSlider, &QSlider::valueChanged, this, &OrionStudioDrawer::onGammaChanged);
 
     return tab;
 }
 
-QWidget *AuraStudioDrawer::createTelemetryTab() {
+QWidget *OrionStudioDrawer::createTelemetryTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(6, 12, 6, 6);
@@ -261,14 +261,14 @@ QWidget *AuraStudioDrawer::createTelemetryTab() {
     layout->addWidget(box);
 
     auto *refreshBtn = new QPushButton("⚡ Refresh HUD Telemetry", tab);
-    connect(refreshBtn, &QPushButton::clicked, this, &AuraStudioDrawer::refreshTelemetry);
+    connect(refreshBtn, &QPushButton::clicked, this, &OrionStudioDrawer::refreshTelemetry);
     layout->addWidget(refreshBtn);
     layout->addStretch(1);
 
     return tab;
 }
 
-void AuraStudioDrawer::addFile(const QString &filePath) {
+void OrionStudioDrawer::addFile(const QString &filePath) {
     if (filePath.isEmpty()) return;
     QFileInfo fi(filePath);
     auto *item = new QListWidgetItem(fi.fileName(), m_queueList);
@@ -276,18 +276,18 @@ void AuraStudioDrawer::addFile(const QString &filePath) {
     item->setData(Qt::UserRole, filePath);
 }
 
-void AuraStudioDrawer::addFiles(const QStringList &filePaths) {
+void OrionStudioDrawer::addFiles(const QStringList &filePaths) {
     for (const auto &p : filePaths) {
         addFile(p);
     }
 }
 
-void AuraStudioDrawer::clearQueue() {
+void OrionStudioDrawer::clearQueue() {
     m_queueList->clear();
     m_currentIndex = -1;
 }
 
-QString AuraStudioDrawer::playNext() {
+QString OrionStudioDrawer::playNext() {
     if (m_queueList->count() == 0) return QString();
     m_currentIndex++;
     if (m_currentIndex >= m_queueList->count()) {
@@ -297,7 +297,7 @@ QString AuraStudioDrawer::playNext() {
     return m_queueList->item(m_currentIndex)->data(Qt::UserRole).toString();
 }
 
-QString AuraStudioDrawer::playPrevious() {
+QString OrionStudioDrawer::playPrevious() {
     if (m_queueList->count() == 0) return QString();
     m_currentIndex--;
     if (m_currentIndex < 0) {
@@ -307,31 +307,31 @@ QString AuraStudioDrawer::playPrevious() {
     return m_queueList->item(m_currentIndex)->data(Qt::UserRole).toString();
 }
 
-void AuraStudioDrawer::selectTab(int index) {
+void OrionStudioDrawer::selectTab(int index) {
     if (m_tabs && index >= 0 && index < m_tabs->count()) {
         m_tabs->setCurrentIndex(index);
     }
 }
 
-void AuraStudioDrawer::onQueueItemDoubleClicked(QListWidgetItem *item) {
+void OrionStudioDrawer::onQueueItemDoubleClicked(QListWidgetItem *item) {
     if (!item) return;
     m_currentIndex = m_queueList->row(item);
     emit trackSelected(item->data(Qt::UserRole).toString());
 }
 
-void AuraStudioDrawer::onAddMediaClicked() {
+void OrionStudioDrawer::onAddMediaClicked() {
     QStringList files = QFileDialog::getOpenFileNames(
-        this, "Add Media to Aura Flow Queue", QString(),
+        this, "Add Media to Orion Flow Queue", QString(),
         "All Media (*.mkv *.mp4 *.webm *.avi *.mov *.flv *.ts *.mp3 *.flac *.opus *.ogg *.wav);;All Files (*)"
     );
     addFiles(files);
 }
 
-void AuraStudioDrawer::onClearQueueClicked() {
+void OrionStudioDrawer::onClearQueueClicked() {
     clearQueue();
 }
 
-void AuraStudioDrawer::onShuffleClicked() {
+void OrionStudioDrawer::onShuffleClicked() {
     int n = m_queueList->count();
     if (n <= 1) return;
     for (int i = n - 1; i > 0; --i) {
@@ -345,7 +345,7 @@ void AuraStudioDrawer::onShuffleClicked() {
     }
 }
 
-void AuraStudioDrawer::onFilterTextChanged(const QString &text) {
+void OrionStudioDrawer::onFilterTextChanged(const QString &text) {
     for (int i = 0; i < m_queueList->count(); ++i) {
         auto *item = m_queueList->item(i);
         bool match = item->text().contains(text, Qt::CaseInsensitive);
@@ -353,7 +353,7 @@ void AuraStudioDrawer::onFilterTextChanged(const QString &text) {
     }
 }
 
-void AuraStudioDrawer::onEqPresetClicked(const QString &name) {
+void OrionStudioDrawer::onEqPresetClicked(const QString &name) {
     QVector<double> vals(10, 0.0);
     if (name == "Flat") {
         vals = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -376,7 +376,7 @@ void AuraStudioDrawer::onEqPresetClicked(const QString &name) {
     if (m_engine) m_engine->setEqualizerBands(vals);
 }
 
-void AuraStudioDrawer::onEqBandChanged(int index, int value) {
+void OrionStudioDrawer::onEqBandChanged(int index, int value) {
     if (index >= 0 && index < m_eqValueLabels.size()) {
         m_eqValueLabels[index]->setText(QString::number(value));
     }
@@ -387,38 +387,38 @@ void AuraStudioDrawer::onEqBandChanged(int index, int value) {
     }
 }
 
-void AuraStudioDrawer::onResetEqClicked() {
+void OrionStudioDrawer::onResetEqClicked() {
     onEqPresetClicked("Flat");
 }
 
-void AuraStudioDrawer::onBrightnessChanged(int val) {
+void OrionStudioDrawer::onBrightnessChanged(int val) {
     m_brightVal->setText(QString::number(val));
     if (m_engine) m_engine->setBrightness(val);
 }
 
-void AuraStudioDrawer::onContrastChanged(int val) {
+void OrionStudioDrawer::onContrastChanged(int val) {
     m_contrastVal->setText(QString::number(val));
     if (m_engine) m_engine->setContrast(val);
 }
 
-void AuraStudioDrawer::onSaturationChanged(int val) {
+void OrionStudioDrawer::onSaturationChanged(int val) {
     m_satVal->setText(QString::number(val));
     if (m_engine) m_engine->setSaturation(val);
 }
 
-void AuraStudioDrawer::onGammaChanged(int val) {
+void OrionStudioDrawer::onGammaChanged(int val) {
     m_gammaVal->setText(QString::number(val));
     if (m_engine) m_engine->setGamma(val);
 }
 
-void AuraStudioDrawer::onResetVideoClicked() {
+void OrionStudioDrawer::onResetVideoClicked() {
     m_brightSlider->setValue(0);
     m_contrastSlider->setValue(0);
     m_satSlider->setValue(0);
     m_gammaSlider->setValue(0);
 }
 
-void AuraStudioDrawer::refreshTelemetry() {
+void OrionStudioDrawer::refreshTelemetry() {
     if (!m_engine) return;
     MediaMetadata meta = m_engine->getMetadata();
 

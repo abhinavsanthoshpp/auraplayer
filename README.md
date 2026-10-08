@@ -1,24 +1,24 @@
-# ⚡ AuraPlayer
+# ⚡ OrionPlayer
 
 > **The Next-Generation Ultra-Fast Open-Source Media Player for Linux**  
 > Engineered for pure speed, zero-latency rendering, minimal memory footprint, and modern desktop aesthetics.
 
-[![Website: Online](https://img.shields.io/badge/Website-Live%20Portal-00e5ff.svg)](https://abhinavsanthoshpp.github.io/auraplayer/)
+[![Website: Online](https://img.shields.io/badge/Website-Live%20Portal-00e5ff.svg)](https://abhinavsanthoshpp.github.io/orionplayer/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Fedora%20%7C%20Ubuntu%20%7C%20Arch-orange.svg)]()
 [![Hardware Acceleration](https://img.shields.io/badge/Hardware%20Accel-VA--API%20%2F%20NVDEC%20%2F%20Vulkan-success.svg)]()
 [![C++](https://img.shields.io/badge/C%2B%2B-20-blue.svg)]()
 [![Qt](https://img.shields.io/badge/GUI-Qt6-brightgreen.svg)]()
 
-🌐 **Official Showcase & Download Website:** [https://abhinavsanthoshpp.github.io/auraplayer/](https://abhinavsanthoshpp.github.io/auraplayer/)
+🌐 **Official Showcase & Download Website:** [https://abhinavsanthoshpp.github.io/orionplayer/](https://abhinavsanthoshpp.github.io/orionplayer/)
 
 ---
 
-## 🌟 Why AuraPlayer?
+## 🌟 Why OrionPlayer?
 
 Traditional media players like VLC are versatile, but they were architected decades ago. On modern Linux workstations and laptops, they often suffer from sluggish launch times (>500ms), high idle memory consumption (150MB+), and dropped frames when playing 4K/60fps 10-bit HDR content due to legacy software pipeline bottlenecks.
 
-**AuraPlayer** is designed from scratch to outperform any existing player:
+**OrionPlayer** is designed from scratch to outperform any existing player:
 
 - 🚀 **Blazing Startup Speed**: Launches in **< 32ms** (15x faster than VLC).
 - 🪶 **Featherweight Footprint**: Consumes only **~38 MB RAM** at idle (77% less than VLC).
@@ -43,7 +43,7 @@ Traditional media players like VLC are versatile, but they were architected deca
 
 ## 📊 Benchmark Comparison
 
-| Metric | Standard VLC | AuraPlayer | Improvement |
+| Metric | Standard VLC | OrionPlayer | Improvement |
 | :--- | :--- | :--- | :--- |
 | **Startup Time** | 480 ms | **32 ms** | **15x Faster** ⚡ |
 | **Idle Memory (RAM)** | 165 MB | **38 MB** | **77% Less RAM** 🪶 |
@@ -57,29 +57,29 @@ Traditional media players like VLC are versatile, but they were architected deca
 
 ### One-Line Terminal Installer
 ```bash
-curl -sSL https://raw.githubusercontent.com/abhinavsanthoshpp/auraplayer/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/abhinavsanthoshpp/orionplayer/main/install.sh | bash
 ```
 
 ### Fedora Linux (41 / 42 / 43)
 ```bash
-git clone https://github.com/abhinavsanthoshpp/auraplayer.git
-cd auraplayer
+git clone https://github.com/abhinavsanthoshpp/orionplayer.git
+cd orionplayer
 ./install.sh
 ```
 
 ### Ubuntu / Debian / Linux Mint
 ```bash
 sudo apt update && sudo apt install -y build-essential cmake qt6-base-dev libmpv-dev
-git clone https://github.com/abhinavsanthoshpp/auraplayer.git
-cd auraplayer
+git clone https://github.com/abhinavsanthoshpp/orionplayer.git
+cd orionplayer
 ./install.sh
 ```
 
 ### Arch Linux / Manjaro
 ```bash
 sudo pacman -S --needed base-devel cmake qt6-base mpv
-git clone https://github.com/abhinavsanthoshpp/auraplayer.git
-cd auraplayer
+git clone https://github.com/abhinavsanthoshpp/orionplayer.git
+cd orionplayer
 ./install.sh
 ```
 
@@ -112,18 +112,18 @@ cd auraplayer
 ## 📁 Project Architecture
 
 ```
-auraplayer/
+orionplayer/
 ├── CMakeLists.txt              # High-performance C++20 build definition
 ├── install.sh                  # One-click desktop installer script
 ├── include/
 │   ├── mpv/                    # Vendored zero-friction libmpv C API headers
-│   ├── AuraEngine.h            # Core hardware accelerated playback engine
-│   ├── AuraVideoWidget.h       # Zero-copy OpenGL video presentation surface
-│   ├── AuraControls.h          # Auto-hiding floating controls & interactive seekbar
-│   ├── AuraPlaylist.h          # Playlist queue drawer
-│   ├── AuraEqualizerDialog.h   # 10-Band audio EQ & video adjustments
-│   ├── AuraMediaInfoDialog.h   # Stream & codec inspector modal
-│   ├── AuraStreamDialog.h      # Network stream input dialog
+│   ├── OrionEngine.h            # Core hardware accelerated playback engine
+│   ├── OrionVideoWidget.h       # Zero-copy OpenGL video presentation surface
+│   ├── OrionControls.h          # Auto-hiding floating controls & interactive seekbar
+│   ├── OrionPlaylist.h          # Playlist queue drawer
+│   ├── OrionEqualizerDialog.h   # 10-Band audio EQ & video adjustments
+│   ├── OrionMediaInfoDialog.h   # Stream & codec inspector modal
+│   ├── OrionStreamDialog.h      # Network stream input dialog
 │   └── MainWindow.h            # Main application window
 ├── src/                        # Complete C++ implementations
 ├── resources/                  # Stylesheet (.qss), .desktop launcher, SVG icons

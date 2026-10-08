@@ -37,12 +37,12 @@ struct MediaMetadata {
     int64_t audioBitrate = 0;
 };
 
-class AuraEngine : public QObject {
+class OrionEngine : public QObject {
     Q_OBJECT
 
 public:
-    explicit AuraEngine(QObject *parent = nullptr);
-    ~AuraEngine() override;
+    explicit OrionEngine(QObject *parent = nullptr);
+    ~OrionEngine() override;
 
     bool initialize();
     mpv_handle *handle() const { return m_mpv; }

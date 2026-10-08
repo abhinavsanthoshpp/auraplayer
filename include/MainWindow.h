@@ -5,14 +5,14 @@
 #include <QLabel>
 #include <QStatusBar>
 #include <QAction>
-#include "AuraEngine.h"
-#include "AuraVideoWidget.h"
-#include "AuraVlcToolbar.h"
-#include "AuraPlaylistView.h"
-#include "AuraEffectsDialog.h"
-#include "AuraMediaInfoDialog.h"
-#include "AuraPreferencesDialog.h"
-#include "AuraStreamDialog.h"
+#include "OrionEngine.h"
+#include "OrionVideoWidget.h"
+#include "OrionVlcToolbar.h"
+#include "OrionPlaylistView.h"
+#include "OrionEffectsDialog.h"
+#include "OrionMediaInfoDialog.h"
+#include "OrionPreferencesDialog.h"
+#include "OrionStreamDialog.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -76,12 +76,12 @@ private:
     void createCentralLayout();
     void applyVlcTheme();
 
-    AuraEngine *m_engine = nullptr;
-    AuraVideoWidget *m_videoWidget = nullptr;
-    AuraPlaylistView *m_playlistView = nullptr;
+    OrionEngine *m_engine = nullptr;
+    OrionVideoWidget *m_videoWidget = nullptr;
+    OrionPlaylistView *m_playlistView = nullptr;
     QStackedWidget *m_stackedWidget = nullptr;
 
-    AuraVlcToolbar *m_toolbar = nullptr;
+    OrionVlcToolbar *m_toolbar = nullptr;
 
     // Status bar labels
     QLabel *m_statusText = nullptr;
@@ -95,10 +95,10 @@ private:
     QAction *m_actFullscreen = nullptr;
 
     // Dialogs
-    AuraEffectsDialog *m_effectsDialog = nullptr;
-    AuraMediaInfoDialog *m_mediaInfoDialog = nullptr;
-    AuraPreferencesDialog *m_prefsDialog = nullptr;
-    AuraStreamDialog *m_streamDialog = nullptr;
+    OrionEffectsDialog *m_effectsDialog = nullptr;
+    OrionMediaInfoDialog *m_mediaInfoDialog = nullptr;
+    OrionPreferencesDialog *m_prefsDialog = nullptr;
+    OrionStreamDialog *m_streamDialog = nullptr;
 
     bool m_isFullscreen = false;
     bool m_isAlwaysOnTop = false;

@@ -1,4 +1,4 @@
-/* AuraPlayer — Professional VLC-Grade Desktop Dark Theme */
+/* OrionPlayer — Professional VLC-Grade Desktop Dark Theme */
 
 QMainWindow {
     background-color: #12151c;
@@ -55,12 +55,12 @@ QMenu::separator {
 }
 
 /* ================= Bottom VLC Toolbar ================= */
-#AuraVlcToolbar {
+#OrionVlcToolbar {
     background-color: #161b22;
     border-top: 1px solid #30363d;
 }
 
-#AuraVlcElapsedLabel, #AuraVlcDurationLabel {
+#OrionVlcElapsedLabel, #OrionVlcDurationLabel {
     color: #8b949e;
     font-family: monospace;
     font-size: 11px;
@@ -69,18 +69,18 @@ QMenu::separator {
 }
 
 /* Time Slider */
-QSlider#AuraVlcTimeSlider::groove:horizontal {
+QSlider#OrionVlcTimeSlider::groove:horizontal {
     height: 6px;
     background: #21262d;
     border-radius: 3px;
 }
 
-QSlider#AuraVlcTimeSlider::sub-page:horizontal {
+QSlider#OrionVlcTimeSlider::sub-page:horizontal {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1f6feb, stop:1 #ff7b00);
     border-radius: 3px;
 }
 
-QSlider#AuraVlcTimeSlider::handle:horizontal {
+QSlider#OrionVlcTimeSlider::handle:horizontal {
     background: #ffffff;
     border: 2px solid #ff7b00;
     width: 14px;
@@ -89,7 +89,7 @@ QSlider#AuraVlcTimeSlider::handle:horizontal {
     border-radius: 7px;
 }
 
-QSlider#AuraVlcTimeSlider::handle:horizontal:hover {
+QSlider#OrionVlcTimeSlider::handle:horizontal:hover {
     background: #ff7b00;
     border: 2px solid #ffffff;
 }
@@ -114,7 +114,7 @@ QPushButton:pressed {
     background-color: #161b22;
 }
 
-QPushButton#AuraVlcPlayPauseBtn {
+QPushButton#OrionVlcPlayPauseBtn {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1f6feb, stop:1 #00b4d8);
     border: 1px solid #58a6ff;
     color: #ffffff;
@@ -122,41 +122,41 @@ QPushButton#AuraVlcPlayPauseBtn {
     font-size: 14px;
 }
 
-QPushButton#AuraVlcPlayPauseBtn:hover {
+QPushButton#OrionVlcPlayPauseBtn:hover {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #388bfd, stop:1 #48cae4);
 }
 
-QPushButton#AuraVlcToolBtn {
+QPushButton#OrionVlcToolBtn {
     background: #21262d;
     border: 1px solid #30363d;
     border-radius: 4px;
     font-size: 12px;
 }
 
-QPushButton#AuraVlcToolBtn:hover {
+QPushButton#OrionVlcToolBtn:hover {
     background: #30363d;
     border-color: #58a6ff;
 }
 
-QPushButton#AuraVlcMuteBtn {
+QPushButton#OrionVlcMuteBtn {
     background: transparent;
     border: none;
     font-size: 13px;
 }
 
 /* Volume Slider */
-QSlider#AuraVlcVolSlider::groove:horizontal {
+QSlider#OrionVlcVolSlider::groove:horizontal {
     height: 4px;
     background: #21262d;
     border-radius: 2px;
 }
 
-QSlider#AuraVlcVolSlider::sub-page:horizontal {
+QSlider#OrionVlcVolSlider::sub-page:horizontal {
     background: #58a6ff;
     border-radius: 2px;
 }
 
-QSlider#AuraVlcVolSlider::handle:horizontal {
+QSlider#OrionVlcVolSlider::handle:horizontal {
     background: #e6edf3;
     border: 1px solid #58a6ff;
     width: 10px;
@@ -165,7 +165,7 @@ QSlider#AuraVlcVolSlider::handle:horizontal {
     border-radius: 5px;
 }
 
-#AuraVlcVolLabel {
+#OrionVlcVolLabel {
     color: #8b949e;
     font-family: monospace;
     font-size: 11px;
@@ -180,7 +180,7 @@ QStatusBar {
 }
 
 /* ================= Playlist & Library View ================= */
-#AuraPlaylistView {
+#OrionPlaylistView {
     background-color: #0d1117;
 }
 

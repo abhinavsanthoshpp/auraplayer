@@ -1,11 +1,11 @@
-#include "AuraPlaylist.h"
+#include "OrionPlaylist.h"
 #include <QFileDialog>
 #include <QLabel>
 #include <QHeaderView>
 
-AuraPlaylist::AuraPlaylist(QWidget *parent)
+OrionPlaylist::OrionPlaylist(QWidget *parent)
     : QWidget(parent) {
-    setObjectName("AuraPlaylistWidget");
+    setObjectName("OrionPlaylistWidget");
     setFixedWidth(280);
 
     auto *layout = new QVBoxLayout(this);
@@ -43,15 +43,15 @@ AuraPlaylist::AuraPlaylist(QWidget *parent)
 
     layout->addLayout(btnRow);
 
-    connect(m_listWidget, &QListWidget::itemDoubleClicked, this, &AuraPlaylist::onItemDoubleClicked);
-    connect(m_addBtn, &QPushButton::clicked, this, &AuraPlaylist::onAddClicked);
-    connect(m_removeBtn, &QPushButton::clicked, this, &AuraPlaylist::onRemoveClicked);
-    connect(m_clearBtn, &QPushButton::clicked, this, &AuraPlaylist::onClearClicked);
-    connect(m_shuffleBtn, &QPushButton::clicked, this, &AuraPlaylist::onShuffleClicked);
-    connect(m_loopBtn, &QPushButton::clicked, this, &AuraPlaylist::onLoopModeClicked);
+    connect(m_listWidget, &QListWidget::itemDoubleClicked, this, &OrionPlaylist::onItemDoubleClicked);
+    connect(m_addBtn, &QPushButton::clicked, this, &OrionPlaylist::onAddClicked);
+    connect(m_removeBtn, &QPushButton::clicked, this, &OrionPlaylist::onRemoveClicked);
+    connect(m_clearBtn, &QPushButton::clicked, this, &OrionPlaylist::onClearClicked);
+    connect(m_shuffleBtn, &QPushButton::clicked, this, &OrionPlaylist::onShuffleClicked);
+    connect(m_loopBtn, &QPushButton::clicked, this, &OrionPlaylist::onLoopModeClicked);
 }
 
-void AuraPlaylist::addFile(const QString &filePath) {
+void OrionPlaylist::addFile(const QString &filePath) {
     if (filePath.isEmpty()) return;
     QFileInfo fi(filePath);
     auto *item = new QListWidgetItem(fi.fileName(), m_listWidget);
@@ -60,26 +60,26 @@ void AuraPlaylist::addFile(const QString &filePath) {
     emit playlistChanged();
 }
 
-void AuraPlaylist::addFiles(const QStringList &filePaths) {
+void OrionPlaylist::addFiles(const QStringList &filePaths) {
     for (const auto &p : filePaths) {
         addFile(p);
     }
 }
 
-void AuraPlaylist::clear() {
+void OrionPlaylist::clear() {
     m_listWidget->clear();
     m_currentIndex = -1;
     emit playlistChanged();
 }
 
-QString AuraPlaylist::currentFilePath() const {
+QString OrionPlaylist::currentFilePath() const {
     if (m_currentIndex >= 0 && m_currentIndex < m_listWidget->count()) {
         return m_listWidget->item(m_currentIndex)->data(Qt::UserRole).toString();
     }
     return QString();
 }
 
-QString AuraPlaylist::playNext() {
+QString OrionPlaylist::playNext() {
     if (m_listWidget->count() == 0) return QString();
 
     if (m_loopMode == LoopMode::RepeatOne && m_currentIndex >= 0) {
@@ -99,7 +99,7 @@ QString AuraPlaylist::playNext() {
     return currentFilePath();
 }
 
-QString AuraPlaylist::playPrevious() {
+QString OrionPlaylist::playPrevious() {
     if (m_listWidget->count() == 0) return QString();
 
     m_currentIndex--;
@@ -115,14 +115,14 @@ QString AuraPlaylist::playPrevious() {
     return currentFilePath();
 }
 
-void AuraPlaylist::onItemDoubleClicked(QListWidgetItem *item) {
+void OrionPlaylist::onItemDoubleClicked(QListWidgetItem *item) {
     if (!item) return;
     m_currentIndex = m_listWidget->row(item);
     QString path = item->data(Qt::UserRole).toString();
     emit trackSelected(path);
 }
 
-void AuraPlaylist::onAddClicked() {
+void OrionPlaylist::onAddClicked() {
     QStringList files = QFileDialog::getOpenFileNames(
         this, "Add Files to Playlist", QString(),
         "All Media (*.mkv *.mp4 *.webm *.avi *.mov *.flv *.ts *.mp3 *.flac *.opus *.ogg *.wav);;All Files (*)"
@@ -130,7 +130,7 @@ void AuraPlaylist::onAddClicked() {
     addFiles(files);
 }
 
-void AuraPlaylist::onRemoveClicked() {
+void OrionPlaylist::onRemoveClicked() {
     int row = m_listWidget->currentRow();
     if (row >= 0) {
         delete m_listWidget->takeItem(row);
@@ -143,11 +143,11 @@ void AuraPlaylist::onRemoveClicked() {
     }
 }
 
-void AuraPlaylist::onClearClicked() {
+void OrionPlaylist::onClearClicked() {
     clear();
 }
 
-void AuraPlaylist::onShuffleClicked() {
+void OrionPlaylist::onShuffleClicked() {
     int n = m_listWidget->count();
     if (n <= 1) return;
 
@@ -163,7 +163,7 @@ void AuraPlaylist::onShuffleClicked() {
     emit playlistChanged();
 }
 
-void AuraPlaylist::onLoopModeClicked() {
+void OrionPlaylist::onLoopModeClicked() {
     if (m_loopMode == LoopMode::RepeatAll) {
         m_loopMode = LoopMode::RepeatOne;
         m_loopBtn->setText("🔂 1");

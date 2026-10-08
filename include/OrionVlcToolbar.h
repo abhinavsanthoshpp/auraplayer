@@ -7,13 +7,13 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMouseEvent>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraVlcSlider : public QSlider {
+class OrionVlcSlider : public QSlider {
     Q_OBJECT
 
 public:
-    explicit AuraVlcSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit OrionVlcSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
 
 signals:
     void seekPercent(double percent);
@@ -28,7 +28,7 @@ private:
     double ratioFromX(int x) const;
 };
 
-class AuraVlcToolbar : public QWidget {
+class OrionVlcToolbar : public QWidget {
     Q_OBJECT
 
 public:
@@ -38,7 +38,7 @@ public:
         RepeatOne
     };
 
-    explicit AuraVlcToolbar(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionVlcToolbar(OrionEngine *engine, QWidget *parent = nullptr);
 
     void setPaused(bool paused);
     void setPosition(double seconds);
@@ -77,11 +77,11 @@ private:
     void setupUi();
     static QString formatVlcTime(double seconds);
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
 
     // Time Progress Row
     QLabel *m_elapsedLabel = nullptr;
-    AuraVlcSlider *m_timeSlider = nullptr;
+    OrionVlcSlider *m_timeSlider = nullptr;
     QLabel *m_durationLabel = nullptr;
 
     // Main Control Row

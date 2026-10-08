@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="auraBg" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="orionBg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0B0E14"/>
       <stop offset="50%" stop-color="#161B22"/>
       <stop offset="100%" stop-color="#090D16"/>
     </linearGradient>
-    <linearGradient id="auraGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="orionGlow" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00E5FF"/>
       <stop offset="50%" stop-color="#1F6FEB"/>
       <stop offset="100%" stop-color="#8A2BE2"/>
@@ -21,11 +21,11 @@
   </defs>
 
   <!-- Background rounded squircle -->
-  <rect x="24" y="24" width="464" height="464" rx="110" fill="url(#auraBg)" stroke="#30363D" stroke-width="4"/>
+  <rect x="24" y="24" width="464" height="464" rx="110" fill="url(#orionBg)" stroke="#30363D" stroke-width="4"/>
 
   <!-- Outer Neon Ring -->
-  <circle cx="256" cy="256" r="170" fill="none" stroke="url(#auraGlow)" stroke-width="12" opacity="0.9" filter="url(#neonBlur)"/>
-  <circle cx="256" cy="256" r="170" fill="none" stroke="url(#auraGlow)" stroke-width="6"/>
+  <circle cx="256" cy="256" r="170" fill="none" stroke="url(#orionGlow)" stroke-width="12" opacity="0.9" filter="url(#neonBlur)"/>
+  <circle cx="256" cy="256" r="170" fill="none" stroke="url(#orionGlow)" stroke-width="6"/>
 
   <!-- Orbital Energy Arc -->
   <path d="M 140 180 A 150 150 0 0 1 380 220" fill="none" stroke="#00E5FF" stroke-width="8" stroke-linecap="round" opacity="0.8"/>

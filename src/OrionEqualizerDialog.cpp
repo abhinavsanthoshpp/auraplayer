@@ -1,18 +1,18 @@
-#include "AuraEqualizerDialog.h"
+#include "OrionEqualizerDialog.h"
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QGroupBox>
 
-AuraEqualizerDialog::AuraEqualizerDialog(AuraEngine *engine, QWidget *parent)
+OrionEqualizerDialog::OrionEqualizerDialog(OrionEngine *engine, QWidget *parent)
     : QDialog(parent), m_engine(engine) {
-    setWindowTitle("AuraPlayer — Audio & Video Adjustments");
+    setWindowTitle("OrionPlayer — Audio & Video Adjustments");
     resize(520, 360);
     setupUi();
 }
 
-void AuraEqualizerDialog::setupUi() {
+void OrionEqualizerDialog::setupUi() {
     auto *rootLayout = new QVBoxLayout(this);
     auto *tabs = new QTabWidget(this);
 
@@ -146,17 +146,17 @@ void AuraEqualizerDialog::setupUi() {
 
     // Connections
     connect(m_presetCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &AuraEqualizerDialog::onPresetSelected);
-    connect(m_resetAudioBtn, &QPushButton::clicked, this, &AuraEqualizerDialog::onResetAudioEq);
+            this, &OrionEqualizerDialog::onPresetSelected);
+    connect(m_resetAudioBtn, &QPushButton::clicked, this, &OrionEqualizerDialog::onResetAudioEq);
 
-    connect(m_brightSlider, &QSlider::valueChanged, this, &AuraEqualizerDialog::onBrightnessChanged);
-    connect(m_contrastSlider, &QSlider::valueChanged, this, &AuraEqualizerDialog::onContrastChanged);
-    connect(m_satSlider, &QSlider::valueChanged, this, &AuraEqualizerDialog::onSaturationChanged);
-    connect(m_gammaSlider, &QSlider::valueChanged, this, &AuraEqualizerDialog::onGammaChanged);
-    connect(m_resetVideoBtn, &QPushButton::clicked, this, &AuraEqualizerDialog::onResetVideoAdjust);
+    connect(m_brightSlider, &QSlider::valueChanged, this, &OrionEqualizerDialog::onBrightnessChanged);
+    connect(m_contrastSlider, &QSlider::valueChanged, this, &OrionEqualizerDialog::onContrastChanged);
+    connect(m_satSlider, &QSlider::valueChanged, this, &OrionEqualizerDialog::onSaturationChanged);
+    connect(m_gammaSlider, &QSlider::valueChanged, this, &OrionEqualizerDialog::onGammaChanged);
+    connect(m_resetVideoBtn, &QPushButton::clicked, this, &OrionEqualizerDialog::onResetVideoAdjust);
 }
 
-void AuraEqualizerDialog::onBandChanged(int index, int value) {
+void OrionEqualizerDialog::onBandChanged(int index, int value) {
     if (index >= 0 && index < m_bandLabels.size()) {
         m_bandLabels[index]->setText(QString("%1%2dB").arg(value > 0 ? "+" : "").arg(value));
     }
@@ -169,7 +169,7 @@ void AuraEqualizerDialog::onBandChanged(int index, int value) {
     }
 }
 
-void AuraEqualizerDialog::applyPreset(const QVector<double> &values) {
+void OrionEqualizerDialog::applyPreset(const QVector<double> &values) {
     for (int i = 0; i < std::min(10, static_cast<int>(values.size())); ++i) {
         m_bandSliders[i]->blockSignals(true);
         m_bandSliders[i]->setValue(static_cast<int>(values[i]));
@@ -181,7 +181,7 @@ void AuraEqualizerDialog::applyPreset(const QVector<double> &values) {
     }
 }
 
-void AuraEqualizerDialog::onPresetSelected(int index) {
+void OrionEqualizerDialog::onPresetSelected(int index) {
     switch (index) {
     case 0: // Flat
         applyPreset({0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
@@ -207,32 +207,32 @@ void AuraEqualizerDialog::onPresetSelected(int index) {
     }
 }
 
-void AuraEqualizerDialog::onResetAudioEq() {
+void OrionEqualizerDialog::onResetAudioEq() {
     m_presetCombo->setCurrentIndex(0);
     applyPreset({0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
 }
 
-void AuraEqualizerDialog::onBrightnessChanged(int value) {
+void OrionEqualizerDialog::onBrightnessChanged(int value) {
     m_brightVal->setText(QString::number(value));
     if (m_engine) m_engine->setBrightness(value);
 }
 
-void AuraEqualizerDialog::onContrastChanged(int value) {
+void OrionEqualizerDialog::onContrastChanged(int value) {
     m_contrastVal->setText(QString::number(value));
     if (m_engine) m_engine->setContrast(value);
 }
 
-void AuraEqualizerDialog::onSaturationChanged(int value) {
+void OrionEqualizerDialog::onSaturationChanged(int value) {
     m_satVal->setText(QString::number(value));
     if (m_engine) m_engine->setSaturation(value);
 }
 
-void AuraEqualizerDialog::onGammaChanged(int value) {
+void OrionEqualizerDialog::onGammaChanged(int value) {
     m_gammaVal->setText(QString::number(value));
     if (m_engine) m_engine->setGamma(value);
 }
 
-void AuraEqualizerDialog::onResetVideoAdjust() {
+void OrionEqualizerDialog::onResetVideoAdjust() {
     m_brightSlider->setValue(0);
     m_contrastSlider->setValue(0);
     m_satSlider->setValue(0);

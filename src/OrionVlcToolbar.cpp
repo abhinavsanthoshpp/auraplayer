@@ -1,24 +1,24 @@
-#include "AuraVlcToolbar.h"
+#include "OrionVlcToolbar.h"
 #include <QToolTip>
 #include <QFrame>
 #include <cmath>
 
-// ================= AuraVlcSlider =================
+// ================= OrionVlcSlider =================
 
-AuraVlcSlider::AuraVlcSlider(Qt::Orientation orientation, QWidget *parent)
+OrionVlcSlider::OrionVlcSlider(Qt::Orientation orientation, QWidget *parent)
     : QSlider(orientation, parent) {
     setMouseTracking(true);
     setRange(0, 1000);
     setCursor(Qt::PointingHandCursor);
-    setObjectName("AuraVlcTimeSlider");
+    setObjectName("OrionVlcTimeSlider");
 }
 
-double AuraVlcSlider::ratioFromX(int x) const {
+double OrionVlcSlider::ratioFromX(int x) const {
     if (width() <= 0) return 0.0;
     return std::clamp(static_cast<double>(x) / static_cast<double>(width()), 0.0, 1.0);
 }
 
-void AuraVlcSlider::mousePressEvent(QMouseEvent *event) {
+void OrionVlcSlider::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         double r = ratioFromX(event->pos().x());
         setValue(static_cast<int>(r * 1000.0));
@@ -27,34 +27,34 @@ void AuraVlcSlider::mousePressEvent(QMouseEvent *event) {
     QSlider::mousePressEvent(event);
 }
 
-void AuraVlcSlider::mouseMoveEvent(QMouseEvent *event) {
+void OrionVlcSlider::mouseMoveEvent(QMouseEvent *event) {
     double r = ratioFromX(event->pos().x());
     emit hoverPercent(r, event->globalPosition().toPoint());
     QSlider::mouseMoveEvent(event);
 }
 
-void AuraVlcSlider::leaveEvent(QEvent *event) {
+void OrionVlcSlider::leaveEvent(QEvent *event) {
     QToolTip::hideText();
     QSlider::leaveEvent(event);
 }
 
-// ================= AuraVlcToolbar =================
+// ================= OrionVlcToolbar =================
 
-AuraVlcToolbar::AuraVlcToolbar(AuraEngine *engine, QWidget *parent)
+OrionVlcToolbar::OrionVlcToolbar(OrionEngine *engine, QWidget *parent)
     : QWidget(parent), m_engine(engine) {
     setupUi();
 
     if (m_engine) {
-        connect(m_engine, &AuraEngine::positionChanged, this, &AuraVlcToolbar::setPosition);
-        connect(m_engine, &AuraEngine::durationChanged, this, &AuraVlcToolbar::setDuration);
-        connect(m_engine, &AuraEngine::playbackPaused, this, &AuraVlcToolbar::setPaused);
-        connect(m_engine, &AuraEngine::volumeChanged, this, &AuraVlcToolbar::setVolume);
-        connect(m_engine, &AuraEngine::muteChanged, this, &AuraVlcToolbar::setMuted);
+        connect(m_engine, &OrionEngine::positionChanged, this, &OrionVlcToolbar::setPosition);
+        connect(m_engine, &OrionEngine::durationChanged, this, &OrionVlcToolbar::setDuration);
+        connect(m_engine, &OrionEngine::playbackPaused, this, &OrionVlcToolbar::setPaused);
+        connect(m_engine, &OrionEngine::volumeChanged, this, &OrionVlcToolbar::setVolume);
+        connect(m_engine, &OrionEngine::muteChanged, this, &OrionVlcToolbar::setMuted);
     }
 }
 
-void AuraVlcToolbar::setupUi() {
-    setObjectName("AuraVlcToolbar");
+void OrionVlcToolbar::setupUi() {
+    setObjectName("OrionVlcToolbar");
     setAttribute(Qt::WA_StyledBackground, true);
 
     auto *rootLayout = new QVBoxLayout(this);
@@ -63,7 +63,7 @@ void AuraVlcToolbar::setupUi() {
 
     // 1. Advanced Controls Bar (Hidden by default, toggleable via View menu)
     m_advancedBar = new QWidget(this);
-    m_advancedBar->setObjectName("AuraVlcAdvancedBar");
+    m_advancedBar->setObjectName("OrionVlcAdvancedBar");
     auto *advLayout = new QHBoxLayout(m_advancedBar);
     advLayout->setContentsMargins(0, 0, 0, 0);
     advLayout->setSpacing(6);
@@ -99,12 +99,12 @@ void AuraVlcToolbar::setupUi() {
     timeRow->setSpacing(8);
 
     m_elapsedLabel = new QLabel("00:00:00", this);
-    m_elapsedLabel->setObjectName("AuraVlcElapsedLabel");
+    m_elapsedLabel->setObjectName("OrionVlcElapsedLabel");
 
-    m_timeSlider = new AuraVlcSlider(Qt::Horizontal, this);
+    m_timeSlider = new OrionVlcSlider(Qt::Horizontal, this);
 
     m_durationLabel = new QLabel("00:00:00", this);
-    m_durationLabel->setObjectName("AuraVlcDurationLabel");
+    m_durationLabel->setObjectName("OrionVlcDurationLabel");
     m_durationLabel->setCursor(Qt::PointingHandCursor);
     m_durationLabel->setToolTip("Click to toggle remaining time countdown");
 
@@ -119,47 +119,47 @@ void AuraVlcToolbar::setupUi() {
     controlRow->setSpacing(4);
 
     m_playPauseBtn = new QPushButton("▶", this);
-    m_playPauseBtn->setObjectName("AuraVlcPlayPauseBtn");
+    m_playPauseBtn->setObjectName("OrionVlcPlayPauseBtn");
     m_playPauseBtn->setFixedSize(32, 30);
     m_playPauseBtn->setToolTip("Play/Pause (Space)");
 
     m_prevBtn = new QPushButton("⏮", this);
-    m_prevBtn->setObjectName("AuraVlcToolBtn");
+    m_prevBtn->setObjectName("OrionVlcToolBtn");
     m_prevBtn->setFixedSize(28, 28);
     m_prevBtn->setToolTip("Previous track in playlist (P)");
 
     m_stopBtn = new QPushButton("⏹", this);
-    m_stopBtn->setObjectName("AuraVlcToolBtn");
+    m_stopBtn->setObjectName("OrionVlcToolBtn");
     m_stopBtn->setFixedSize(28, 28);
     m_stopBtn->setToolTip("Stop playback (S)");
 
     m_nextBtn = new QPushButton("⏭", this);
-    m_nextBtn->setObjectName("AuraVlcToolBtn");
+    m_nextBtn->setObjectName("OrionVlcToolBtn");
     m_nextBtn->setFixedSize(28, 28);
     m_nextBtn->setToolTip("Next track in playlist (N)");
 
     m_fullscreenBtn = new QPushButton("⛶", this);
-    m_fullscreenBtn->setObjectName("AuraVlcToolBtn");
+    m_fullscreenBtn->setObjectName("OrionVlcToolBtn");
     m_fullscreenBtn->setFixedSize(28, 28);
     m_fullscreenBtn->setToolTip("Toggle Fullscreen (F11 / F)");
 
     m_effectsBtn = new QPushButton("🎛", this);
-    m_effectsBtn->setObjectName("AuraVlcToolBtn");
+    m_effectsBtn->setObjectName("OrionVlcToolBtn");
     m_effectsBtn->setFixedSize(28, 28);
     m_effectsBtn->setToolTip("Show Extended Settings: Equalizer, Video FX, and Audio/Sub Sync (Ctrl+E)");
 
     m_playlistBtn = new QPushButton("📑", this);
-    m_playlistBtn->setObjectName("AuraVlcToolBtn");
+    m_playlistBtn->setObjectName("OrionVlcToolBtn");
     m_playlistBtn->setFixedSize(28, 28);
     m_playlistBtn->setToolTip("Toggle Playlist View (Ctrl+L)");
 
     m_loopBtn = new QPushButton("➡️", this);
-    m_loopBtn->setObjectName("AuraVlcToolBtn");
+    m_loopBtn->setObjectName("OrionVlcToolBtn");
     m_loopBtn->setFixedSize(28, 28);
     m_loopBtn->setToolTip("Loop Mode: Normal (Click to toggle Repeat All / Repeat One)");
 
     m_shuffleBtn = new QPushButton("🔀", this);
-    m_shuffleBtn->setObjectName("AuraVlcToolBtn");
+    m_shuffleBtn->setObjectName("OrionVlcToolBtn");
     m_shuffleBtn->setFixedSize(28, 28);
     m_shuffleBtn->setToolTip("Random / Shuffle Playlist Mode");
 
@@ -177,19 +177,19 @@ void AuraVlcToolbar::setupUi() {
 
     // Audio Volume Section
     m_muteBtn = new QPushButton("🔊", this);
-    m_muteBtn->setObjectName("AuraVlcMuteBtn");
+    m_muteBtn->setObjectName("OrionVlcMuteBtn");
     m_muteBtn->setFixedSize(26, 26);
     m_muteBtn->setToolTip("Mute / Unmute audio (M)");
 
     m_volumeSlider = new QSlider(Qt::Horizontal, this);
-    m_volumeSlider->setObjectName("AuraVlcVolSlider");
+    m_volumeSlider->setObjectName("OrionVlcVolSlider");
     m_volumeSlider->setRange(0, 200);
     m_volumeSlider->setValue(100);
     m_volumeSlider->setFixedWidth(90);
     m_volumeSlider->setToolTip("Volume (0% - 200% with VLC audio booster)");
 
     m_volumeLabel = new QLabel("100%", this);
-    m_volumeLabel->setObjectName("AuraVlcVolLabel");
+    m_volumeLabel->setObjectName("OrionVlcVolLabel");
     m_volumeLabel->setFixedWidth(42);
 
     controlRow->addWidget(m_muteBtn);
@@ -199,39 +199,39 @@ void AuraVlcToolbar::setupUi() {
     rootLayout->addLayout(controlRow);
 
     // Signal connections
-    connect(m_timeSlider, &AuraVlcSlider::seekPercent, this, &AuraVlcToolbar::onSeekRequested);
-    connect(m_timeSlider, &AuraVlcSlider::hoverPercent, this, [this](double pct, const QPoint &pos) {
+    connect(m_timeSlider, &OrionVlcSlider::seekPercent, this, &OrionVlcToolbar::onSeekRequested);
+    connect(m_timeSlider, &OrionVlcSlider::hoverPercent, this, [this](double pct, const QPoint &pos) {
         if (m_duration > 0.0) {
             double hoverSecs = pct * m_duration;
             QToolTip::showText(pos, formatVlcTime(hoverSecs), m_timeSlider);
         }
     });
 
-    connect(m_playPauseBtn, &QPushButton::clicked, this, &AuraVlcToolbar::playPauseClicked);
-    connect(m_stopBtn, &QPushButton::clicked, this, &AuraVlcToolbar::stopClicked);
-    connect(m_prevBtn, &QPushButton::clicked, this, &AuraVlcToolbar::prevClicked);
-    connect(m_nextBtn, &QPushButton::clicked, this, &AuraVlcToolbar::nextClicked);
-    connect(m_fullscreenBtn, &QPushButton::clicked, this, &AuraVlcToolbar::fullscreenClicked);
-    connect(m_effectsBtn, &QPushButton::clicked, this, &AuraVlcToolbar::extendedSettingsClicked);
-    connect(m_playlistBtn, &QPushButton::clicked, this, &AuraVlcToolbar::playlistClicked);
-    connect(m_loopBtn, &QPushButton::clicked, this, &AuraVlcToolbar::onLoopClicked);
-    connect(m_shuffleBtn, &QPushButton::clicked, this, &AuraVlcToolbar::shuffleClicked);
+    connect(m_playPauseBtn, &QPushButton::clicked, this, &OrionVlcToolbar::playPauseClicked);
+    connect(m_stopBtn, &QPushButton::clicked, this, &OrionVlcToolbar::stopClicked);
+    connect(m_prevBtn, &QPushButton::clicked, this, &OrionVlcToolbar::prevClicked);
+    connect(m_nextBtn, &QPushButton::clicked, this, &OrionVlcToolbar::nextClicked);
+    connect(m_fullscreenBtn, &QPushButton::clicked, this, &OrionVlcToolbar::fullscreenClicked);
+    connect(m_effectsBtn, &QPushButton::clicked, this, &OrionVlcToolbar::extendedSettingsClicked);
+    connect(m_playlistBtn, &QPushButton::clicked, this, &OrionVlcToolbar::playlistClicked);
+    connect(m_loopBtn, &QPushButton::clicked, this, &OrionVlcToolbar::onLoopClicked);
+    connect(m_shuffleBtn, &QPushButton::clicked, this, &OrionVlcToolbar::shuffleClicked);
 
-    connect(m_muteBtn, &QPushButton::clicked, this, &AuraVlcToolbar::onMuteClicked);
-    connect(m_volumeSlider, &QSlider::valueChanged, this, &AuraVlcToolbar::onVolumeChanged);
+    connect(m_muteBtn, &QPushButton::clicked, this, &OrionVlcToolbar::onMuteClicked);
+    connect(m_volumeSlider, &QSlider::valueChanged, this, &OrionVlcToolbar::onVolumeChanged);
 
-    connect(m_recordBtn, &QPushButton::clicked, this, &AuraVlcToolbar::recordClicked);
-    connect(m_snapshotBtn, &QPushButton::clicked, this, &AuraVlcToolbar::snapshotClicked);
-    connect(m_frameStepBtn, &QPushButton::clicked, this, &AuraVlcToolbar::frameStepClicked);
+    connect(m_recordBtn, &QPushButton::clicked, this, &OrionVlcToolbar::recordClicked);
+    connect(m_snapshotBtn, &QPushButton::clicked, this, &OrionVlcToolbar::snapshotClicked);
+    connect(m_frameStepBtn, &QPushButton::clicked, this, &OrionVlcToolbar::frameStepClicked);
 
     m_durationLabel->installEventFilter(this);
 }
 
-void AuraVlcToolbar::setPaused(bool paused) {
+void OrionVlcToolbar::setPaused(bool paused) {
     m_playPauseBtn->setText(paused ? "▶" : "⏸");
 }
 
-void AuraVlcToolbar::setPosition(double seconds) {
+void OrionVlcToolbar::setPosition(double seconds) {
     m_position = seconds;
     m_elapsedLabel->setText(formatVlcTime(m_position));
 
@@ -248,12 +248,12 @@ void AuraVlcToolbar::setPosition(double seconds) {
     }
 }
 
-void AuraVlcToolbar::setDuration(double seconds) {
+void OrionVlcToolbar::setDuration(double seconds) {
     m_duration = seconds;
     setPosition(m_position);
 }
 
-void AuraVlcToolbar::setVolume(double volume) {
+void OrionVlcToolbar::setVolume(double volume) {
     m_volumeSlider->blockSignals(true);
     m_volumeSlider->setValue(static_cast<int>(volume));
     m_volumeSlider->blockSignals(false);
@@ -268,23 +268,23 @@ void AuraVlcToolbar::setVolume(double volume) {
     }
 }
 
-void AuraVlcToolbar::setMuted(bool muted) {
+void OrionVlcToolbar::setMuted(bool muted) {
     m_muteBtn->setText(muted ? "🔇" : "🔊");
 }
 
-void AuraVlcToolbar::setSpeed(double speed) {
+void OrionVlcToolbar::setSpeed(double speed) {
     Q_UNUSED(speed);
 }
 
-void AuraVlcToolbar::setAdvancedControlsVisible(bool visible) {
+void OrionVlcToolbar::setAdvancedControlsVisible(bool visible) {
     m_advancedBar->setVisible(visible);
 }
 
-bool AuraVlcToolbar::isAdvancedControlsVisible() const {
+bool OrionVlcToolbar::isAdvancedControlsVisible() const {
     return m_advancedBar->isVisible();
 }
 
-bool AuraVlcToolbar::eventFilter(QObject *watched, QEvent *event) {
+bool OrionVlcToolbar::eventFilter(QObject *watched, QEvent *event) {
     if (watched == m_durationLabel && event->type() == QEvent::MouseButtonPress) {
         onDurationLabelClicked();
         return true;
@@ -292,26 +292,26 @@ bool AuraVlcToolbar::eventFilter(QObject *watched, QEvent *event) {
     return QWidget::eventFilter(watched, event);
 }
 
-void AuraVlcToolbar::onSeekRequested(double percent) {
+void OrionVlcToolbar::onSeekRequested(double percent) {
     if (m_engine && m_duration > 0.0) {
         m_engine->seek(percent * m_duration);
     }
 }
 
-void AuraVlcToolbar::onVolumeChanged(int val) {
+void OrionVlcToolbar::onVolumeChanged(int val) {
     m_volumeLabel->setText(QString("%1%").arg(val));
     if (m_engine) {
         m_engine->setVolume(static_cast<double>(val));
     }
 }
 
-void AuraVlcToolbar::onMuteClicked() {
+void OrionVlcToolbar::onMuteClicked() {
     if (m_engine) {
         m_engine->toggleMute();
     }
 }
 
-void AuraVlcToolbar::onLoopClicked() {
+void OrionVlcToolbar::onLoopClicked() {
     if (m_loopMode == LoopMode::None) {
         m_loopMode = LoopMode::RepeatAll;
         m_loopBtn->setText("🔁");
@@ -328,12 +328,12 @@ void AuraVlcToolbar::onLoopClicked() {
     emit loopModeChanged(m_loopMode);
 }
 
-void AuraVlcToolbar::onDurationLabelClicked() {
+void OrionVlcToolbar::onDurationLabelClicked() {
     m_showRemaining = !m_showRemaining;
     setPosition(m_position);
 }
 
-QString AuraVlcToolbar::formatVlcTime(double seconds) {
+QString OrionVlcToolbar::formatVlcTime(double seconds) {
     if (seconds < 0.0) seconds = 0.0;
     int total = static_cast<int>(seconds);
     int h = total / 3600;

@@ -1,4 +1,4 @@
-#include "AuraVideoWidget.h"
+#include "OrionVideoWidget.h"
 #include "mpv/render.h"
 #include "mpv/render_gl.h"
 
@@ -11,7 +11,7 @@
 #include <QOpenGLContext>
 #include <QDebug>
 
-void *AuraVideoWidget::getProcAddress(void *ctx, const char *name) {
+void *OrionVideoWidget::getProcAddress(void *ctx, const char *name) {
     auto *glCtx = static_cast<QOpenGLContext *>(ctx);
     if (!glCtx) {
         glCtx = QOpenGLContext::currentContext();
@@ -20,14 +20,14 @@ void *AuraVideoWidget::getProcAddress(void *ctx, const char *name) {
     return reinterpret_cast<void *>(glCtx->getProcAddress(QByteArray(name)));
 }
 
-void AuraVideoWidget::onMpvUpdateCallback(void *ctx) {
-    auto *widget = static_cast<AuraVideoWidget *>(ctx);
+void OrionVideoWidget::onMpvUpdateCallback(void *ctx) {
+    auto *widget = static_cast<OrionVideoWidget *>(ctx);
     if (widget) {
         QMetaObject::invokeMethod(widget, "onMpvRenderUpdate", Qt::QueuedConnection);
     }
 }
 
-AuraVideoWidget::AuraVideoWidget(AuraEngine *engine, QWidget *parent)
+OrionVideoWidget::OrionVideoWidget(OrionEngine *engine, QWidget *parent)
     : QOpenGLWidget(parent), m_engine(engine) {
     setMouseTracking(true);
     setAcceptDrops(true);
@@ -35,21 +35,21 @@ AuraVideoWidget::AuraVideoWidget(AuraEngine *engine, QWidget *parent)
 
     m_clickTimer.setSingleShot(true);
     m_clickTimer.setInterval(220);
-    connect(&m_clickTimer, &QTimer::timeout, this, &AuraVideoWidget::singleClicked);
+    connect(&m_clickTimer, &QTimer::timeout, this, &OrionVideoWidget::singleClicked);
 
     if (m_engine) {
-        connect(m_engine, &AuraEngine::playbackStarted, this, [this]() {
+        connect(m_engine, &OrionEngine::playbackStarted, this, [this]() {
             m_hasActiveVideo = true;
             update();
         });
-        connect(m_engine, &AuraEngine::playbackStopped, this, [this]() {
+        connect(m_engine, &OrionEngine::playbackStopped, this, [this]() {
             m_hasActiveVideo = false;
             update();
         });
     }
 }
 
-AuraVideoWidget::~AuraVideoWidget() {
+OrionVideoWidget::~OrionVideoWidget() {
     makeCurrent();
     if (m_renderCtx) {
         mpv_render_context_set_update_callback(m_renderCtx, nullptr, nullptr);
@@ -59,7 +59,7 @@ AuraVideoWidget::~AuraVideoWidget() {
     doneCurrent();
 }
 
-void AuraVideoWidget::initializeGL() {
+void OrionVideoWidget::initializeGL() {
     initializeOpenGLFunctions();
 
     if (!m_engine || !m_engine->handle()) return;
@@ -84,12 +84,12 @@ void AuraVideoWidget::initializeGL() {
     mpv_render_context_set_update_callback(m_renderCtx, onMpvUpdateCallback, this);
 }
 
-void AuraVideoWidget::resizeGL(int w, int h) {
+void OrionVideoWidget::resizeGL(int w, int h) {
     Q_UNUSED(w);
     Q_UNUSED(h);
 }
 
-void AuraVideoWidget::paintGL() {
+void OrionVideoWidget::paintGL() {
     if (m_renderCtx && m_hasActiveVideo) {
         qreal dpr = devicePixelRatioF();
         int fboWidth = static_cast<int>(width() * dpr);
@@ -154,7 +154,7 @@ void AuraVideoWidget::paintGL() {
         painter.setPen(QColor(255, 255, 255));
         QFont titleFont("Inter", 24, QFont::Bold);
         painter.setFont(titleFont);
-        painter.drawText(r.adjusted(0, 50, 0, 0), Qt::AlignHCenter | Qt::AlignTop, "AuraPlayer");
+        painter.drawText(r.adjusted(0, 50, 0, 0), Qt::AlignHCenter | Qt::AlignTop, "OrionPlayer");
 
         // Pill badge
         QRect badgeRect(center.x() - 140, center.y() + 90, 280, 24);
@@ -183,11 +183,11 @@ void AuraVideoWidget::paintGL() {
     }
 }
 
-void AuraVideoWidget::onMpvRenderUpdate() {
+void OrionVideoWidget::onMpvRenderUpdate() {
     update();
 }
 
-void AuraVideoWidget::mousePressEvent(QMouseEvent *event) {
+void OrionVideoWidget::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         m_clickTimer.start();
     }
@@ -195,7 +195,7 @@ void AuraVideoWidget::mousePressEvent(QMouseEvent *event) {
     QOpenGLWidget::mousePressEvent(event);
 }
 
-void AuraVideoWidget::mouseDoubleClickEvent(QMouseEvent *event) {
+void OrionVideoWidget::mouseDoubleClickEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         m_clickTimer.stop();
         emit doubleClicked();
@@ -203,24 +203,24 @@ void AuraVideoWidget::mouseDoubleClickEvent(QMouseEvent *event) {
     QOpenGLWidget::mouseDoubleClickEvent(event);
 }
 
-void AuraVideoWidget::mouseMoveEvent(QMouseEvent *event) {
+void OrionVideoWidget::mouseMoveEvent(QMouseEvent *event) {
     emit userActivity();
     QOpenGLWidget::mouseMoveEvent(event);
 }
 
-void AuraVideoWidget::wheelEvent(QWheelEvent *event) {
+void OrionVideoWidget::wheelEvent(QWheelEvent *event) {
     emit userActivity();
     emit wheelScrolled(event->angleDelta().y());
     QOpenGLWidget::wheelEvent(event);
 }
 
-void AuraVideoWidget::dragEnterEvent(QDragEnterEvent *event) {
+void OrionVideoWidget::dragEnterEvent(QDragEnterEvent *event) {
     if (event->mimeData()->hasUrls()) {
         event->acceptProposedAction();
     }
 }
 
-void AuraVideoWidget::dropEvent(QDropEvent *event) {
+void OrionVideoWidget::dropEvent(QDropEvent *event) {
     const auto urls = event->mimeData()->urls();
     if (!urls.isEmpty()) {
         QString localPath = urls.first().toLocalFile();

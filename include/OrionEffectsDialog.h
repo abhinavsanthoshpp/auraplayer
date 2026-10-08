@@ -9,13 +9,13 @@
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QVector>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
-class AuraEffectsDialog : public QDialog {
+class OrionEffectsDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AuraEffectsDialog(AuraEngine *engine, QWidget *parent = nullptr);
+    explicit OrionEffectsDialog(OrionEngine *engine, QWidget *parent = nullptr);
 
     void refreshFromEngine();
 
@@ -46,7 +46,7 @@ private:
     QWidget *createSyncTab();
     void applyEqualizer();
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
 
     // Audio Equalizer controls
     QCheckBox *m_eqEnable = nullptr;

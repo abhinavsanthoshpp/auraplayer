@@ -1,18 +1,18 @@
-#include "AuraPreferencesDialog.h"
+#include "OrionPreferencesDialog.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QMessageBox>
 
-AuraPreferencesDialog::AuraPreferencesDialog(AuraEngine *engine, QWidget *parent)
+OrionPreferencesDialog::OrionPreferencesDialog(OrionEngine *engine, QWidget *parent)
     : QDialog(parent), m_engine(engine) {
-    setWindowTitle("Simple Preferences — AuraPlayer");
+    setWindowTitle("Simple Preferences — OrionPlayer");
     resize(580, 420);
     setupUi();
 }
 
-void AuraPreferencesDialog::setupUi() {
+void OrionPreferencesDialog::setupUi() {
     auto *rootLayout = new QVBoxLayout(this);
     rootLayout->setContentsMargins(10, 10, 10, 10);
     rootLayout->setSpacing(8);
@@ -54,13 +54,13 @@ void AuraPreferencesDialog::setupUi() {
     bottomRow->addWidget(saveBtn);
     rootLayout->addLayout(bottomRow);
 
-    connect(m_categoryList, &QListWidget::currentRowChanged, this, &AuraPreferencesDialog::onCategoryChanged);
-    connect(resetBtn, &QPushButton::clicked, this, &AuraPreferencesDialog::onResetDefaultsClicked);
+    connect(m_categoryList, &QListWidget::currentRowChanged, this, &OrionPreferencesDialog::onCategoryChanged);
+    connect(resetBtn, &QPushButton::clicked, this, &OrionPreferencesDialog::onResetDefaultsClicked);
     connect(cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
-    connect(saveBtn, &QPushButton::clicked, this, &AuraPreferencesDialog::onSaveClicked);
+    connect(saveBtn, &QPushButton::clicked, this, &OrionPreferencesDialog::onSaveClicked);
 }
 
-QWidget *AuraPreferencesDialog::createInterfacePage() {
+QWidget *OrionPreferencesDialog::createInterfacePage() {
     auto *page = new QWidget();
     auto *layout = new QVBoxLayout(page);
 
@@ -86,7 +86,7 @@ QWidget *AuraPreferencesDialog::createInterfacePage() {
     return page;
 }
 
-QWidget *AuraPreferencesDialog::createAudioPage() {
+QWidget *OrionPreferencesDialog::createAudioPage() {
     auto *page = new QWidget();
     auto *layout = new QVBoxLayout(page);
 
@@ -110,7 +110,7 @@ QWidget *AuraPreferencesDialog::createAudioPage() {
     return page;
 }
 
-QWidget *AuraPreferencesDialog::createVideoPage() {
+QWidget *OrionPreferencesDialog::createVideoPage() {
     auto *page = new QWidget();
     auto *layout = new QVBoxLayout(page);
 
@@ -135,7 +135,7 @@ QWidget *AuraPreferencesDialog::createVideoPage() {
     return page;
 }
 
-QWidget *AuraPreferencesDialog::createSubtitlesPage() {
+QWidget *OrionPreferencesDialog::createSubtitlesPage() {
     auto *page = new QWidget();
     auto *layout = new QVBoxLayout(page);
 
@@ -159,7 +159,7 @@ QWidget *AuraPreferencesDialog::createSubtitlesPage() {
     return page;
 }
 
-QWidget *AuraPreferencesDialog::createCodecsPage() {
+QWidget *OrionPreferencesDialog::createCodecsPage() {
     auto *page = new QWidget();
     auto *layout = new QVBoxLayout(page);
 
@@ -178,17 +178,17 @@ QWidget *AuraPreferencesDialog::createCodecsPage() {
     return page;
 }
 
-void AuraPreferencesDialog::onCategoryChanged(int index) {
+void OrionPreferencesDialog::onCategoryChanged(int index) {
     if (m_pages && index >= 0 && index < m_pages->count()) {
         m_pages->setCurrentIndex(index);
     }
 }
 
-void AuraPreferencesDialog::onSaveClicked() {
+void OrionPreferencesDialog::onSaveClicked() {
     accept();
 }
 
-void AuraPreferencesDialog::onResetDefaultsClicked() {
+void OrionPreferencesDialog::onResetDefaultsClicked() {
     m_defaultVolume->setValue(100);
     m_hwdecCombo->setCurrentIndex(0);
     m_deinterlaceCombo->setCurrentIndex(0);

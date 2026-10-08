@@ -3,16 +3,16 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QTimer>
-#include "AuraEngine.h"
+#include "OrionEngine.h"
 
 struct mpv_render_context;
 
-class AuraVideoWidget : public QOpenGLWidget, protected QOpenGLFunctions {
+class OrionVideoWidget : public QOpenGLWidget, protected QOpenGLFunctions {
     Q_OBJECT
 
 public:
-    explicit AuraVideoWidget(AuraEngine *engine, QWidget *parent = nullptr);
-    ~AuraVideoWidget() override;
+    explicit OrionVideoWidget(OrionEngine *engine, QWidget *parent = nullptr);
+    ~OrionVideoWidget() override;
 
 signals:
     void doubleClicked();
@@ -40,7 +40,7 @@ private:
     static void *getProcAddress(void *ctx, const char *name);
     static void onMpvUpdateCallback(void *ctx);
 
-    AuraEngine *m_engine = nullptr;
+    OrionEngine *m_engine = nullptr;
     mpv_render_context *m_renderCtx = nullptr;
     bool m_hasActiveVideo = false;
     QTimer m_clickTimer;

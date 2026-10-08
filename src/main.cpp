@@ -9,13 +9,13 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     std::setlocale(LC_NUMERIC, "C"); // Strictly required by libmpv
 
-    app.setApplicationName("AuraPlayer");
+    app.setApplicationName("OrionPlayer");
     app.setApplicationVersion("1.0.0");
-    app.setOrganizationName("AuraPlayer");
-    app.setDesktopFileName("auraplayer");
+    app.setOrganizationName("OrionPlayer");
+    app.setDesktopFileName("orionplayer");
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("AuraPlayer — Ultra-Fast Open-Source Hardware Accelerated Media Player");
+    parser.setApplicationDescription("OrionPlayer — Ultra-Fast Open-Source Hardware Accelerated Media Player");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("media", "Media file or stream URL to play directly on startup");

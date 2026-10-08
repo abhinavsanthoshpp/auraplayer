@@ -1,17 +1,17 @@
-#include "AuraEffectsDialog.h"
+#include "OrionEffectsDialog.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QGroupBox>
 
-AuraEffectsDialog::AuraEffectsDialog(AuraEngine *engine, QWidget *parent)
+OrionEffectsDialog::OrionEffectsDialog(OrionEngine *engine, QWidget *parent)
     : QDialog(parent), m_engine(engine) {
-    setWindowTitle("Adjustments and Effects — AuraPlayer");
+    setWindowTitle("Adjustments and Effects — OrionPlayer");
     resize(560, 440);
     setupUi();
 }
 
-void AuraEffectsDialog::setupUi() {
+void OrionEffectsDialog::setupUi() {
     auto *rootLayout = new QVBoxLayout(this);
     rootLayout->setContentsMargins(10, 10, 10, 10);
     rootLayout->setSpacing(8);
@@ -30,7 +30,7 @@ void AuraEffectsDialog::setupUi() {
     rootLayout->addLayout(bottomRow);
 }
 
-QWidget *AuraEffectsDialog::createAudioTab() {
+QWidget *OrionEffectsDialog::createAudioTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(10, 10, 10, 10);
@@ -127,14 +127,14 @@ QWidget *AuraEffectsDialog::createAudioTab() {
     eqLayout->addLayout(slidersRow);
     layout->addWidget(eqBox, 1);
 
-    connect(m_eqEnable, &QCheckBox::toggled, this, &AuraEffectsDialog::onEqToggled);
-    connect(m_preampSlider, &QSlider::valueChanged, this, &AuraEffectsDialog::onPreampChanged);
-    connect(m_presetCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraEffectsDialog::onPresetSelected);
+    connect(m_eqEnable, &QCheckBox::toggled, this, &OrionEffectsDialog::onEqToggled);
+    connect(m_preampSlider, &QSlider::valueChanged, this, &OrionEffectsDialog::onPreampChanged);
+    connect(m_presetCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OrionEffectsDialog::onPresetSelected);
 
     return tab;
 }
 
-QWidget *AuraEffectsDialog::createVideoTab() {
+QWidget *OrionEffectsDialog::createVideoTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(10, 10, 10, 10);
@@ -173,18 +173,18 @@ QWidget *AuraEffectsDialog::createVideoTab() {
     layout->addWidget(adjustBox);
     layout->addStretch(1);
 
-    connect(m_videoEnable, &QCheckBox::toggled, this, &AuraEffectsDialog::onVideoAdjustToggled);
-    connect(m_brightSlider, &QSlider::valueChanged, this, &AuraEffectsDialog::onBrightnessChanged);
-    connect(m_contrastSlider, &QSlider::valueChanged, this, &AuraEffectsDialog::onContrastChanged);
-    connect(m_satSlider, &QSlider::valueChanged, this, &AuraEffectsDialog::onSaturationChanged);
-    connect(m_gammaSlider, &QSlider::valueChanged, this, &AuraEffectsDialog::onGammaChanged);
-    connect(m_hueSlider, &QSlider::valueChanged, this, &AuraEffectsDialog::onHueChanged);
-    connect(resetBtn, &QPushButton::clicked, this, &AuraEffectsDialog::onResetVideoClicked);
+    connect(m_videoEnable, &QCheckBox::toggled, this, &OrionEffectsDialog::onVideoAdjustToggled);
+    connect(m_brightSlider, &QSlider::valueChanged, this, &OrionEffectsDialog::onBrightnessChanged);
+    connect(m_contrastSlider, &QSlider::valueChanged, this, &OrionEffectsDialog::onContrastChanged);
+    connect(m_satSlider, &QSlider::valueChanged, this, &OrionEffectsDialog::onSaturationChanged);
+    connect(m_gammaSlider, &QSlider::valueChanged, this, &OrionEffectsDialog::onGammaChanged);
+    connect(m_hueSlider, &QSlider::valueChanged, this, &OrionEffectsDialog::onHueChanged);
+    connect(resetBtn, &QPushButton::clicked, this, &OrionEffectsDialog::onResetVideoClicked);
 
     return tab;
 }
 
-QWidget *AuraEffectsDialog::createSyncTab() {
+QWidget *OrionEffectsDialog::createSyncTab() {
     auto *tab = new QWidget();
     auto *layout = new QVBoxLayout(tab);
     layout->setContentsMargins(14, 14, 14, 14);
@@ -218,13 +218,13 @@ QWidget *AuraEffectsDialog::createSyncTab() {
 
     layout->addStretch(1);
 
-    connect(m_audioSyncSpin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AuraEffectsDialog::onAudioSyncChanged);
-    connect(m_subSyncSpin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AuraEffectsDialog::onSubSyncChanged);
+    connect(m_audioSyncSpin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OrionEffectsDialog::onAudioSyncChanged);
+    connect(m_subSyncSpin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OrionEffectsDialog::onSubSyncChanged);
 
     return tab;
 }
 
-void AuraEffectsDialog::onEqToggled(bool checked) {
+void OrionEffectsDialog::onEqToggled(bool checked) {
     if (!checked) {
         if (m_engine) {
             m_engine->setEqualizerBands(QVector<double>(10, 0.0), 0.0);
@@ -234,19 +234,19 @@ void AuraEffectsDialog::onEqToggled(bool checked) {
     }
 }
 
-void AuraEffectsDialog::onPreampChanged(int val) {
+void OrionEffectsDialog::onPreampChanged(int val) {
     m_preampLabel->setText(QString("%1%2 dB").arg(val > 0 ? "+" : "").arg(val));
     applyEqualizer();
 }
 
-void AuraEffectsDialog::onBandChanged(int index, int val) {
+void OrionEffectsDialog::onBandChanged(int index, int val) {
     if (index >= 0 && index < m_bandLabels.size()) {
         m_bandLabels[index]->setText(QString("%1%2 dB").arg(val > 0 ? "+" : "").arg(val));
     }
     applyEqualizer();
 }
 
-void AuraEffectsDialog::applyEqualizer() {
+void OrionEffectsDialog::applyEqualizer() {
     if (!m_eqEnable->isChecked() || !m_engine) return;
 
     QVector<double> gains(10);
@@ -257,7 +257,7 @@ void AuraEffectsDialog::applyEqualizer() {
     m_engine->setEqualizerBands(gains, preamp);
 }
 
-void AuraEffectsDialog::onPresetSelected(int index) {
+void OrionEffectsDialog::onPresetSelected(int index) {
     m_eqEnable->setChecked(true);
 
     static const QVector<QVector<double>> presets = {
@@ -293,7 +293,7 @@ void AuraEffectsDialog::onPresetSelected(int index) {
     }
 }
 
-void AuraEffectsDialog::onVideoAdjustToggled(bool checked) {
+void OrionEffectsDialog::onVideoAdjustToggled(bool checked) {
     if (!checked) {
         if (m_engine) {
             m_engine->setBrightness(0);
@@ -313,32 +313,32 @@ void AuraEffectsDialog::onVideoAdjustToggled(bool checked) {
     }
 }
 
-void AuraEffectsDialog::onBrightnessChanged(int val) {
+void OrionEffectsDialog::onBrightnessChanged(int val) {
     m_brightVal->setText(QString::number(val));
     if (m_videoEnable->isChecked() && m_engine) m_engine->setBrightness(val);
 }
 
-void AuraEffectsDialog::onContrastChanged(int val) {
+void OrionEffectsDialog::onContrastChanged(int val) {
     m_contrastVal->setText(QString::number(val));
     if (m_videoEnable->isChecked() && m_engine) m_engine->setContrast(val);
 }
 
-void AuraEffectsDialog::onSaturationChanged(int val) {
+void OrionEffectsDialog::onSaturationChanged(int val) {
     m_satVal->setText(QString::number(val));
     if (m_videoEnable->isChecked() && m_engine) m_engine->setSaturation(val);
 }
 
-void AuraEffectsDialog::onGammaChanged(int val) {
+void OrionEffectsDialog::onGammaChanged(int val) {
     m_gammaVal->setText(QString::number(val));
     if (m_videoEnable->isChecked() && m_engine) m_engine->setGamma(val);
 }
 
-void AuraEffectsDialog::onHueChanged(int val) {
+void OrionEffectsDialog::onHueChanged(int val) {
     m_hueVal->setText(QString::number(val));
     if (m_videoEnable->isChecked() && m_engine) m_engine->setHue(val);
 }
 
-void AuraEffectsDialog::onResetVideoClicked() {
+void OrionEffectsDialog::onResetVideoClicked() {
     m_brightSlider->setValue(0);
     m_contrastSlider->setValue(0);
     m_satSlider->setValue(0);
@@ -346,15 +346,15 @@ void AuraEffectsDialog::onResetVideoClicked() {
     m_hueSlider->setValue(0);
 }
 
-void AuraEffectsDialog::onAudioSyncChanged(double val) {
+void OrionEffectsDialog::onAudioSyncChanged(double val) {
     if (m_engine) m_engine->setAudioDelay(val);
 }
 
-void AuraEffectsDialog::onSubSyncChanged(double val) {
+void OrionEffectsDialog::onSubSyncChanged(double val) {
     if (m_engine) m_engine->setSubtitleDelay(val);
 }
 
-void AuraEffectsDialog::refreshFromEngine() {
+void OrionEffectsDialog::refreshFromEngine() {
     if (!m_engine) return;
     m_audioSyncSpin->blockSignals(true);
     m_audioSyncSpin->setValue(m_engine->audioDelay());

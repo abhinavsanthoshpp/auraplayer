@@ -1,17 +1,17 @@
-#include "AuraPlaylistView.h"
+#include "OrionPlaylistView.h"
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QFileInfo>
 #include <QRandomGenerator>
 #include <QDir>
 
-AuraPlaylistView::AuraPlaylistView(QWidget *parent)
+OrionPlaylistView::OrionPlaylistView(QWidget *parent)
     : QWidget(parent) {
-    setObjectName("AuraPlaylistView");
+    setObjectName("OrionPlaylistView");
     setupUi();
 }
 
-void AuraPlaylistView::setupUi() {
+void OrionPlaylistView::setupUi() {
     auto *rootLayout = new QVBoxLayout(this);
     rootLayout->setContentsMargins(6, 6, 6, 6);
     rootLayout->setSpacing(6);
@@ -79,16 +79,16 @@ void AuraPlaylistView::setupUi() {
     rootLayout->addLayout(bottomRow);
 
     // Connections
-    connect(m_table, &QTableWidget::cellDoubleClicked, this, &AuraPlaylistView::onTableItemDoubleClicked);
-    connect(m_searchEdit, &QLineEdit::textChanged, this, &AuraPlaylistView::onSearchChanged);
-    connect(m_addFileBtn, &QPushButton::clicked, this, &AuraPlaylistView::onAddFilesClicked);
-    connect(m_addFolderBtn, &QPushButton::clicked, this, &AuraPlaylistView::onAddFolderClicked);
-    connect(m_removeBtn, &QPushButton::clicked, this, &AuraPlaylistView::onRemoveSelectedClicked);
-    connect(m_clearBtn, &QPushButton::clicked, this, &AuraPlaylistView::onClearClicked);
-    connect(m_sortBtn, &QPushButton::clicked, this, &AuraPlaylistView::onSortByNameClicked);
+    connect(m_table, &QTableWidget::cellDoubleClicked, this, &OrionPlaylistView::onTableItemDoubleClicked);
+    connect(m_searchEdit, &QLineEdit::textChanged, this, &OrionPlaylistView::onSearchChanged);
+    connect(m_addFileBtn, &QPushButton::clicked, this, &OrionPlaylistView::onAddFilesClicked);
+    connect(m_addFolderBtn, &QPushButton::clicked, this, &OrionPlaylistView::onAddFolderClicked);
+    connect(m_removeBtn, &QPushButton::clicked, this, &OrionPlaylistView::onRemoveSelectedClicked);
+    connect(m_clearBtn, &QPushButton::clicked, this, &OrionPlaylistView::onClearClicked);
+    connect(m_sortBtn, &QPushButton::clicked, this, &OrionPlaylistView::onSortByNameClicked);
 }
 
-void AuraPlaylistView::addFile(const QString &filePath, double duration) {
+void OrionPlaylistView::addFile(const QString &filePath, double duration) {
     if (filePath.isEmpty()) return;
 
     QFileInfo fi(filePath);
@@ -110,30 +110,30 @@ void AuraPlaylistView::addFile(const QString &filePath, double duration) {
     emit playlistChanged();
 }
 
-void AuraPlaylistView::addFiles(const QStringList &filePaths) {
+void OrionPlaylistView::addFiles(const QStringList &filePaths) {
     for (const auto &p : filePaths) {
         addFile(p);
     }
 }
 
-void AuraPlaylistView::clear() {
+void OrionPlaylistView::clear() {
     m_table->setRowCount(0);
     m_currentIndex = -1;
     emit playlistChanged();
 }
 
-int AuraPlaylistView::count() const {
+int OrionPlaylistView::count() const {
     return m_table->rowCount();
 }
 
-QString AuraPlaylistView::currentFilePath() const {
+QString OrionPlaylistView::currentFilePath() const {
     if (m_currentIndex >= 0 && m_currentIndex < m_table->rowCount()) {
         return m_table->item(m_currentIndex, 0)->data(Qt::UserRole).toString();
     }
     return QString();
 }
 
-QString AuraPlaylistView::playNext() {
+QString OrionPlaylistView::playNext() {
     if (count() == 0) return QString();
 
     if (m_loopMode == LoopMode::RepeatOne && m_currentIndex >= 0) {
@@ -153,7 +153,7 @@ QString AuraPlaylistView::playNext() {
     return currentFilePath();
 }
 
-QString AuraPlaylistView::playPrevious() {
+QString OrionPlaylistView::playPrevious() {
     if (count() == 0) return QString();
 
     m_currentIndex--;
@@ -169,7 +169,7 @@ QString AuraPlaylistView::playPrevious() {
     return currentFilePath();
 }
 
-void AuraPlaylistView::shuffle() {
+void OrionPlaylistView::shuffle() {
     int n = count();
     if (n <= 1) return;
     for (int i = n - 1; i > 0; --i) {
@@ -185,7 +185,7 @@ void AuraPlaylistView::shuffle() {
     }
 }
 
-void AuraPlaylistView::onTableItemDoubleClicked(int row, int column) {
+void OrionPlaylistView::onTableItemDoubleClicked(int row, int column) {
     Q_UNUSED(column);
     if (row >= 0 && row < count()) {
         m_currentIndex = row;
@@ -194,7 +194,7 @@ void AuraPlaylistView::onTableItemDoubleClicked(int row, int column) {
     }
 }
 
-void AuraPlaylistView::onSearchChanged(const QString &text) {
+void OrionPlaylistView::onSearchChanged(const QString &text) {
     for (int r = 0; r < count(); ++r) {
         bool match = false;
         for (int c = 0; c < 4; ++c) {
@@ -207,7 +207,7 @@ void AuraPlaylistView::onSearchChanged(const QString &text) {
     }
 }
 
-void AuraPlaylistView::onAddFilesClicked() {
+void OrionPlaylistView::onAddFilesClicked() {
     QStringList files = QFileDialog::getOpenFileNames(
         this, "Select Media to Add to Playlist", QString(),
         "All Media (*.mkv *.mp4 *.webm *.avi *.mov *.flv *.ts *.mp3 *.flac *.opus *.ogg *.wav);;All Files (*)"
@@ -215,7 +215,7 @@ void AuraPlaylistView::onAddFilesClicked() {
     addFiles(files);
 }
 
-void AuraPlaylistView::onAddFolderClicked() {
+void OrionPlaylistView::onAddFolderClicked() {
     QString dir = QFileDialog::getExistingDirectory(this, "Select Folder to Add");
     if (!dir.isEmpty()) {
         QDir directory(dir);
@@ -228,7 +228,7 @@ void AuraPlaylistView::onAddFolderClicked() {
     }
 }
 
-void AuraPlaylistView::onRemoveSelectedClicked() {
+void OrionPlaylistView::onRemoveSelectedClicked() {
     int row = m_table->currentRow();
     if (row >= 0) {
         m_table->removeRow(row);
@@ -238,15 +238,15 @@ void AuraPlaylistView::onRemoveSelectedClicked() {
     }
 }
 
-void AuraPlaylistView::onClearClicked() {
+void OrionPlaylistView::onClearClicked() {
     clear();
 }
 
-void AuraPlaylistView::onSortByNameClicked() {
+void OrionPlaylistView::onSortByNameClicked() {
     m_table->sortItems(0, Qt::AscendingOrder);
 }
 
-QString AuraPlaylistView::formatDuration(double seconds) {
+QString OrionPlaylistView::formatDuration(double seconds) {
     int total = static_cast<int>(seconds);
     int m = total / 60;
     int s = total % 60;

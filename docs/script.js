@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = document.getElementById('copyCmdBtn');
     if (copyBtn) {
         copyBtn.addEventListener('click', () => {
-            const command = "curl -sSL https://raw.githubusercontent.com/abhinavsanthoshpp/auraplayer/main/install.sh | bash";
+            const command = "curl -sSL https://raw.githubusercontent.com/abhinavsanthoshpp/orionplayer/main/install.sh | bash";
             navigator.clipboard.writeText(command).then(() => {
                 const originalText = copyBtn.innerText;
                 copyBtn.innerText = "✅ Copied!";

@@ -8,7 +8,7 @@
 #include <QFileInfo>
 #include <QRandomGenerator>
 
-class AuraPlaylist : public QWidget {
+class OrionPlaylist : public QWidget {
     Q_OBJECT
 
 public:
@@ -18,7 +18,7 @@ public:
         RepeatOne
     };
 
-    explicit AuraPlaylist(QWidget *parent = nullptr);
+    explicit OrionPlaylist(QWidget *parent = nullptr);
 
     void addFile(const QString &filePath);
     void addFiles(const QStringList &filePaths);

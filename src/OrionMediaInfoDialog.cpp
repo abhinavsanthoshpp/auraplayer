@@ -1,11 +1,11 @@
-#include "AuraMediaInfoDialog.h"
+#include "OrionMediaInfoDialog.h"
 #include <QHeaderView>
 #include <QLabel>
 #include <QFileInfo>
 
-AuraMediaInfoDialog::AuraMediaInfoDialog(AuraEngine *engine, QWidget *parent)
+OrionMediaInfoDialog::OrionMediaInfoDialog(OrionEngine *engine, QWidget *parent)
     : QDialog(parent), m_engine(engine) {
-    setWindowTitle("AuraPlayer — Media Information");
+    setWindowTitle("OrionPlayer — Media Information");
     resize(480, 420);
 
     auto *layout = new QVBoxLayout(this);
@@ -38,7 +38,7 @@ AuraMediaInfoDialog::AuraMediaInfoDialog(AuraEngine *engine, QWidget *parent)
     refresh();
 }
 
-void AuraMediaInfoDialog::addRow(int &row, const QString &property, const QString &value) {
+void OrionMediaInfoDialog::addRow(int &row, const QString &property, const QString &value) {
     m_table->insertRow(row);
 
     auto *propItem = new QTableWidgetItem(property);
@@ -53,7 +53,7 @@ void AuraMediaInfoDialog::addRow(int &row, const QString &property, const QStrin
     row++;
 }
 
-QString AuraMediaInfoDialog::formatBytes(int64_t bytes) {
+QString OrionMediaInfoDialog::formatBytes(int64_t bytes) {
     if (bytes <= 0) return "N/A";
     if (bytes >= (1024ULL * 1024ULL * 1024ULL)) {
         return QString("%1 GB").arg(bytes / (1024.0 * 1024.0 * 1024.0), 0, 'f', 2);
@@ -64,7 +64,7 @@ QString AuraMediaInfoDialog::formatBytes(int64_t bytes) {
     return QString("%1 KB").arg(bytes / 1024.0, 0, 'f', 1);
 }
 
-void AuraMediaInfoDialog::refresh() {
+void OrionMediaInfoDialog::refresh() {
     m_table->setRowCount(0);
     if (!m_engine) return;
 

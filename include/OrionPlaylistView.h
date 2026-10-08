@@ -9,7 +9,7 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 
-class AuraPlaylistView : public QWidget {
+class OrionPlaylistView : public QWidget {
     Q_OBJECT
 
 public:
@@ -19,7 +19,7 @@ public:
         RepeatOne
     };
 
-    explicit AuraPlaylistView(QWidget *parent = nullptr);
+    explicit OrionPlaylistView(QWidget *parent = nullptr);
 
     void addFile(const QString &filePath, double duration = 0.0);
     void addFiles(const QStringList &filePaths);
