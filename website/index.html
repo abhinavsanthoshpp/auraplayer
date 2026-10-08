@@ -29,6 +29,7 @@
                 <a href="#benchmarks">Benchmarks</a>
                 <a href="#download">Download</a>
                 <a href="#shortcuts">Shortcuts</a>
+                <a href="#donate" class="nav-donate-btn">💖 Donate</a>
                 <a href="https://github.com/abhinavsanthoshpp/orionplayer" target="_blank" class="nav-github-btn">
                     <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
@@ -66,6 +67,9 @@
                 </a>
                 <a href="#download" class="btn btn-secondary" onclick="document.querySelector('[data-tab=\'android\']')?.click()">
                     📱 Android APK
+                </a>
+                <a href="donate.html" class="btn btn-secondary">
+                    💖 Support Creator
                 </a>
                 <a href="https://github.com/abhinavsanthoshpp/orionplayer" target="_blank" class="btn btn-secondary">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -560,6 +564,104 @@ make -j$(nproc)
         </div>
     </section>
 
+    <!-- Support & Donate Section -->
+    <section id="donate" class="donate-section">
+        <div class="container">
+            <div class="section-badge">SUPPORT DEVELOPMENT</div>
+            <h2 class="section-title">Support Orion Player Development</h2>
+            <p class="section-subtitle">
+                Orion Player is 100% free, source-available, and ad-free software built by <strong>Abhinav Santhosh</strong>.
+                Your direct support powers hardware acceleration engineering and keeps the player independent!
+            </p>
+
+            <div class="donate-card">
+                <div class="donate-section-title">Select Donation Amount</div>
+
+                <div class="amount-grid">
+                    <button class="amount-btn" data-amount="3">
+                        $3
+                        <span class="label">Coffee ☕</span>
+                    </button>
+                    <button class="amount-btn popular active" data-amount="5">
+                        $5
+                        <span class="label">Snack 🍿</span>
+                    </button>
+                    <button class="amount-btn" data-amount="10">
+                        $10
+                        <span class="label">Supporter ⭐</span>
+                    </button>
+                    <button class="amount-btn" data-amount="25">
+                        $25
+                        <span class="label">Producer 👑</span>
+                    </button>
+                </div>
+
+                <div class="custom-box">
+                    <span>$</span>
+                    <input type="number" id="custom-amount-home" min="1" step="1" placeholder="Or enter custom amount in USD">
+                </div>
+
+                <div class="donate-section-title">Direct Payment Methods</div>
+
+                <div class="providers-list">
+                    <!-- UPI / Direct Bank Transfer -->
+                    <div class="upi-box-style">
+                        <div class="upi-header-style">
+                            <div class="provider-action-left">
+                                <span style="font-size:20px;">⚡</span>
+                                <span>UPI (Instant Direct Bank Transfer)</span>
+                            </div>
+                            <span class="upi-badge-tag">0% FEE • DIRECT BANK</span>
+                        </div>
+                        <div class="upi-id-box">
+                            <div>
+                                <span style="font-size: 11px; color: #94a3b8; display: block;">UPI ID:</span>
+                                <span class="upi-id-code" id="home-upi-id">abhinava6525@naviaxis</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn-copy-upi" id="home-copy-upi-btn" onclick="copyHomeUpi(this)">📋 Copy</button>
+                                <button class="btn-qr-scan" id="home-toggle-qr-btn" onclick="toggleHomeQr()">📱 Scan QR</button>
+                            </div>
+                        </div>
+                        <div class="upi-qr-display" id="home-upi-qr">
+                            <img class="upi-qr-image-src" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=upi%3A%2F%2Fpay%3Fpa%3Dabhinava6525%40naviaxis%26pn%3DAbhinav%26cu%3DINR" alt="UPI QR Code" />
+                            <p style="font-size: 12px; color: #94a3b8; margin-top: 10px;">Scan using Google Pay, PhonePe, Paytm, Navi, BHIM, Cred or any banking app</p>
+                        </div>
+                        <p style="font-size: 11px; color: #64748b; margin-top: 2px;">Direct bank deposit • 0% intermediary fee • Instant settlement.</p>
+                    </div>
+
+                    <!-- Buy Me a Coffee -->
+                    <a class="provider-action-btn btn-bmac-style" href="https://buymeacoffee.com/abhinavsanthoshpp" target="_blank" rel="noopener">
+                        <div class="provider-action-left">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.216 6.415l-.132-.666c-.119-.597-.388-1.15-.778-1.611-.645-.762-1.603-1.19-2.628-1.174l-11.892.001c-.015 0-.03 0-.044.001-.986.04-1.921.464-2.569 1.164-.649.7-.978 1.637-.905 2.571l.666 8.529c.162 2.072 1.83 3.69 3.906 3.69h7.411c1.996 0 3.645-1.503 3.896-3.486l.66-5.187.324.032c1.233.123 2.378-.344 3.14-1.282.721-.887.971-2.029.687-3.132l-.744.55zm-1.897 1.86c-.469.576-1.19.854-1.982.766l-.608-.061.272-2.141c.01-.078.016-.156.018-.235l.135-.001c.548 0 1.05.215 1.393.597.234.261.385.589.438.948.055.372-.036.757-.266 1.047l.6-.92z"/>
+                            </svg>
+                            <span>Buy Me a Coffee (Cards, Apple Pay &amp; PayPal)</span>
+                        </div>
+                        <span>→</span>
+                    </a>
+
+                    <!-- GitHub Sponsors -->
+                    <a class="provider-action-btn btn-gh-sponsors" href="https://github.com/sponsors/abhinavsanthoshpp" target="_blank" rel="noopener">
+                        <div class="provider-action-left">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                            <span>Sponsor on GitHub</span>
+                        </div>
+                        <span>→</span>
+                    </a>
+                </div>
+
+                <div style="text-align: center; margin-top: 8px;">
+                    <a href="donate.html" style="font-size: 13px; color: var(--accent-cyan); text-decoration: none; font-weight: 600;">
+                        Open Dedicated Donation Page →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-container">
@@ -573,6 +675,7 @@ make -j$(nproc)
                 <p style="font-size: 12px; color: #8b949e; margin-top: 6px;">The Orion Player software, website, logos, and design assets are the exclusive intellectual property of Abhinav Santhosh. Unauthorized reproduction, rebranding, or commercial appropriation is strictly prohibited.</p>
             </div>
             <div class="footer-right">
+                <a href="donate.html">💖 Support &amp; Donate</a>
                 <a href="https://github.com/abhinavsanthoshpp/orionplayer" target="_blank">GitHub Repository</a>
                 <a href="https://github.com/abhinavsanthoshpp/orionplayer/issues" target="_blank">Report Issue</a>
                 <a href="https://github.com/abhinavsanthoshpp/orionplayer/blob/main/LICENSE" target="_blank">Copyright & License</a>

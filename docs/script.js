@@ -50,4 +50,54 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // 4. Donation Amount Selector on Home Page
+    const homeAmountBtns = document.querySelectorAll('#donate .amount-btn');
+    const homeCustomInput = document.getElementById('custom-amount-home');
+    if (homeAmountBtns.length > 0) {
+        homeAmountBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                homeAmountBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (homeCustomInput) homeCustomInput.value = '';
+            });
+        });
+    }
+
+    if (homeCustomInput) {
+        homeCustomInput.addEventListener('input', () => {
+            if (homeCustomInput.value) {
+                homeAmountBtns.forEach(b => b.classList.remove('active'));
+            } else if (homeAmountBtns.length > 1) {
+                homeAmountBtns[1].classList.add('active');
+            }
+        });
+    }
 });
+
+// Global functions for inline onclick handlers
+function copyHomeUpi(btn) {
+    const upiId = document.getElementById('home-upi-id')?.textContent.trim() || 'abhinava6525@naviaxis';
+    navigator.clipboard.writeText(upiId).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = "✔ Copied!";
+        btn.style.background = "#10b981";
+        btn.style.borderColor = "#10b981";
+        setTimeout(() => {
+            btn.innerText = orig;
+            btn.style.background = "";
+            btn.style.borderColor = "";
+        }, 2000);
+    }).catch(() => {
+        prompt("Copy UPI ID:", upiId);
+    });
+}
+
+function toggleHomeQr() {
+    const qrDisplay = document.getElementById('home-upi-qr');
+    const toggleBtn = document.getElementById('home-toggle-qr-btn');
+    if (qrDisplay) {
+        const isShown = qrDisplay.classList.toggle('show');
+        if (toggleBtn) toggleBtn.innerText = isShown ? "✕ Hide QR" : "📱 Scan QR";
+    }
+}

@@ -47,6 +47,7 @@ set(SOURCES
     src/OrionPreferencesDialog.cpp
     src/OrionMediaInfoDialog.cpp
     src/OrionStreamDialog.cpp
+    src/OrionDonateDialog.cpp
     src/MainWindow.cpp
 )
 
@@ -59,6 +60,7 @@ set(HEADERS
     include/OrionPreferencesDialog.h
     include/OrionMediaInfoDialog.h
     include/OrionStreamDialog.h
+    include/OrionDonateDialog.h
     include/MainWindow.h
 )
 

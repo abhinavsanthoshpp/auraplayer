@@ -24,5 +24,6 @@
         <file alias="icons/snapshot.svg">icons/snapshot.svg</file>
         <file alias="icons/ab_loop.svg">icons/ab_loop.svg</file>
         <file alias="icons/frame_step.svg">icons/frame_step.svg</file>
+        <file alias="icons/upi_qr.png">icons/upi_qr.png</file>
     </qresource>
 </RCC>

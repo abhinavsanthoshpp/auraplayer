@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Orion Player — Donate to Abhinav Santhosh</title>
+  <meta name="description" content="Support the development of Orion Player. Donate via UPI (0% fee direct bank transfer), Buy Me a Coffee, or GitHub Sponsors.">
+  <link rel="icon" type="image/svg+xml" href="orionplayer.svg">
+  <link rel="alternate icon" type="image/png" href="orionplayer.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --card-bg: #111827;
+      --card-hover: #1f2937;
+      --accent-blue: #6366f1;
+      --accent-purple: #a855f7;
+      --accent-green: #10b981;
+      --accent-bmac: #ffdd00;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --gradient-accent: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      background-image: 
+        radial-gradient(circle at 20% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 40%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 620px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .brand:hover {
+      transform: translateY(-2px);
+    }
+
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.4));
+    }
+
+    .brand-logo {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-logo strong {
+      color: #818cf8;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    p.subtitle strong {
+      color: #e5e7eb;
+    }
+
+    /* Main Donation Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Amount Selector */
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .amount-btn {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      color: #fff;
+      padding: 14px 8px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .amount-btn span.label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .amount-btn:hover {
+      background: #334155;
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .amount-btn.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--accent-blue);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.35);
+    }
+
+    .amount-btn.popular:after {
+      content: "POPULAR";
+      position: absolute;
+      top: -9px;
+      font-size: 8px;
+      font-weight: 800;
+      background: var(--gradient-accent);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.6px;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Custom Amount Input */
+    .custom-box {
+      display: flex;
+      align-items: center;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+      gap: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .custom-box:focus-within {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    .custom-box span {
+      color: var(--text-muted);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .custom-box input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .custom-box input::placeholder {
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    /* Payment Providers */
+    .providers {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .provider-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .provider-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buy Me a Coffee */
+    .btn-bmac {
+      background: #FFDD00;
+      color: #000000;
+    }
+
+    .btn-bmac:hover {
+      background: #ffe333;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 221, 0, 0.4);
+    }
+
+    /* UPI Direct Bank */
+    .upi-box {
+      background: #0f1f1d;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .upi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .upi-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .upi-details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .upi-id-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #091413;
+      border-radius: 8px;
+      padding: 10px 14px;
+      gap: 10px;
+      flex-wrap: wrap;
+      border: 1px solid rgba(16, 185, 129, 0.15);
+    }
+
+    .upi-label {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .upi-id-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #34d399;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .upi-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-copy {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: #10b981;
+      border-color: #10b981;
+      color: #fff;
+    }
+
+    .btn-qr-toggle {
+      background: #134e4a;
+      color: #a7f3d0;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-qr-toggle:hover {
+      background: #047857;
+      color: #fff;
+    }
+
+    .upi-qr-wrapper {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: #091413;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 4px;
+      text-align: center;
+      border: 1px dashed rgba(16, 185, 129, 0.3);
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upi-qr-wrapper.show {
+      display: flex;
+    }
+
+    .upi-qr-img {
+      width: 200px;
+      height: 200px;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .upi-qr-caption {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 12px;
+    }
+
+    .upi-apps-row {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    /* GitHub Sponsors */
+    .btn-github {
+      background: #1e293b;
+      color: #f472b6;
+      border: 1px solid rgba(244, 114, 182, 0.35);
+    }
+
+    .btn-github:hover {
+      background: rgba(244, 114, 182, 0.15);
+      border-color: #f472b6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(244, 114, 182, 0.2);
+    }
+
+    /* Note & Footer */
+    .footer-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .footer-note a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .footer-note a:hover {
+      color: #818cf8;
+    }
+
+    .btn-return {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 10px auto 0;
+      padding: 10px 18px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-return:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 500px) {
+      .amount-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .card {
+        padding: 24px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <a href="index.html" class="brand">
+        <img src="orionplayer.svg" alt="Orion Player Logo" class="brand-logo-img">
+        <span class="brand-logo">Orion<strong>Player</strong></span>
+        <span class="badge">OPEN SOURCE</span>
+      </a>
+      <h1>Support Orion Player Development</h1>
+      <p class="subtitle">
+        Orion Player is built and maintained 100% free and open-source by <strong>Abhinav Santhosh</strong>.
+        Your direct support powers cross-platform releases, high-performance hardware acceleration, and keeps the project truly independent.
+      </p>
+    </header>
+
+    <div class="card">
+      <div class="section-title">Select Donation Amount</div>
+
+      <div class="amount-grid">
+        <button class="amount-btn" data-amount="3">
+          $3
+          <span class="label">Coffee ☕</span>
+        </button>
+        <button class="amount-btn popular active" data-amount="5">
+          $5
+          <span class="label">Snack 🍿</span>
+        </button>
+        <button class="amount-btn" data-amount="10">
+          $10
+          <span class="label">Supporter ⭐</span>
+        </button>
+        <button class="amount-btn" data-amount="25">
+          $25
+          <span class="label">Producer 👑</span>
+        </button>
+      </div>
+
+      <div class="custom-box">
+        <span>$</span>
+        <input type="number" id="custom-amount" min="1" step="1" placeholder="Or enter custom amount in USD">
+      </div>
+
+      <div class="section-title">Choose Payment Method</div>
+
+      <div class="providers">
+        <!-- UPI / Direct Bank Transfer -->
+        <div class="upi-box" id="upi-container">
+          <div class="upi-header">
+            <div class="provider-left">
+              <span style="font-size:20px;">⚡</span>
+              <span>UPI (Instant Direct Bank Transfer)</span>
+            </div>
+            <span class="upi-badge">0% FEE • DIRECT BANK</span>
+          </div>
+          <div class="upi-details">
+            <div class="upi-id-row">
+              <span class="upi-label">UPI ID:</span>
+              <span class="upi-id-text" id="upi-id-val">abhinava6525@naviaxis</span>
+              <div class="upi-actions">
+                <button class="btn-copy" id="btn-copy-upi" onclick="copyText('upi-id-val', this)">📋 Copy</button>
+                <button class="btn-qr-toggle" id="btn-toggle-qr" type="button">📱 Scan QR</button>
+              </div>
+            </div>
+            <div class="upi-qr-wrapper" id="upi-qr-wrapper">
+              <img id="upi-qr-image" class="upi-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=upi%3A%2F%2Fpay%3Fpa%3Dabhinava6525%40naviaxis%26pn%3DAbhinav%26cu%3DINR" alt="UPI QR Code" />
+              <div class="upi-qr-caption">Scan using Google Pay, PhonePe, Paytm, Navi, BHIM, Cred or any banking app</div>
+            </div>
+            <div class="upi-apps-row">
+              Supports Google Pay, PhonePe, Paytm, Navi, Cred, BHIM &amp; all major Indian banking apps.
+            </div>
+          </div>
+        </div>
+
+        <!-- Buy Me a Coffee -->
+        <a class="provider-btn btn-bmac" id="link-bmac" href="https://buymeacoffee.com/abhinavsanthoshpp" target="_blank" rel="noopener">
+          <div class="provider-left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.216 6.415l-.132-.666c-.119-.597-.388-1.15-.778-1.611-.645-.762-1.603-1.19-2.628-1.174l-11.892.001c-.015 0-.03 0-.044.001-.986.04-1.921.464-2.569 1.164-.649.7-.978 1.637-.905 2.571l.666 8.529c.162 2.072 1.83 3.69 3.906 3.69h7.411c1.996 0 3.645-1.503 3.896-3.486l.66-5.187.324.032c1.233.123 2.378-.344 3.14-1.282.721-.887.971-2.029.687-3.132l-.744.55zm-1.897 1.86c-.469.576-1.19.854-1.982.766l-.608-.061.272-2.141c.01-.078.016-.156.018-.235l.135-.001c.548 0 1.05.215 1.393.597.234.261.385.589.438.948.055.372-.036.757-.266 1.047l.6-.92z"/>
+            </svg>
+            <span>Buy Me a Coffee (Cards, Apple Pay &amp; PayPal)</span>
+          </div>
+          <span>→</span>
+        </a>
+
+        <!-- GitHub Sponsors -->
+        <a class="provider-btn btn-github" id="link-github" href="https://github.com/sponsors/abhinavsanthoshpp" target="_blank" rel="noopener">
+          <div class="provider-left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>GitHub Sponsors</span>
+          </div>
+          <span>→</span>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="footer-note">
+      Thank you for empowering Orion Player! ❤️<br>
+      Created by <strong>Abhinav Santhosh</strong> (<a href="https://github.com/abhinavsanthoshpp" target="_blank">@abhinavsanthoshpp</a>). All Rights Reserved.
+    </div>
+
+    <a href="index.html" class="btn-return">
+      ← Return to Orion Player
+    </a>
+  </div>
+
+  <script>
+    const DONATION_CONFIG = {
+      upiId: 'abhinava6525@naviaxis',
+      buyMeACoffeeUsername: 'abhinavsanthoshpp',
+      githubUsername: 'abhinavsanthoshpp'
+    };
+
+    let selectedAmount = 5;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramAmount = parseInt(urlParams.get('amount'), 10);
+    if (paramAmount && !isNaN(paramAmount)) {
+      selectedAmount = paramAmount;
+    }
+
+    const amountButtons = document.querySelectorAll('.amount-btn');
+    const customInput = document.getElementById('custom-amount');
+
+    function syncAmountUI() {
+      amountButtons.forEach(btn => {
+        const val = parseInt(btn.dataset.amount, 10);
+        if (val === selectedAmount && !customInput.value) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      updatePaymentLinks();
+    }
+
+    amountButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedAmount = parseInt(btn.dataset.amount, 10);
+        customInput.value = '';
+        syncAmountUI();
+      });
+    });
+
+    customInput.addEventListener('input', () => {
+      const val = parseInt(customInput.value, 10);
+      if (val && val > 0) {
+        selectedAmount = val;
+        amountButtons.forEach(b => b.classList.remove('active'));
+      } else {
+        selectedAmount = 5;
+      }
+      updatePaymentLinks();
+    });
+
+    function updatePaymentLinks() {
+      const bmacLink = document.getElementById('link-bmac');
+      const githubLink = document.getElementById('link-github');
+
+      bmacLink.href = `https://buymeacoffee.com/${DONATION_CONFIG.buyMeACoffeeUsername}`;
+      githubLink.href = `https://github.com/sponsors/${DONATION_CONFIG.githubUsername}`;
+    }
+
+    // Toggle UPI QR Code
+    const qrToggleBtn = document.getElementById('btn-toggle-qr');
+    const qrWrapper = document.getElementById('upi-qr-wrapper');
+    if (qrToggleBtn && qrWrapper) {
+      qrToggleBtn.addEventListener('click', () => {
+        const isShown = qrWrapper.classList.toggle('show');
+        qrToggleBtn.textContent = isShown ? '✕ Hide QR' : '📱 Scan QR';
+      });
+    }
+
+    // Copy to clipboard helper
+    function copyText(id, btn) {
+      const text = document.getElementById(id).textContent.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = '✔ Copied!';
+        btn.style.background = '#10b981';
+        btn.style.borderColor = '#10b981';
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.background = '';
+          btn.style.borderColor = '';
+        }, 2000);
+      }).catch(() => {
+        prompt("Copy UPI ID:", text);
+      });
+    }
+
+    // Set addresses from config
+    const upiEl = document.getElementById('upi-id-val');
+    if (upiEl) upiEl.textContent = DONATION_CONFIG.upiId;
+
+    const upiQrImg = document.getElementById('upi-qr-image');
+    if (upiQrImg) {
+      const upiUri = `upi://pay?pa=${encodeURIComponent(DONATION_CONFIG.upiId)}&pn=Abhinav&cu=INR`;
+      upiQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUri)}`;
+    }
+
+    // Initialize
+    syncAmountUI();
+  </script>
+</body>
+</html>

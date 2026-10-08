@@ -75,11 +75,11 @@ void OrionPlaylistView::setupUi() {
     auto *bottomRow = new QHBoxLayout();
     bottomRow->setSpacing(6);
 
-    m_addFileBtn = new QPushButton("➕ Add File...", this);
-    m_addFolderBtn = new QPushButton("📁 Add Folder...", this);
-    m_removeBtn = new QPushButton("➖ Remove", this);
-    m_clearBtn = new QPushButton("🗑️ Clear Playlist", this);
-    m_sortBtn = new QPushButton("⇅ Sort by Title", this);
+    m_addFileBtn = new QPushButton("Add File...", this);
+    m_addFolderBtn = new QPushButton("Add Folder...", this);
+    m_removeBtn = new QPushButton("Remove", this);
+    m_clearBtn = new QPushButton("Clear", this);
+    m_sortBtn = new QPushButton("Sort by Title", this);
 
     bottomRow->addWidget(m_addFileBtn);
     bottomRow->addWidget(m_addFolderBtn);

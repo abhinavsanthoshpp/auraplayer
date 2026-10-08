@@ -9,6 +9,9 @@
 package com.abhinavsanthosh.orionplayer
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -78,6 +82,10 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_stream -> {
                     showStreamDialog()
+                    true
+                }
+                R.id.action_donate -> {
+                    showDonateDialog()
                     true
                 }
                 R.id.action_about -> {
@@ -169,6 +177,41 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.about_title)
             .setMessage(R.string.about_desc)
             .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showDonateDialog() {
+        val items = arrayOf(
+            "⚡ Copy UPI ID (abhinava6525@naviaxis)",
+            "☕ Open Buy Me a Coffee",
+            "💖 Open GitHub Sponsors"
+        )
+        AlertDialog.Builder(this)
+            .setTitle(R.string.donate_title)
+            .setMessage(
+                "Orion Player is 100% free, source-available, and ad-free.\n" +
+                "Created by Abhinav Santhosh (@abhinavsanthoshpp).\n\n" +
+                "Direct contributions empower independent development!"
+            )
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> {
+                        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText("UPI ID", "abhinava6525@naviaxis")
+                        clipboard.setPrimaryClip(clip)
+                        Toast.makeText(this, "Copied UPI ID: abhinava6525@naviaxis", Toast.LENGTH_SHORT).show()
+                    }
+                    1 -> {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://buymeacoffee.com/abhinavsanthoshpp"))
+                        startActivity(browserIntent)
+                    }
+                    2 -> {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sponsors/abhinavsanthoshpp"))
+                        startActivity(browserIntent)
+                    }
+                }
+            }
+            .setNegativeButton("Close", null)
             .show()
     }
 

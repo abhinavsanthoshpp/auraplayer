@@ -53,13 +53,13 @@ OrionVideoWidget::OrionVideoWidget(OrionEngine *engine, QWidget *parent)
     m_osdLabel->setObjectName("OrionOsdBadge");
     m_osdLabel->setStyleSheet(
         "QLabel#OrionOsdBadge {"
-        "  background-color: rgba(10, 14, 23, 0.90);"
-        "  color: #00e5ff;"
-        "  font-size: 15px;"
-        "  font-weight: 700;"
-        "  border: 1px solid rgba(0, 229, 255, 0.45);"
-        "  border-radius: 8px;"
-        "  padding: 8px 16px;"
+        "  background-color: rgba(15, 18, 26, 0.88);"
+        "  color: #f1f5f9;"
+        "  font-size: 13px;"
+        "  font-weight: 600;"
+        "  border: 1px solid rgba(255, 255, 255, 0.12);"
+        "  border-radius: 6px;"
+        "  padding: 6px 14px;"
         "}"
     );
     m_osdLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);

@@ -30,6 +30,7 @@
 #include <QTextEdit>
 #include <QPlainTextEdit>
 #include <QIcon>
+#include "OrionDonateDialog.h"
 #include <cmath>
 
 static QString formatOsdTime(double seconds) {
@@ -278,6 +279,8 @@ void MainWindow::createMenuBar() {
 
     // Help menu
     auto *helpMenu = mb->addMenu("&Help");
+    helpMenu->addAction("💖 &Donate to Creator...", QKeySequence("Shift+D"), this, &MainWindow::onShowDonate);
+    helpMenu->addSeparator();
     helpMenu->addAction("&About OrionPlayer", QKeySequence("Shift+F1"), this, &MainWindow::onAbout);
 }
 
@@ -369,7 +372,7 @@ void MainWindow::onTogglePlayPause() {
     if (!m_engine) return;
     bool willBePaused = !m_engine->isPaused();
     m_engine->togglePause();
-    QString msg = willBePaused ? "⏸ Paused" : "▶ Playing";
+    QString msg = willBePaused ? "Paused" : "Playing";
     if (m_videoWidget) m_videoWidget->showOsd(msg, 900);
 }
 
@@ -377,7 +380,7 @@ void MainWindow::onStop() {
     if (m_engine) {
         m_engine->stop();
         m_statusText->setText("Stopped");
-        if (m_videoWidget) m_videoWidget->showOsd("⏹ Stopped", 900);
+        if (m_videoWidget) m_videoWidget->showOsd("Stopped", 900);
     }
 }
 
@@ -385,7 +388,7 @@ void MainWindow::onNext() {
     QString nextTrack = m_playlistView->playNext();
     if (!nextTrack.isEmpty()) {
         openMedia(nextTrack);
-        if (m_videoWidget) m_videoWidget->showOsd(QString("⏭ Next: %1").arg(QFileInfo(nextTrack).fileName()), 1200);
+        if (m_videoWidget) m_videoWidget->showOsd(QString("Next: %1").arg(QFileInfo(nextTrack).fileName()), 1200);
     }
 }
 
@@ -393,7 +396,7 @@ void MainWindow::onPrevious() {
     QString prevTrack = m_playlistView->playPrevious();
     if (!prevTrack.isEmpty()) {
         openMedia(prevTrack);
-        if (m_videoWidget) m_videoWidget->showOsd(QString("⏮ Prev: %1").arg(QFileInfo(prevTrack).fileName()), 1200);
+        if (m_videoWidget) m_videoWidget->showOsd(QString("Previous: %1").arg(QFileInfo(prevTrack).fileName()), 1200);
     }
 }
 
@@ -401,7 +404,7 @@ void MainWindow::onSpeedFaster() {
     if (!m_engine) return;
     double newSpeed = std::min(4.0, m_engine->speed() + 0.1);
     m_engine->setSpeed(newSpeed);
-    QString msg = QString("⚡ Speed: %1x").arg(newSpeed, 0, 'f', 2);
+    QString msg = QString("Speed: %1x").arg(newSpeed, 0, 'f', 2);
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1000);
     statusBar()->showMessage(msg, 1500);
 }
@@ -410,7 +413,7 @@ void MainWindow::onSpeedSlower() {
     if (!m_engine) return;
     double newSpeed = std::max(0.25, m_engine->speed() - 0.1);
     m_engine->setSpeed(newSpeed);
-    QString msg = QString("⚡ Speed: %1x").arg(newSpeed, 0, 'f', 2);
+    QString msg = QString("Speed: %1x").arg(newSpeed, 0, 'f', 2);
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1000);
     statusBar()->showMessage(msg, 1500);
 }
@@ -418,7 +421,7 @@ void MainWindow::onSpeedSlower() {
 void MainWindow::onSpeedNormal() {
     if (!m_engine) return;
     m_engine->setSpeed(1.0);
-    QString msg = "⚡ Speed: 1.00x";
+    QString msg = "Speed: 1.00x";
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1000);
     statusBar()->showMessage(msg, 1500);
 }
@@ -439,17 +442,14 @@ void MainWindow::onJumpRelative(double seconds) {
         jumpStr = QString("%1%2s").arg(sign).arg(sAbs);
     }
 
-    QString icon = seconds >= 0 ? "⏩" : "⏪";
     QString msg;
     if (dur > 0) {
-        msg = QString("%1 %2  (%3 / %4)")
-            .arg(icon)
+        msg = QString("Seek: %1  (%2 / %3)")
             .arg(jumpStr)
             .arg(formatOsdTime(targetPos))
             .arg(formatOsdTime(dur));
     } else {
-        msg = QString("%1 %2  (%3)")
-            .arg(icon)
+        msg = QString("Seek: %1  (%2)")
             .arg(jumpStr)
             .arg(formatOsdTime(targetPos));
     }
@@ -461,7 +461,7 @@ void MainWindow::onJumpRelative(double seconds) {
 void MainWindow::onFrameStep() {
     if (m_engine) {
         m_engine->frameStep();
-        if (m_videoWidget) m_videoWidget->showOsd("🎞️ Frame Step", 800);
+        if (m_videoWidget) m_videoWidget->showOsd("Frame Step", 800);
     }
 }
 
@@ -472,7 +472,7 @@ void MainWindow::onAddSubtitleFile() {
     );
     if (!sub.isEmpty() && m_engine) {
         m_engine->loadSubtitleFile(sub);
-        QString msg = QString("💬 Loaded Subtitle: %1").arg(QFileInfo(sub).fileName());
+        QString msg = QString("Subtitle: %1").arg(QFileInfo(sub).fileName());
         if (m_videoWidget) m_videoWidget->showOsd(msg, 2000);
         statusBar()->showMessage(msg, 3000);
     }
@@ -481,7 +481,7 @@ void MainWindow::onAddSubtitleFile() {
 void MainWindow::onSetAspectRatio(const QString &ratio) {
     if (!m_engine) return;
     m_engine->setAspectRatio(ratio);
-    QString msg = QString("📐 Aspect Ratio: %1").arg(ratio == "-1" || ratio == "default" ? "Default" : ratio);
+    QString msg = QString("Aspect Ratio: %1").arg(ratio == "-1" || ratio == "default" ? "Default" : ratio);
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1200);
     statusBar()->showMessage(msg, 2000);
 }
@@ -489,7 +489,7 @@ void MainWindow::onSetAspectRatio(const QString &ratio) {
 void MainWindow::onCycleAspectRatio() {
     if (!m_engine) return;
     QString ratio = m_engine->cycleAspectRatio();
-    QString msg = QString("📐 Aspect Ratio: %1").arg(ratio == "-1" || ratio == "default" ? "Default" : ratio);
+    QString msg = QString("Aspect Ratio: %1").arg(ratio == "-1" || ratio == "default" ? "Default" : ratio);
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1200);
     statusBar()->showMessage(msg, 2000);
 }
@@ -497,7 +497,7 @@ void MainWindow::onCycleAspectRatio() {
 void MainWindow::onCycleAudioTrack() {
     if (!m_engine) return;
     QString desc = m_engine->cycleAudioTrack();
-    QString msg = QString("🎵 Audio Track: %1").arg(desc);
+    QString msg = QString("Audio Track: %1").arg(desc);
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1500);
     statusBar()->showMessage(msg, 2500);
 }
@@ -505,7 +505,7 @@ void MainWindow::onCycleAudioTrack() {
 void MainWindow::onCycleSubtitleTrack() {
     if (!m_engine) return;
     QString desc = m_engine->cycleSubtitleTrack();
-    QString msg = QString("💬 Subtitle Track: %1").arg(desc);
+    QString msg = QString("Subtitle Track: %1").arg(desc);
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1500);
     statusBar()->showMessage(msg, 2500);
 }
@@ -541,7 +541,7 @@ void MainWindow::onSubtitleDelayDelta(double delta) {
 void MainWindow::onTakeSnapshot() {
     if (m_engine) {
         m_engine->takeScreenshot();
-        if (m_videoWidget) m_videoWidget->showOsd("📸 Snapshot Saved to ~/Pictures", 1500);
+        if (m_videoWidget) m_videoWidget->showOsd("Snapshot Saved to ~/Pictures", 1500);
         statusBar()->showMessage("Snapshot saved to ~/Pictures", 3000);
     }
 }
@@ -556,13 +556,13 @@ void MainWindow::onToggleFullscreen() {
         m_toolbar->hide();
         statusBar()->hide();
         showFullScreen();
-        if (m_videoWidget) m_videoWidget->showOsd("⛶ Fullscreen", 900);
+        if (m_videoWidget) m_videoWidget->showOsd("Fullscreen", 900);
     } else {
         menuBar()->show();
         m_toolbar->show();
         statusBar()->show();
         showNormal();
-        if (m_videoWidget) m_videoWidget->showOsd("🗗 Windowed", 900);
+        if (m_videoWidget) m_videoWidget->showOsd("Windowed", 900);
     }
 }
 
@@ -577,7 +577,7 @@ void MainWindow::onToggleMute() {
     if (!m_engine) return;
     m_engine->toggleMute();
     bool muted = m_engine->isMuted();
-    QString msg = muted ? "🔇 Muted" : QString("🔊 Volume: %1%").arg(static_cast<int>(std::round(m_engine->volume())));
+    QString msg = muted ? "Mute" : QString("Volume: %1%").arg(static_cast<int>(std::round(m_engine->volume())));
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1000);
     statusBar()->showMessage(msg, 1500);
 }
@@ -586,7 +586,7 @@ void MainWindow::onVolumeDelta(double delta) {
     if (!m_engine) return;
     double newVol = std::clamp(m_engine->volume() + delta, 0.0, 200.0);
     m_engine->setVolume(newVol);
-    QString msg = QString("🔊 Volume: %1%").arg(static_cast<int>(std::round(newVol)));
+    QString msg = QString("Volume: %1%").arg(static_cast<int>(std::round(newVol)));
     if (m_videoWidget) m_videoWidget->showOsd(msg, 1000);
     statusBar()->showMessage(msg, 1500);
 }
@@ -631,17 +631,23 @@ void MainWindow::onToggleAdvancedControls() {
 void MainWindow::onAbout() {
     QMessageBox::about(this, "About Orion Player",
         "<h3>Orion Player 1.0</h3>"
-        "<p>High-Performance Hardware-Accelerated Media Player for Linux.</p>"
-        "<p>Designed with VLC-grade ergonomics and zero-copy Intel VA-API acceleration.</p>"
+        "<p>High-Performance Hardware-Accelerated Media Player for Linux & Windows.</p>"
+        "<p>Designed with VLC-grade ergonomics and zero-copy hardware acceleration.</p>"
         "<hr>"
         "<p><b>Copyright © 2026 Abhinav Santhosh. All Rights Reserved.</b></p>"
         "<p>Author: <b>Abhinav Santhosh</b> (<a href='https://github.com/abhinavsanthoshpp'>@abhinavsanthoshpp</a>)<br>"
-        "Website: <a href='https://abhinavsanthoshpp.github.io/orionplayer/'>abhinavsanthoshpp.github.io/orionplayer</a></p>"
+        "Website: <a href='https://abhinavsanthoshpp.github.io/orionplayer/'>abhinavsanthoshpp.github.io/orionplayer</a><br>"
+        "Support Creator: <a href='https://buymeacoffee.com/abhinavsanthoshpp'>☕ Buy Me a Coffee</a> | <b>UPI:</b> <code>abhinava6525@naviaxis</code></p>"
         "<p style='font-size: 11px; color: #8b949e;'>"
         "The software, website, brand, and design assets are the exclusive intellectual property "
         "of Abhinav Santhosh. Unauthorized reproduction, rebranding, or commercial distribution "
         "is strictly prohibited under international copyright laws.</p>"
     );
+}
+
+void MainWindow::onShowDonate() {
+    OrionDonateDialog dlg(this);
+    dlg.exec();
 }
 
 void MainWindow::onPlaybackStarted() {
@@ -1048,6 +1054,8 @@ void MainWindow::showVideoContextMenu(const QPoint &globalPos) {
     toolsMenu->addAction("Preferences", QKeySequence("Ctrl+P"), this, &MainWindow::onShowPreferences);
 
     menu.addAction("Playlist", QKeySequence("Ctrl+L"), this, &MainWindow::onTogglePlaylist);
+    menu.addSeparator();
+    menu.addAction("💖 Support & Donate...", QKeySequence("Shift+D"), this, &MainWindow::onShowDonate);
     menu.addSeparator();
     menu.addAction("Quit", QKeySequence("Ctrl+Q"), this, &QWidget::close);
 

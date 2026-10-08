@@ -1,21 +1,23 @@
-/* OrionPlayer — Professional VLC-Grade Desktop Dark Theme */
+/* OrionPlayer — High-Performance Studio Dark Theme
+ * Engineered for professional Linux & cross-platform workstations.
+ */
 
 QMainWindow {
-    background-color: #12151c;
-    color: #e6edf3;
+    background-color: #0d1017;
+    color: #f1f5f9;
 }
 
 QWidget {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
-    color: #c9d1d9;
+    color: #cbd5e1;
     font-size: 13px;
 }
 
 /* ================= Professional Menubar ================= */
 QMenuBar {
-    background-color: #161b22;
-    color: #c9d1d9;
-    border-bottom: 1px solid #30363d;
+    background-color: #131620;
+    color: #cbd5e1;
+    border-bottom: 1px solid #222634;
     padding: 2px 4px;
 }
 
@@ -26,14 +28,14 @@ QMenuBar::item {
 }
 
 QMenuBar::item:selected {
-    background-color: #21262d;
-    color: #58a6ff;
+    background-color: #1e2330;
+    color: #f1f5f9;
 }
 
 QMenu {
-    background-color: #1c2128;
-    color: #e6edf3;
-    border: 1px solid #30363d;
+    background-color: #181c26;
+    color: #f1f5f9;
+    border: 1px solid #282e3e;
     border-radius: 6px;
     padding: 4px;
 }
@@ -44,109 +46,122 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-    background-color: #1f6feb;
+    background-color: #2563eb;
     color: #ffffff;
 }
 
 QMenu::separator {
     height: 1px;
-    background-color: #30363d;
+    background-color: #282e3e;
     margin: 4px 6px;
 }
 
-/* ================= Bottom VLC Toolbar ================= */
+/* ================= Bottom Master Toolbar ================= */
 #OrionVlcToolbar {
-    background-color: #161b22;
-    border-top: 1px solid #30363d;
+    background-color: #131620;
+    border-top: 1px solid #222634;
 }
 
 #OrionVlcElapsedLabel, #OrionVlcDurationLabel {
-    color: #8b949e;
-    font-family: monospace;
+    color: #94a3b8;
+    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 600;
     padding: 0 4px;
 }
 
-/* Time Slider */
+#OrionVlcDurationLabel:hover {
+    color: #f1f5f9;
+}
+
+/* Time Scrubber Slider */
 QSlider#OrionVlcTimeSlider::groove:horizontal {
-    height: 6px;
-    background: #1c222d;
-    border-radius: 3px;
+    height: 4px;
+    background: #232838;
+    border-radius: 2px;
 }
 
 QSlider#OrionVlcTimeSlider::sub-page:horizontal {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1e3a8a, stop:0.5 #2563eb, stop:1 #00f5ff);
-    border-radius: 3px;
+    background: #2563eb;
+    border-radius: 2px;
 }
 
 QSlider#OrionVlcTimeSlider::handle:horizontal {
-    background: #ffffff;
-    border: 2px solid #00f5ff;
-    width: 14px;
-    height: 14px;
+    background: #f1f5f9;
+    border: 1px solid #2563eb;
+    width: 12px;
+    height: 12px;
     margin: -4px 0;
-    border-radius: 7px;
+    border-radius: 6px;
 }
 
 QSlider#OrionVlcTimeSlider::handle:horizontal:hover {
-    background: #00f5ff;
-    border: 2px solid #ffffff;
+    background: #ffffff;
+    border: 2px solid #3b82f6;
+    width: 14px;
+    height: 14px;
+    margin: -5px 0;
+    border-radius: 7px;
 }
 
-/* Buttons */
+/* Base PushButton */
 QPushButton {
-    background-color: #21262d;
-    border: 1px solid #30363d;
+    background-color: #1a1e28;
+    border: 1px solid #282e3e;
     border-radius: 5px;
-    color: #c9d1d9;
-    padding: 4px 8px;
+    color: #cbd5e1;
+    padding: 4px 10px;
     font-weight: 500;
 }
 
 QPushButton:hover {
-    background-color: #30363d;
-    border-color: #00f5ff;
-    color: #ffffff;
+    background-color: #242938;
+    border-color: #384156;
+    color: #f8fafc;
 }
 
 QPushButton:pressed {
-    background-color: #161b22;
+    background-color: #141720;
+    border-color: #222634;
 }
 
+/* Centerpiece Play / Pause Button */
 QPushButton#OrionVlcPlayPauseBtn {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1e3a8a, stop:0.5 #2563eb, stop:1 #00d2ff);
-    border: 1px solid #00f5ff;
+    background-color: #2563eb;
+    border: 1px solid #3b82f6;
     border-radius: 6px;
     padding: 2px;
 }
 
 QPushButton#OrionVlcPlayPauseBtn:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #2563eb, stop:0.5 #3b82f6, stop:1 #00f5ff);
-    border: 1px solid #ffffff;
+    background-color: #3b82f6;
+    border-color: #60a5fa;
 }
 
 QPushButton#OrionVlcPlayPauseBtn:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1e3a8a, stop:1 #1d4ed8);
+    background-color: #1d4ed8;
+    border-color: #2563eb;
 }
 
+/* Professional Ghost / Flat Tool Buttons */
 QPushButton#OrionVlcToolBtn {
-    background: #1c222d;
-    border: 1px solid #2e3846;
-    border-radius: 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
     padding: 3px;
 }
 
 QPushButton#OrionVlcToolBtn:hover {
-    background: #252e3d;
-    border-color: #00d2ff;
+    background-color: #1e2330;
+    border-color: #2c3345;
 }
 
 QPushButton#OrionVlcToolBtn:pressed {
-    background: #141820;
-    border-color: #0077b6;
+    background-color: #161922;
+    border-color: #222736;
 }
 
+/* Mute Button */
 QPushButton#OrionVlcMuteBtn {
     background: transparent;
     border: 1px solid transparent;
@@ -155,74 +170,86 @@ QPushButton#OrionVlcMuteBtn {
 }
 
 QPushButton#OrionVlcMuteBtn:hover {
-    background: #21262d;
-    border-color: #30363d;
+    background-color: #1e2330;
+    border-color: #2c3345;
 }
 
+/* Advanced Recording / Inspection Bar */
 #OrionVlcAdvancedBar QPushButton {
-    background: #1a202c;
-    border: 1px solid #2d3748;
-    border-radius: 5px;
+    background-color: #181c26;
+    border: 1px solid #282e3e;
+    border-radius: 4px;
     padding: 2px 8px;
-    color: #cbd5e1;
+    color: #94a3b8;
     font-size: 11px;
+    font-weight: 500;
 }
 
 #OrionVlcAdvancedBar QPushButton:hover {
-    background: #2d3748;
-    border-color: #00f5ff;
-    color: #ffffff;
+    background-color: #222736;
+    border-color: #384156;
+    color: #f1f5f9;
 }
 
 #OrionVlcAdvancedBar QPushButton:pressed {
-    background: #11151c;
+    background-color: #13151e;
 }
 
 /* Volume Slider */
 QSlider#OrionVlcVolSlider::groove:horizontal {
-    height: 4px;
-    background: #21262d;
-    border-radius: 2px;
+    height: 3px;
+    background: #232838;
+    border-radius: 1.5px;
 }
 
 QSlider#OrionVlcVolSlider::sub-page:horizontal {
-    background: #58a6ff;
-    border-radius: 2px;
+    background: #64748b;
+    border-radius: 1.5px;
+}
+
+QSlider#OrionVlcVolSlider::sub-page:horizontal:hover {
+    background: #3b82f6;
 }
 
 QSlider#OrionVlcVolSlider::handle:horizontal {
-    background: #e6edf3;
-    border: 1px solid #58a6ff;
+    background: #cbd5e1;
+    border: none;
     width: 10px;
     height: 10px;
-    margin: -3px 0;
+    margin: -3.5px 0;
     border-radius: 5px;
 }
 
+QSlider#OrionVlcVolSlider::handle:horizontal:hover {
+    background: #ffffff;
+    border: 1px solid #3b82f6;
+}
+
 #OrionVlcVolLabel {
-    color: #8b949e;
-    font-family: monospace;
+    color: #94a3b8;
+    font-family: "JetBrains Mono", "SF Mono", monospace;
     font-size: 11px;
+    font-weight: 600;
 }
 
 /* ================= Status Bar ================= */
 QStatusBar {
-    background-color: #161b22;
-    border-top: 1px solid #21262d;
-    color: #8b949e;
+    background-color: #131620;
+    border-top: 1px solid #1e222e;
+    color: #64748b;
     font-size: 11px;
 }
 
 /* ================= Playlist & Library View ================= */
 #OrionPlaylistView {
-    background-color: #0d1117;
+    background-color: #0a0d14;
 }
 
 QTreeWidget {
-    background-color: #161b22;
-    border: 1px solid #30363d;
+    background-color: #131620;
+    border: 1px solid #232838;
     border-radius: 6px;
-    color: #c9d1d9;
+    color: #cbd5e1;
     padding: 4px;
 }
 
@@ -232,16 +259,16 @@ QTreeWidget::item {
 }
 
 QTreeWidget::item:selected {
-    background-color: #1f6feb;
+    background-color: #2563eb;
     color: #ffffff;
 }
 
 QTableWidget {
-    background-color: #0d1117;
-    border: 1px solid #30363d;
+    background-color: #0d1017;
+    border: 1px solid #232838;
     border-radius: 6px;
-    gridline-color: #21262d;
-    color: #c9d1d9;
+    gridline-color: #1e222e;
+    color: #cbd5e1;
 }
 
 QTableWidget::item {
@@ -249,54 +276,54 @@ QTableWidget::item {
 }
 
 QTableWidget::item:selected {
-    background-color: #1f6feb;
+    background-color: #2563eb;
     color: #ffffff;
 }
 
 QHeaderView::section {
-    background-color: #161b22;
-    color: #8b949e;
-    font-weight: bold;
-    border: 1px solid #21262d;
+    background-color: #131620;
+    color: #94a3b8;
+    font-weight: 600;
+    border: 1px solid #1e222e;
     padding: 5px;
 }
 
 /* ================= Dialogs, Tabs & Controls ================= */
 QDialog {
-    background-color: #161b22;
-    color: #e6edf3;
+    background-color: #131620;
+    color: #f1f5f9;
 }
 
 QTabWidget::pane {
-    border: 1px solid #30363d;
+    border: 1px solid #282e3e;
     border-radius: 6px;
-    background-color: #161b22;
+    background-color: #131620;
 }
 
 QTabBar::tab {
-    background-color: #21262d;
-    color: #8b949e;
+    background-color: #1a1e28;
+    color: #94a3b8;
     padding: 7px 14px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     margin-right: 2px;
 }
 
 QTabBar::tab:selected {
-    background-color: #161b22;
-    color: #58a6ff;
-    font-weight: bold;
-    border: 1px solid #30363d;
+    background-color: #131620;
+    color: #f1f5f9;
+    font-weight: 600;
+    border: 1px solid #282e3e;
     border-bottom: none;
 }
 
 QGroupBox {
-    border: 1px solid #30363d;
+    border: 1px solid #282e3e;
     border-radius: 6px;
     margin-top: 10px;
     padding-top: 10px;
-    font-weight: bold;
-    color: #8b949e;
+    font-weight: 600;
+    color: #94a3b8;
 }
 
 QGroupBox::title {
@@ -307,21 +334,21 @@ QGroupBox::title {
 }
 
 QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
-    background-color: #21262d;
-    border: 1px solid #30363d;
+    background-color: #1a1e28;
+    border: 1px solid #282e3e;
     border-radius: 5px;
     padding: 5px 8px;
-    color: #f0f6fc;
+    color: #f1f5f9;
 }
 
-QLineEdit:focus, QComboBox:focus {
-    border-color: #58a6ff;
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus {
+    border-color: #3b82f6;
 }
 
 QToolTip {
-    background-color: #1c2128;
-    color: #f0f6fc;
-    border: 1px solid #30363d;
+    background-color: #181c26;
+    color: #f1f5f9;
+    border: 1px solid #2c3345;
     border-radius: 4px;
     padding: 4px 8px;
     font-size: 12px;

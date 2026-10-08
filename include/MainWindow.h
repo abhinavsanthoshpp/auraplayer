@@ -84,6 +84,7 @@ private slots:
     void onTogglePlaylist();
     void onToggleAdvancedControls();
     void onAbout();
+    void onShowDonate();
 
     // Engine feedback
     void onPlaybackStarted();

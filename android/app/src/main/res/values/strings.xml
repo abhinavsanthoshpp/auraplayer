@@ -11,4 +11,6 @@
     <string name="aspect_ratio">Aspect Ratio</string>
     <string name="audio_track">Audio Track</string>
     <string name="subtitles">Subtitles</string>
+    <string name="donate_title">Support &amp; Donate</string>
+    <string name="donate_desc">Support Orion Player development!\n\nCreator: Abhinav Santhosh (@abhinavsanthoshpp)\n\n⚡ UPI ID: abhinava6525@naviaxis\n(Direct bank transfer • 0% fee)\n\n☕ Buy Me a Coffee:\nbuymeacoffee.com/abhinavsanthoshpp</string>
 </resources>

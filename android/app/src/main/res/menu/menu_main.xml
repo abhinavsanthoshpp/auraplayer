@@ -7,6 +7,11 @@
         android:icon="@android:drawable/ic_menu_upload"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_donate"
+        android:title="@string/donate_title"
+        android:icon="@android:drawable/ic_menu_agenda"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_about"
         android:title="@string/about_title"
         app:showAsAction="never" />
