@@ -10,24 +10,23 @@
 #include <QMouseEvent>
 #include "AuraEngine.h"
 
-class AuraSeekBar : public QSlider {
+class AuraTimeline : public QSlider {
     Q_OBJECT
 
 public:
-    explicit AuraSeekBar(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit AuraTimeline(Qt::Orientation orientation, QWidget *parent = nullptr);
 
 signals:
-    void seekRequested(double positionPercent);
-    void hoverPositionChanged(double percent, const QPoint &globalPos);
+    void seekPercent(double percent);
+    void hoverPercent(double percent, const QPoint &globalPos);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    void enterEvent(QEnterEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
 private:
-    double valueFromPosition(int x) const;
+    double ratioFromX(int x) const;
 };
 
 class AuraControls : public QWidget {
@@ -52,13 +51,9 @@ signals:
     void stepForwardClicked();
     void stepBackClicked();
     void fullscreenClicked();
-    void playlistToggleClicked();
-    void equalizerClicked();
+    void studioToggleClicked();
     void pipToggleClicked();
     void userInteracted();
-
-protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
     void onSeekRequested(double percent);
@@ -76,10 +71,9 @@ private:
 
     AuraEngine *m_engine = nullptr;
 
-    AuraSeekBar *m_seekBar = nullptr;
+    AuraTimeline *m_timeline = nullptr;
     QLabel *m_timeLabel = nullptr;
-    QPushButton *m_playPauseBtn = nullptr;
-    QPushButton *m_stopBtn = nullptr;
+    QPushButton *m_playPauseBtn = nullptr; // Central Aura Core
     QPushButton *m_prevBtn = nullptr;
     QPushButton *m_nextBtn = nullptr;
     QPushButton *m_stepBackBtn = nullptr;
@@ -87,20 +81,18 @@ private:
 
     QPushButton *m_muteBtn = nullptr;
     QSlider *m_volumeSlider = nullptr;
-    QLabel *m_volumeLabel = nullptr;
+    QLabel *m_volumeBadge = nullptr;
 
-    QComboBox *m_speedCombo = nullptr;
-    QComboBox *m_audioCombo = nullptr;
-    QComboBox *m_subCombo = nullptr;
-    QComboBox *m_aspectCombo = nullptr;
+    QComboBox *m_speedPill = nullptr;
+    QComboBox *m_audioPill = nullptr;
+    QComboBox *m_subPill = nullptr;
+    QComboBox *m_aspectPill = nullptr;
 
-    QPushButton *m_eqBtn = nullptr;
-    QPushButton *m_playlistBtn = nullptr;
+    QPushButton *m_studioBtn = nullptr;
     QPushButton *m_pipBtn = nullptr;
     QPushButton *m_fullscreenBtn = nullptr;
 
     double m_duration = 0.0;
     double m_currentPosition = 0.0;
     bool m_showRemaining = false;
-    bool m_isSeeking = false;
 };

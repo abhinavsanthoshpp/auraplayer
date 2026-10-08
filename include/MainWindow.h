@@ -3,14 +3,12 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QLabel>
+#include <QPushButton>
 #include "AuraEngine.h"
 #include "AuraVideoWidget.h"
 #include "AuraControls.h"
-
-class AuraPlaylist;
-class AuraEqualizerDialog;
-class AuraMediaInfoDialog;
-class AuraStreamDialog;
+#include "AuraStudioDrawer.h"
+#include "AuraStreamDialog.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -24,15 +22,12 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    // File / Media actions
+    // Playback & File slots
     void onOpenFile();
-    void onOpenMultipleFiles();
-    void onOpenFolder();
     void onOpenNetworkStream();
-
-    // Playback actions
     void onTogglePlayPause();
     void onStop();
     void onNext();
@@ -43,42 +38,44 @@ private slots:
     void onVolumeDelta(double delta);
     void onSpeedDelta(double delta);
 
-    // View / Mode actions
+    // Modes & UI
     void onToggleFullscreen();
     void onToggleAlwaysOnTop();
-    void onTogglePlaylist();
-    void onShowEqualizer();
-    void onShowMediaInfo();
+    void onToggleStudioDrawer();
     void onTakeScreenshot();
-    void onAbout();
-
-    // UI reactivity & auto-hide
     void onUserActivity();
     void onAutoHideTimeout();
     void showOsdMessage(const QString &text, int timeoutMs = 1500);
 
 private:
-    void createMenuBar();
-    void createCentralLayout();
-    void setupShortcuts();
-    void applyTheme();
+    void setupFramelessCanvas();
+    void setupTopAuraCapsule();
+    void applyNebulaTheme();
+    void repositionFloatingOverlays();
 
     AuraEngine *m_engine = nullptr;
     AuraVideoWidget *m_videoWidget = nullptr;
-    AuraControls *m_controls = nullptr;
+    AuraControls *m_cyberDeck = nullptr;
+    AuraStudioDrawer *m_studioDrawer = nullptr;
 
-    // Overlay OSD label
+    // Top Floating Aura Capsule
+    QWidget *m_topCapsule = nullptr;
+    QLabel *m_capsuleTitle = nullptr;
+    QPushButton *m_capsuleOpenBtn = nullptr;
+    QPushButton *m_capsuleStreamBtn = nullptr;
+    QPushButton *m_capsuleStudioBtn = nullptr;
+    QPushButton *m_capsulePipBtn = nullptr;
+    QPushButton *m_capsuleMaxBtn = nullptr;
+    QPushButton *m_capsuleCloseBtn = nullptr;
+
+    // Overlay OSD
     QLabel *m_osdLabel = nullptr;
     QTimer m_osdTimer;
 
-    // Auto-hide controls timer
+    // Auto-hide timer
     QTimer m_autoHideTimer;
     bool m_isFullscreen = false;
     bool m_isAlwaysOnTop = false;
 
-    // Dialogs
-    AuraEqualizerDialog *m_equalizerDialog = nullptr;
-    AuraMediaInfoDialog *m_mediaInfoDialog = nullptr;
     AuraStreamDialog *m_streamDialog = nullptr;
-    AuraPlaylist *m_playlistWidget = nullptr;
 };

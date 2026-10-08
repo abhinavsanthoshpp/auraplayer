@@ -85,53 +85,81 @@
             <!-- UI Player Preview Mockup -->
             <div class="mockup-wrapper">
                 <div class="mockup-frame">
-                    <div class="mockup-titlebar">
-                        <div class="window-controls">
-                            <span class="wc-dot close"></span>
-                            <span class="wc-dot min"></span>
-                            <span class="wc-dot max"></span>
+                    <!-- Top Floating Aura Capsule Island -->
+                    <div class="mockup-capsule-island">
+                        <div class="capsule-left">
+                            <span class="capsule-logo">⚡ Aura<strong>Player</strong></span>
+                            <span class="capsule-pill">📁 Open</span>
+                            <span class="capsule-pill">🌐 Stream</span>
+                            <span class="capsule-pill highlight">⚡ Studio</span>
                         </div>
-                        <div class="mockup-title">AuraPlayer — Cyberpunk_Neon_4K_60fps.mkv</div>
-                        <div class="mockup-tags">
-                            <span class="tag tag-vaapi">Intel VA-API Active</span>
-                            <span class="tag tag-spec">4K AV1 60FPS</span>
+                        <div class="capsule-center">
+                            <span class="capsule-file">Cyberpunk_Neon_4K_60fps.mkv</span>
+                        </div>
+                        <div class="capsule-right">
+                            <span class="capsule-dot vaapi">VA-API Active</span>
+                            <span class="capsule-icon">📌</span>
+                            <span class="capsule-icon">⛶</span>
+                            <span class="capsule-close">✕</span>
                         </div>
                     </div>
+
                     <div class="mockup-screen">
                         <div class="mockup-video-canvas">
                             <div class="mockup-play-center">▶</div>
                             <div class="mockup-stats-overlay">
-                                <div>CPU: <strong>1.8%</strong></div>
-                                <div>RAM: <strong>38 MB</strong></div>
+                                <div>CPU Load: <strong>1.8%</strong> (Intel Tiger Lake)</div>
+                                <div>RAM: <strong>38 MB</strong> (77% less than VLC)</div>
                                 <div>Frames Dropped: <strong>0 / 14,400</strong></div>
-                                <div>Render: <strong>Direct OpenGL FBO</strong></div>
+                                <div>Zero-Copy: <strong>Direct OpenGL FBO</strong></div>
+                            </div>
+
+                            <!-- Slide-Out Aura Studio Drawer Mockup (Preview) -->
+                            <div class="mockup-studio-preview">
+                                <div class="msp-header">
+                                    <span>⚡ Aura <strong>Studio</strong></span>
+                                    <span class="msp-tab active">Queue</span>
+                                    <span class="msp-tab">Sound</span>
+                                    <span class="msp-tab">Color</span>
+                                    <span class="msp-tab">HUD</span>
+                                </div>
+                                <div class="msp-queue">
+                                    <div class="msp-item active">▶ 01. Cyberpunk_Neon_4K.mkv</div>
+                                    <div class="msp-item">02. Synthwave_Drive_1080p.mp4</div>
+                                    <div class="msp-item">03. Interstellar_Theme_FLAC.flac</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="mockup-controlbar">
+
+                        <!-- Floating Cyber Deck Bottom Dock -->
+                        <div class="mockup-cyber-deck">
                             <div class="mockup-seekbar">
                                 <div class="mockup-seek-progress"></div>
                                 <div class="mockup-seek-thumb"></div>
+                                <div class="mockup-seek-time-badge">04:22 / 12:45</div>
                             </div>
-                            <div class="mockup-controls-row">
-                                <div class="mc-left">
-                                    <span>⏮</span>
-                                    <span>⏪</span>
-                                    <span class="mc-play">▶</span>
-                                    <span>⏩</span>
-                                    <span>⏭</span>
-                                    <span>⏹</span>
-                                    <span class="mc-time">04:22 / 12:45</span>
+                            <div class="mockup-deck-row">
+                                <div class="deck-sound-capsule">
+                                    <span>🔊</span>
+                                    <div class="deck-vol-bar"></div>
+                                    <span class="deck-vol-txt">100%</span>
                                 </div>
-                                <div class="mc-center">
-                                    <span>🔊 100%</span>
-                                    <span class="mc-badge">Speed: 1.0x</span>
-                                    <span class="mc-badge">Subs: Eng [SRT]</span>
+
+                                <div class="deck-core-cluster">
+                                    <span class="deck-btn">⏮</span>
+                                    <span class="deck-btn">‹</span>
+                                    <span class="deck-play-core">▶</span>
+                                    <span class="deck-btn">›</span>
+                                    <span class="deck-btn">⏭</span>
                                 </div>
-                                <div class="mc-right">
-                                    <span>🎚️ EQ</span>
-                                    <span>📑 Queue</span>
-                                    <span>📌 Pin</span>
-                                    <span>⛶</span>
+
+                                <div class="deck-pills-cluster">
+                                    <span class="deck-pill">1.0x</span>
+                                    <span class="deck-pill">ENG 5.1</span>
+                                    <span class="deck-pill">SRT</span>
+                                    <span class="deck-pill studio-pill">⚡ Studio</span>
+                                    <span class="deck-icon">📌</span>
+                                    <span class="deck-icon">⛶</span>
                                 </div>
                             </div>
                         </div>

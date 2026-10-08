@@ -23,9 +23,15 @@ Traditional media players like VLC are versatile, but they were architected deca
 - 🚀 **Blazing Startup Speed**: Launches in **< 32ms** (15x faster than VLC).
 - 🪶 **Featherweight Footprint**: Consumes only **~38 MB RAM** at idle (77% less than VLC).
 - 🎬 **Hardware Acceleration (Zero-Copy)**: Native **Intel VA-API / NVIDIA NVDEC** hardware video decoding. Smooth 4K/8K 60fps playback with < 2% CPU load and zero frame drops.
-- 🎨 **Modern Glassmorphic Dark UI**: High-DPI crisp interface with auto-hiding controls, responsive seek preview, and smooth animations.
-- 🔊 **200% Volume Boost & 10-Band Equalizer**: Crystal-clear audio with custom EQ presets and pitch-preserving speed adjustment (0.25x - 4x).
-- 📑 **Integrated Playlist Queue**: Drag & drop folders and files, repeat all/one, shuffle, and instant search.
+- 🌌 **Original "Dynamic Nebula" UI/UX (Zero-Chrome Canvas)**:
+  - **No 90s Menubars**: Fully frameless, edge-to-edge cinematic canvas with smooth auto-hiding controls.
+  - **Top Aura Capsule Island**: Floating glass island for quick media browsing, stream inputs, and window controls.
+  - **Floating Cyber Deck Dock**: Floating translucent capsule with the circular glowing **Aura Core** play button, holographic timeline, and fluid volume capsule (0%–200% boost with dynamic amber overdrive).
+  - **Integrated Slide-Out Aura Studio Drawer**: Single-panel right drawer with 4 live tabs:
+    - 📑 **Flow Queue**: Searchable playlist queue with drag-and-drop & shuffle.
+    - 🎵 **Acoustic Studio**: 10-band precision graphic equalizer with sound signatures (Flat, Bass+, Cinema, Vocal+, Lo-Fi).
+    - 🎬 **Color Shaders**: Real-time cinematic color grading (Brightness, Contrast, Saturation, Gamma).
+    - ⚡ **Telemetry HUD**: Real-time hardware decoder monitoring (VA-API engine status, FPS, zero-copy buffer).
 - 🌐 **Network Stream Player**: Direct playback from YouTube, Twitch, RTSP feeds, and HLS/DASH streams.
 - 🐧 **Linux-First Desktop Integration**: Wayland & X11 native, MPRIS2 D-Bus controls (lock screen & hardware media keys), and dark mode sync.
 - 🛡️ **100% Free & Open Source**: Transparent, privacy-respecting, zero telemetry, zero bundled bloat.

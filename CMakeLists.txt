@@ -36,6 +36,7 @@ set(SOURCES
     src/AuraEngine.cpp
     src/AuraVideoWidget.cpp
     src/AuraControls.cpp
+    src/AuraStudioDrawer.cpp
     src/AuraPlaylist.cpp
     src/AuraEqualizerDialog.cpp
     src/AuraMediaInfoDialog.cpp
@@ -47,6 +48,7 @@ set(HEADERS
     include/AuraEngine.h
     include/AuraVideoWidget.h
     include/AuraControls.h
+    include/AuraStudioDrawer.h
     include/AuraPlaylist.h
     include/AuraEqualizerDialog.h
     include/AuraMediaInfoDialog.h

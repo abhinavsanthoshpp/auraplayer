@@ -1,102 +1,79 @@
 #include "MainWindow.h"
-#include "AuraPlaylist.h"
-#include "AuraEqualizerDialog.h"
-#include "AuraMediaInfoDialog.h"
-#include "AuraStreamDialog.h"
-
-#include <QMenuBar>
-#include <QMenu>
-#include <QAction>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QKeyEvent>
 #include <QCloseEvent>
+#include <QResizeEvent>
 #include <QFile>
-#include <QSplitter>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFileInfo>
 #include <QApplication>
-#include <QScreen>
 #include <cmath>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
-    setWindowTitle("AuraPlayer — Ultra-Fast Media Player");
-    resize(1100, 720);
+    setWindowTitle("AuraPlayer");
+    resize(1140, 720);
+    setMinimumSize(640, 420);
 
-    // Initialize media engine
     m_engine = new AuraEngine(this);
-    if (!m_engine->initialize()) {
-        QMessageBox::critical(this, "Engine Error", "Failed to initialize AuraEngine hardware accelerated backend.");
-    }
+    m_engine->initialize();
 
-    createCentralLayout();
-    createMenuBar();
-    setupShortcuts();
-    applyTheme();
+    setupFramelessCanvas();
+    setupTopAuraCapsule();
+    applyNebulaTheme();
 
-    // Auto-hide controls timer
-    m_autoHideTimer.setInterval(2500);
+    m_autoHideTimer.setInterval(2400);
     connect(&m_autoHideTimer, &QTimer::timeout, this, &MainWindow::onAutoHideTimeout);
 
-    // OSD timer
     m_osdTimer.setSingleShot(true);
     connect(&m_osdTimer, &QTimer::timeout, this, [this]() {
         m_osdLabel->hide();
     });
 
-    // Start auto-hide timer once media plays
     connect(m_engine, &AuraEngine::playbackStarted, this, [this]() {
         m_autoHideTimer.start();
-        setWindowTitle(QString("AuraPlayer — %1").arg(QFileInfo(m_engine->currentFilePath()).fileName()));
+        QString fileName = QFileInfo(m_engine->currentFilePath()).fileName();
+        m_capsuleTitle->setText(fileName.isEmpty() ? "AuraPlayer" : fileName);
+        setWindowTitle(QString("AuraPlayer — %1").arg(fileName));
     });
+
     connect(m_engine, &AuraEngine::playbackStopped, this, [this]() {
         m_autoHideTimer.stop();
-        m_controls->show();
-        setWindowTitle("AuraPlayer — Ultra-Fast Media Player");
+        m_cyberDeck->show();
+        m_topCapsule->show();
+        m_capsuleTitle->setText("⚡ AuraPlayer");
+        setWindowTitle("AuraPlayer");
     });
 }
 
 MainWindow::~MainWindow() {
 }
 
-void MainWindow::createCentralLayout() {
+void MainWindow::setupFramelessCanvas() {
     auto *centralContainer = new QWidget(this);
     auto *containerLayout = new QHBoxLayout(centralContainer);
     containerLayout->setContentsMargins(0, 0, 0, 0);
     containerLayout->setSpacing(0);
 
-    // Video & Controls column
-    auto *videoControlsCol = new QWidget(centralContainer);
-    auto *colLayout = new QVBoxLayout(videoControlsCol);
-    colLayout->setContentsMargins(0, 0, 0, 0);
-    colLayout->setSpacing(0);
+    // Video Canvas occupies main body
+    m_videoWidget = new AuraVideoWidget(m_engine, centralContainer);
+    containerLayout->addWidget(m_videoWidget, 1);
 
-    // Video widget
-    m_videoWidget = new AuraVideoWidget(m_engine, videoControlsCol);
-    colLayout->addWidget(m_videoWidget, 1);
-
-    // Controls bar
-    m_controls = new AuraControls(m_engine, videoControlsCol);
-    colLayout->addWidget(m_controls, 0);
-
-    // Playlist drawer
-    m_playlistWidget = new AuraPlaylist(centralContainer);
-    m_playlistWidget->hide(); // Initially closed
-
-    containerLayout->addWidget(videoControlsCol, 1);
-    containerLayout->addWidget(m_playlistWidget, 0);
+    // Studio Drawer slides out on the right
+    m_studioDrawer = new AuraStudioDrawer(m_engine, centralContainer);
+    m_studioDrawer->hide();
+    containerLayout->addWidget(m_studioDrawer, 0);
 
     setCentralWidget(centralContainer);
 
-    // Floating OSD overlay on top of video widget
+    // Floating Cyber Deck (Bottom Dock)
+    m_cyberDeck = new AuraControls(m_engine, m_videoWidget);
+
+    // Dynamic OSD Pill
     m_osdLabel = new QLabel(m_videoWidget);
-    m_osdLabel->setObjectName("AuraOsdLabel");
-    m_osdLabel->setStyleSheet(
-        "background: rgba(13, 17, 23, 0.88); color: #00e5ff; font-size: 16px; font-weight: bold;"
-        "border: 1px solid #30363d; border-radius: 8px; padding: 10px 20px;"
-    );
+    m_osdLabel->setObjectName("AuraDynamicOsd");
     m_osdLabel->setAlignment(Qt::AlignCenter);
     m_osdLabel->hide();
 
@@ -109,166 +86,137 @@ void MainWindow::createCentralLayout() {
         onVolumeDelta(delta > 0 ? 5.0 : -5.0);
     });
 
-    // Wiring controls bar
-    connect(m_controls, &AuraControls::playPauseClicked, this, &MainWindow::onTogglePlayPause);
-    connect(m_controls, &AuraControls::stopClicked, this, &MainWindow::onStop);
-    connect(m_controls, &AuraControls::nextClicked, this, &MainWindow::onNext);
-    connect(m_controls, &AuraControls::prevClicked, this, &MainWindow::onPrevious);
-    connect(m_controls, &AuraControls::stepForwardClicked, this, &MainWindow::onStepForward);
-    connect(m_controls, &AuraControls::stepBackClicked, this, &MainWindow::onStepBack);
-    connect(m_controls, &AuraControls::fullscreenClicked, this, &MainWindow::onToggleFullscreen);
-    connect(m_controls, &AuraControls::playlistToggleClicked, this, &MainWindow::onTogglePlaylist);
-    connect(m_controls, &AuraControls::equalizerClicked, this, &MainWindow::onShowEqualizer);
-    connect(m_controls, &AuraControls::pipToggleClicked, this, &MainWindow::onToggleAlwaysOnTop);
-    connect(m_controls, &AuraControls::userInteracted, this, &MainWindow::onUserActivity);
+    // Wiring Cyber Deck events
+    connect(m_cyberDeck, &AuraControls::playPauseClicked, this, &MainWindow::onTogglePlayPause);
+    connect(m_cyberDeck, &AuraControls::prevClicked, this, &MainWindow::onPrevious);
+    connect(m_cyberDeck, &AuraControls::nextClicked, this, &MainWindow::onNext);
+    connect(m_cyberDeck, &AuraControls::stepBackClicked, this, &MainWindow::onStepBack);
+    connect(m_cyberDeck, &AuraControls::stepForwardClicked, this, &MainWindow::onStepForward);
+    connect(m_cyberDeck, &AuraControls::fullscreenClicked, this, &MainWindow::onToggleFullscreen);
+    connect(m_cyberDeck, &AuraControls::studioToggleClicked, this, &MainWindow::onToggleStudioDrawer);
+    connect(m_cyberDeck, &AuraControls::pipToggleClicked, this, &MainWindow::onToggleAlwaysOnTop);
+    connect(m_cyberDeck, &AuraControls::userInteracted, this, &MainWindow::onUserActivity);
 
-    // Wiring playlist
-    connect(m_playlistWidget, &AuraPlaylist::trackSelected, this, &MainWindow::openMedia);
+    // Wiring Studio Drawer
+    connect(m_studioDrawer, &AuraStudioDrawer::trackSelected, this, &MainWindow::openMedia);
+    connect(m_studioDrawer, &AuraStudioDrawer::closeRequested, this, &MainWindow::onToggleStudioDrawer);
 }
 
-void MainWindow::createMenuBar() {
-    auto *mb = menuBar();
+void MainWindow::setupTopAuraCapsule() {
+    m_topCapsule = new QWidget(m_videoWidget);
+    m_topCapsule->setObjectName("AuraTopCapsule");
 
-    // 1. File Menu
-    auto *fileMenu = mb->addMenu("&Media");
-    fileMenu->addAction("&Open File...", this, &MainWindow::onOpenFile, QKeySequence::Open);
-    fileMenu->addAction("Open &Multiple Files...", this, &MainWindow::onOpenMultipleFiles);
-    fileMenu->addAction("Open &Folder...", this, &MainWindow::onOpenFolder);
-    fileMenu->addAction("Open Network &Stream...", this, &MainWindow::onOpenNetworkStream, QKeySequence("Ctrl+U"));
-    fileMenu->addSeparator();
-    fileMenu->addAction("&Exit", this, &QWidget::close, QKeySequence::Quit);
+    auto *capsuleLayout = new QHBoxLayout(m_topCapsule);
+    capsuleLayout->setContentsMargins(12, 6, 12, 6);
+    capsuleLayout->setSpacing(8);
 
-    // 2. Playback Menu
-    auto *playMenu = mb->addMenu("&Playback");
-    playMenu->addAction("Play / &Pause", this, &MainWindow::onTogglePlayPause, Qt::Key_Space);
-    playMenu->addAction("&Stop", this, &MainWindow::onStop);
-    playMenu->addAction("&Previous Track", this, &MainWindow::onPrevious, Qt::Key_P);
-    playMenu->addAction("&Next Track", this, &MainWindow::onNext, Qt::Key_N);
-    playMenu->addSeparator();
-    playMenu->addAction("Seek Forward 5s", this, [this]() { onSeekRelative(5.0); }, Qt::Key_Right);
-    playMenu->addAction("Seek Backward 5s", this, [this]() { onSeekRelative(-5.0); }, Qt::Key_Left);
-    playMenu->addAction("Seek Forward 30s", this, [this]() { onSeekRelative(30.0); }, QKeySequence("Ctrl+Right"));
-    playMenu->addAction("Seek Backward 30s", this, [this]() { onSeekRelative(-30.0); }, QKeySequence("Ctrl+Left"));
-    playMenu->addSeparator();
-    playMenu->addAction("Speed Up (+0.1x)", this, [this]() { onSpeedDelta(0.1); }, Qt::Key_BracketRight);
-    playMenu->addAction("Speed Down (-0.1x)", this, [this]() { onSpeedDelta(-0.1); }, Qt::Key_BracketLeft);
-    playMenu->addAction("Reset Speed (1.0x)", this, [this]() { if (m_engine) m_engine->setSpeed(1.0); }, Qt::Key_Backspace);
+    m_capsuleTitle = new QLabel("⚡ Aura<strong>Player</strong>", m_topCapsule);
+    m_capsuleTitle->setObjectName("AuraCapsuleBrand");
+    m_capsuleTitle->setTextFormat(Qt::RichText);
+    capsuleLayout->addWidget(m_capsuleTitle);
 
-    // 3. Audio Menu
-    auto *audioMenu = mb->addMenu("&Audio");
-    audioMenu->addAction("Volume &Up (+5%)", this, [this]() { onVolumeDelta(5.0); }, Qt::Key_Up);
-    audioMenu->addAction("Volume &Down (-5%)", this, [this]() { onVolumeDelta(-5.0); }, Qt::Key_Down);
-    audioMenu->addAction("&Mute / Unmute", this, [this]() { if (m_engine) m_engine->toggleMute(); }, Qt::Key_M);
-    audioMenu->addSeparator();
-    audioMenu->addAction("Audio Delay +100ms", this, [this]() {
-        if (m_engine) {
-            double d = m_engine->audioDelay() + 0.1;
-            m_engine->setAudioDelay(d);
-            showOsdMessage(QString("Audio Delay: %1 ms").arg(static_cast<int>(d * 1000)));
-        }
-    }, Qt::Key_K);
-    audioMenu->addAction("Audio Delay -100ms", this, [this]() {
-        if (m_engine) {
-            double d = m_engine->audioDelay() - 0.1;
-            m_engine->setAudioDelay(d);
-            showOsdMessage(QString("Audio Delay: %1 ms").arg(static_cast<int>(d * 1000)));
-        }
-    }, Qt::Key_J);
-    audioMenu->addSeparator();
-    audioMenu->addAction("Audio &Equalizer...", this, &MainWindow::onShowEqualizer, Qt::Key_E);
+    capsuleLayout->addSpacing(8);
 
-    // 4. Video Menu
-    auto *videoMenu = mb->addMenu("&Video");
-    videoMenu->addAction("Subtitle Delay +100ms", this, [this]() {
-        if (m_engine) {
-            double d = m_engine->subtitleDelay() + 0.1;
-            m_engine->setSubtitleDelay(d);
-            showOsdMessage(QString("Sub Delay: %1 ms").arg(static_cast<int>(d * 1000)));
-        }
-    }, Qt::Key_X);
-    videoMenu->addAction("Subtitle Delay -100ms", this, [this]() {
-        if (m_engine) {
-            double d = m_engine->subtitleDelay() - 0.1;
-            m_engine->setSubtitleDelay(d);
-            showOsdMessage(QString("Sub Delay: %1 ms").arg(static_cast<int>(d * 1000)));
-        }
-    }, Qt::Key_Z);
-    videoMenu->addSeparator();
-    videoMenu->addAction("Video Color Adjustments...", this, &MainWindow::onShowEqualizer, Qt::Key_C);
-    videoMenu->addAction("Take &Screenshot", this, &MainWindow::onTakeScreenshot, Qt::Key_S);
+    m_capsuleOpenBtn = new QPushButton("📁 Open", m_topCapsule);
+    m_capsuleOpenBtn->setObjectName("AuraCapsuleBtn");
+    m_capsuleOpenBtn->setToolTip("Open Media File (Ctrl+O)");
+    connect(m_capsuleOpenBtn, &QPushButton::clicked, this, &MainWindow::onOpenFile);
+    capsuleLayout->addWidget(m_capsuleOpenBtn);
 
-    // 5. View Menu
-    auto *viewMenu = mb->addMenu("&View");
-    viewMenu->addAction("&Fullscreen", this, &MainWindow::onToggleFullscreen, Qt::Key_F11);
-    viewMenu->addAction("Always on &Top", this, &MainWindow::onToggleAlwaysOnTop);
-    viewMenu->addAction("Playlist &Drawer", this, &MainWindow::onTogglePlaylist, Qt::Key_L);
-    viewMenu->addAction("Media &Information...", this, &MainWindow::onShowMediaInfo, Qt::Key_I);
+    m_capsuleStreamBtn = new QPushButton("🌐 Stream", m_topCapsule);
+    m_capsuleStreamBtn->setObjectName("AuraCapsuleBtn");
+    m_capsuleStreamBtn->setToolTip("Play Stream URL (Ctrl+U)");
+    connect(m_capsuleStreamBtn, &QPushButton::clicked, this, &MainWindow::onOpenNetworkStream);
+    capsuleLayout->addWidget(m_capsuleStreamBtn);
 
-    // 6. Help Menu
-    auto *helpMenu = mb->addMenu("&Help");
-    helpMenu->addAction("&About AuraPlayer", this, &MainWindow::onAbout);
+    m_capsuleStudioBtn = new QPushButton("⚡ Studio", m_topCapsule);
+    m_capsuleStudioBtn->setObjectName("AuraCapsuleBtn");
+    m_capsuleStudioBtn->setToolTip("Toggle Studio Panel (L / Tab)");
+    connect(m_capsuleStudioBtn, &QPushButton::clicked, this, &MainWindow::onToggleStudioDrawer);
+    capsuleLayout->addWidget(m_capsuleStudioBtn);
+
+    capsuleLayout->addStretch(1);
+
+    m_capsulePipBtn = new QPushButton("📌", m_topCapsule);
+    m_capsulePipBtn->setObjectName("AuraCapsuleIconBtn");
+    m_capsulePipBtn->setToolTip("Always on Top");
+    connect(m_capsulePipBtn, &QPushButton::clicked, this, &MainWindow::onToggleAlwaysOnTop);
+    capsuleLayout->addWidget(m_capsulePipBtn);
+
+    m_capsuleMaxBtn = new QPushButton("⛶", m_topCapsule);
+    m_capsuleMaxBtn->setObjectName("AuraCapsuleIconBtn");
+    m_capsuleMaxBtn->setToolTip("Toggle Fullscreen (F11 / F)");
+    connect(m_capsuleMaxBtn, &QPushButton::clicked, this, &MainWindow::onToggleFullscreen);
+    capsuleLayout->addWidget(m_capsuleMaxBtn);
+
+    m_capsuleCloseBtn = new QPushButton("✕", m_topCapsule);
+    m_capsuleCloseBtn->setObjectName("AuraCapsuleCloseBtn");
+    m_capsuleCloseBtn->setToolTip("Quit AuraPlayer (Ctrl+Q)");
+    connect(m_capsuleCloseBtn, &QPushButton::clicked, this, &QWidget::close);
+    capsuleLayout->addWidget(m_capsuleCloseBtn);
 }
 
-void MainWindow::setupShortcuts() {
-    // Basic global hotkeys handled in keyPressEvent
-}
-
-void MainWindow::applyTheme() {
-    QFile qssFile(":/style.qss");
-    if (!qssFile.exists()) {
-        qssFile.setFileName("resources/style.qss");
+void MainWindow::applyNebulaTheme() {
+    QFile file(":/style.qss");
+    if (!file.exists()) {
+        file.setFileName("resources/style.qss");
     }
-    if (qssFile.open(QFile::ReadOnly)) {
-        setStyleSheet(QString::fromUtf8(qssFile.readAll()));
-        qssFile.close();
+    if (file.open(QFile::ReadOnly)) {
+        setStyleSheet(QString::fromUtf8(file.readAll()));
+        file.close();
     }
+}
+
+void MainWindow::repositionFloatingOverlays() {
+    if (!m_videoWidget) return;
+
+    int canvasW = m_videoWidget->width();
+    int canvasH = m_videoWidget->height();
+
+    // 1. Position Top Aura Capsule: centered or spanning top margin
+    int capW = std::min(canvasW - 32, 780);
+    int capH = 46;
+    int capX = (canvasW - capW) / 2;
+    int capY = 16;
+    m_topCapsule->setGeometry(capX, capY, capW, capH);
+
+    // 2. Position Floating Cyber Deck: centered near bottom
+    int deckW = std::min(canvasW - 36, 880);
+    int deckH = 92;
+    int deckX = (canvasW - deckW) / 2;
+    int deckY = canvasH - deckH - 20;
+    m_cyberDeck->setGeometry(deckX, deckY, deckW, deckH);
+
+    // 3. Position OSD Label: centered top-middle
+    int osdX = (canvasW - m_osdLabel->width()) / 2;
+    int osdY = capY + capH + 18;
+    m_osdLabel->move(std::max(10, osdX), osdY);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    QMainWindow::resizeEvent(event);
+    repositionFloatingOverlays();
 }
 
 void MainWindow::openMedia(const QString &path) {
     if (path.isEmpty() || !m_engine) return;
 
-    m_playlistWidget->addFile(path);
+    m_studioDrawer->addFile(path);
     m_engine->loadFile(path);
     m_engine->play();
-    showOsdMessage(QString("Loaded: %1").arg(QFileInfo(path).fileName()), 2000);
+
+    m_capsuleTitle->setText(QFileInfo(path).fileName());
+    showOsdMessage(QString("Now Playing: %1").arg(QFileInfo(path).fileName()), 2200);
+    m_studioDrawer->refreshTelemetry();
 }
 
 void MainWindow::onOpenFile() {
     QString file = QFileDialog::getOpenFileName(
-        this, "Open Media File", QString(),
-        "Media Files (*.mkv *.mp4 *.webm *.avi *.mov *.flv *.ts *.mp3 *.flac *.opus *.ogg *.wav);;All Files (*)"
+        this, "Select Media to Play in AuraPlayer", QString(),
+        "All Media (*.mkv *.mp4 *.webm *.avi *.mov *.flv *.ts *.mp3 *.flac *.opus *.ogg *.wav);;All Files (*)"
     );
     if (!file.isEmpty()) {
         openMedia(file);
-    }
-}
-
-void MainWindow::onOpenMultipleFiles() {
-    QStringList files = QFileDialog::getOpenFileNames(
-        this, "Open Multiple Files", QString(),
-        "Media Files (*.mkv *.mp4 *.webm *.avi *.mov *.flv *.ts *.mp3 *.flac *.opus *.ogg *.wav);;All Files (*)"
-    );
-    if (!files.isEmpty()) {
-        m_playlistWidget->addFiles(files);
-        openMedia(files.first());
-    }
-}
-
-void MainWindow::onOpenFolder() {
-    QString dir = QFileDialog::getExistingDirectory(this, "Open Folder");
-    if (!dir.isEmpty()) {
-        QDir directory(dir);
-        QStringList nameFilters;
-        nameFilters << "*.mp4" << "*.mkv" << "*.webm" << "*.avi" << "*.mov" << "*.flv" << "*.mp3" << "*.flac" << "*.wav";
-        QStringList files = directory.entryList(nameFilters, QDir::Files, QDir::Name);
-        QStringList fullPaths;
-        for (const auto &f : files) {
-            fullPaths.append(directory.absoluteFilePath(f));
-        }
-        if (!fullPaths.isEmpty()) {
-            m_playlistWidget->addFiles(fullPaths);
-            openMedia(fullPaths.first());
-        }
     }
 }
 
@@ -285,43 +233,29 @@ void MainWindow::onOpenNetworkStream() {
 }
 
 void MainWindow::onTogglePlayPause() {
-    if (m_engine) {
-        m_engine->togglePause();
-    }
+    if (m_engine) m_engine->togglePause();
 }
 
 void MainWindow::onStop() {
-    if (m_engine) {
-        m_engine->stop();
-    }
+    if (m_engine) m_engine->stop();
 }
 
 void MainWindow::onNext() {
-    QString nextTrack = m_playlistWidget->playNext();
-    if (!nextTrack.isEmpty()) {
-        m_engine->loadFile(nextTrack);
-        m_engine->play();
-    }
+    QString nextTrack = m_studioDrawer->playNext();
+    if (!nextTrack.isEmpty()) openMedia(nextTrack);
 }
 
 void MainWindow::onPrevious() {
-    QString prevTrack = m_playlistWidget->playPrevious();
-    if (!prevTrack.isEmpty()) {
-        m_engine->loadFile(prevTrack);
-        m_engine->play();
-    }
+    QString prevTrack = m_studioDrawer->playPrevious();
+    if (!prevTrack.isEmpty()) openMedia(prevTrack);
 }
 
 void MainWindow::onStepForward() {
-    if (m_engine) {
-        m_engine->frameStep();
-    }
+    if (m_engine) m_engine->frameStep();
 }
 
 void MainWindow::onStepBack() {
-    if (m_engine) {
-        m_engine->frameBackStep();
-    }
+    if (m_engine) m_engine->frameBackStep();
 }
 
 void MainWindow::onSeekRelative(double deltaSecs) {
@@ -350,14 +284,16 @@ void MainWindow::onSpeedDelta(double delta) {
 void MainWindow::onToggleFullscreen() {
     m_isFullscreen = !m_isFullscreen;
     if (m_isFullscreen) {
-        menuBar()->hide();
         showFullScreen();
+        m_capsuleMaxBtn->setText("⤓");
         m_autoHideTimer.start();
     } else {
-        menuBar()->show();
-        m_controls->show();
         showNormal();
+        m_capsuleMaxBtn->setText("⛶");
+        m_cyberDeck->show();
+        m_topCapsule->show();
     }
+    repositionFloatingOverlays();
 }
 
 void MainWindow::onToggleAlwaysOnTop() {
@@ -367,80 +303,41 @@ void MainWindow::onToggleAlwaysOnTop() {
     showOsdMessage(m_isAlwaysOnTop ? "Pin: Always on Top" : "Pin: Normal Window");
 }
 
-void MainWindow::onTogglePlaylist() {
-    if (m_playlistWidget->isVisible()) {
-        m_playlistWidget->hide();
+void MainWindow::onToggleStudioDrawer() {
+    if (m_studioDrawer->isVisible()) {
+        m_studioDrawer->hide();
     } else {
-        m_playlistWidget->show();
+        m_studioDrawer->show();
+        m_studioDrawer->refreshTelemetry();
     }
-}
-
-void MainWindow::onShowEqualizer() {
-    if (!m_equalizerDialog) {
-        m_equalizerDialog = new AuraEqualizerDialog(m_engine, this);
-    }
-    m_equalizerDialog->show();
-    m_equalizerDialog->raise();
-    m_equalizerDialog->activateWindow();
-}
-
-void MainWindow::onShowMediaInfo() {
-    if (!m_mediaInfoDialog) {
-        m_mediaInfoDialog = new AuraMediaInfoDialog(m_engine, this);
-    }
-    m_mediaInfoDialog->refresh();
-    m_mediaInfoDialog->show();
-    m_mediaInfoDialog->raise();
-    m_mediaInfoDialog->activateWindow();
+    repositionFloatingOverlays();
 }
 
 void MainWindow::onTakeScreenshot() {
     if (m_engine) {
         m_engine->takeScreenshot();
-        showOsdMessage("📸 Screenshot saved to Pictures");
+        showOsdMessage("📸 Snapshot saved to ~/Pictures");
     }
-}
-
-void MainWindow::onAbout() {
-    QMessageBox::about(this, "About AuraPlayer",
-        "<h3>⚡ AuraPlayer 1.0</h3>"
-        "<p>The Next-Generation Ultra-Fast Open-Source Media Player for Linux.</p>"
-        "<p><b>Engine:</b> libmpv Core with Hardware VA-API / NVDEC Decoders<br>"
-        "<b>GUI:</b> Qt6 Obsidian Glass with Native Wayland Integration<br>"
-        "<b>Author:</b> Abhinav Santhosh (abhinavsanthoshpp)<br>"
-        "<b>License:</b> GPL-3.0 Open Source</p>"
-        "<p>Engineered to deliver faster launch, lower RAM, and smoother playback than standard VLC.</p>"
-    );
 }
 
 void MainWindow::onUserActivity() {
-    if (!m_controls->isVisible()) {
-        m_controls->show();
-    }
-    if (m_isFullscreen && menuBar()->isHidden()) {
-        // keep menu bar hidden in fullscreen
-    }
+    if (!m_cyberDeck->isVisible()) m_cyberDeck->show();
+    if (!m_topCapsule->isVisible()) m_topCapsule->show();
     m_autoHideTimer.start();
 }
 
 void MainWindow::onAutoHideTimeout() {
-    if (m_engine && m_engine->currentFilePath().isEmpty()) {
-        return; // Don't hide when idle
-    }
-    if (m_controls->underMouse() || m_playlistWidget->underMouse()) {
-        return; // Don't hide while cursor is over controls
-    }
-    m_controls->hide();
+    if (m_engine && m_engine->currentFilePath().isEmpty()) return;
+    if (m_cyberDeck->underMouse() || m_topCapsule->underMouse() || m_studioDrawer->isVisible()) return;
+
+    m_cyberDeck->hide();
+    m_topCapsule->hide();
 }
 
 void MainWindow::showOsdMessage(const QString &text, int timeoutMs) {
     m_osdLabel->setText(text);
     m_osdLabel->adjustSize();
-
-    // Center inside video widget
-    int x = (m_videoWidget->width() - m_osdLabel->width()) / 2;
-    int y = 40; // near top
-    m_osdLabel->move(std::max(10, x), y);
+    repositionFloatingOverlays();
     m_osdLabel->show();
     m_osdTimer.start(timeoutMs);
 }
@@ -453,22 +350,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         onTogglePlayPause();
         break;
     case Qt::Key_Left:
-        if (event->modifiers() & Qt::ControlModifier) {
-            onSeekRelative(-30.0);
-        } else if (event->modifiers() & Qt::ShiftModifier) {
-            onSeekRelative(-1.0);
-        } else {
-            onSeekRelative(-5.0);
-        }
+        if (event->modifiers() & Qt::ControlModifier) onSeekRelative(-30.0);
+        else if (event->modifiers() & Qt::ShiftModifier) onSeekRelative(-1.0);
+        else onSeekRelative(-5.0);
         break;
     case Qt::Key_Right:
-        if (event->modifiers() & Qt::ControlModifier) {
-            onSeekRelative(30.0);
-        } else if (event->modifiers() & Qt::ShiftModifier) {
-            onSeekRelative(1.0);
-        } else {
-            onSeekRelative(5.0);
-        }
+        if (event->modifiers() & Qt::ControlModifier) onSeekRelative(30.0);
+        else if (event->modifiers() & Qt::ShiftModifier) onSeekRelative(1.0);
+        else onSeekRelative(5.0);
         break;
     case Qt::Key_Up:
         onVolumeDelta(5.0);
@@ -489,15 +378,52 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_S:
         onTakeScreenshot();
         break;
+    case Qt::Key_Tab:
     case Qt::Key_L:
-        onTogglePlaylist();
+        onToggleStudioDrawer();
         break;
-    case Qt::Key_E:
-    case Qt::Key_C:
-        onShowEqualizer();
+    case Qt::Key_BracketLeft:
+        onSpeedDelta(-0.1);
         break;
-    case Qt::Key_I:
-        onShowMediaInfo();
+    case Qt::Key_BracketRight:
+        onSpeedDelta(0.1);
+        break;
+    case Qt::Key_Backspace:
+        if (m_engine) m_engine->setSpeed(1.0);
+        break;
+    case Qt::Key_Z:
+        if (m_engine) {
+            double d = m_engine->subtitleDelay() - 0.1;
+            m_engine->setSubtitleDelay(d);
+            showOsdMessage(QString("Sub Delay: %1 ms").arg(static_cast<int>(d * 1000)));
+        }
+        break;
+    case Qt::Key_X:
+        if (m_engine) {
+            double d = m_engine->subtitleDelay() + 0.1;
+            m_engine->setSubtitleDelay(d);
+            showOsdMessage(QString("Sub Delay: %1 ms").arg(static_cast<int>(d * 1000)));
+        }
+        break;
+    case Qt::Key_J:
+        if (m_engine) {
+            double d = m_engine->audioDelay() - 0.1;
+            m_engine->setAudioDelay(d);
+            showOsdMessage(QString("Audio Delay: %1 ms").arg(static_cast<int>(d * 1000)));
+        }
+        break;
+    case Qt::Key_K:
+        if (m_engine) {
+            double d = m_engine->audioDelay() + 0.1;
+            m_engine->setAudioDelay(d);
+            showOsdMessage(QString("Audio Delay: %1 ms").arg(static_cast<int>(d * 1000)));
+        }
+        break;
+    case Qt::Key_O:
+        if (event->modifiers() & Qt::ControlModifier) onOpenFile();
+        break;
+    case Qt::Key_U:
+        if (event->modifiers() & Qt::ControlModifier) onOpenNetworkStream();
         break;
     default:
         QMainWindow::keyPressEvent(event);
@@ -506,8 +432,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    if (m_engine) {
-        m_engine->stop();
-    }
+    if (m_engine) m_engine->stop();
     QMainWindow::closeEvent(event);
 }

@@ -2,46 +2,42 @@
 #include <QToolTip>
 #include <cmath>
 
-// ================= AuraSeekBar Implementation =================
+// ================= AuraTimeline =================
 
-AuraSeekBar::AuraSeekBar(Qt::Orientation orientation, QWidget *parent)
+AuraTimeline::AuraTimeline(Qt::Orientation orientation, QWidget *parent)
     : QSlider(orientation, parent) {
     setMouseTracking(true);
     setRange(0, 1000);
     setCursor(Qt::PointingHandCursor);
+    setObjectName("AuraHoloTimeline");
 }
 
-double AuraSeekBar::valueFromPosition(int x) const {
+double AuraTimeline::ratioFromX(int x) const {
     if (width() <= 0) return 0.0;
-    double ratio = static_cast<double>(x) / static_cast<double>(width());
-    return std::clamp(ratio, 0.0, 1.0);
+    return std::clamp(static_cast<double>(x) / static_cast<double>(width()), 0.0, 1.0);
 }
 
-void AuraSeekBar::mousePressEvent(QMouseEvent *event) {
+void AuraTimeline::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
-        double pct = valueFromPosition(event->pos().x());
+        double pct = ratioFromX(event->pos().x());
         setValue(static_cast<int>(pct * 1000.0));
-        emit seekRequested(pct);
+        emit seekPercent(pct);
     }
     QSlider::mousePressEvent(event);
 }
 
-void AuraSeekBar::mouseMoveEvent(QMouseEvent *event) {
-    double pct = valueFromPosition(event->pos().x());
-    emit hoverPositionChanged(pct, event->globalPosition().toPoint());
+void AuraTimeline::mouseMoveEvent(QMouseEvent *event) {
+    double pct = ratioFromX(event->pos().x());
+    emit hoverPercent(pct, event->globalPosition().toPoint());
     QSlider::mouseMoveEvent(event);
 }
 
-void AuraSeekBar::enterEvent(QEnterEvent *event) {
-    QSlider::enterEvent(event);
-}
-
-void AuraSeekBar::leaveEvent(QEvent *event) {
+void AuraTimeline::leaveEvent(QEvent *event) {
     QToolTip::hideText();
     QSlider::leaveEvent(event);
 }
 
-// ================= AuraControls Implementation =================
+// ================= AuraControls (Cyber Deck) =================
 
 AuraControls::AuraControls(AuraEngine *engine, QWidget *parent)
     : QWidget(parent), m_engine(engine) {
@@ -59,170 +55,165 @@ AuraControls::AuraControls(AuraEngine *engine, QWidget *parent)
 }
 
 void AuraControls::setupUi() {
-    setObjectName("AuraControlsPanel");
+    setObjectName("AuraCyberDeck");
     setAttribute(Qt::WA_StyledBackground, true);
 
-    auto *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(14, 8, 14, 10);
-    mainLayout->setSpacing(6);
+    auto *dockLayout = new QVBoxLayout(this);
+    dockLayout->setContentsMargins(18, 10, 18, 12);
+    dockLayout->setSpacing(8);
 
-    // 1. Seek bar & Time row
-    auto *seekLayout = new QHBoxLayout();
-    seekLayout->setSpacing(10);
+    // 1. Holographic Timeline Row
+    auto *timelineRow = new QHBoxLayout();
+    timelineRow->setSpacing(12);
 
-    m_seekBar = new AuraSeekBar(Qt::Horizontal, this);
-    m_seekBar->setObjectName("AuraTimelineSlider");
-
+    m_timeline = new AuraTimeline(Qt::Horizontal, this);
     m_timeLabel = new QLabel("00:00 / 00:00", this);
-    m_timeLabel->setObjectName("AuraTimeLabel");
+    m_timeLabel->setObjectName("AuraTimeBadge");
     m_timeLabel->setCursor(Qt::PointingHandCursor);
-    m_timeLabel->setToolTip("Click to toggle remaining time");
+    m_timeLabel->setToolTip("Click to toggle remaining time countdown");
 
-    seekLayout->addWidget(m_seekBar, 1);
-    seekLayout->addWidget(m_timeLabel, 0);
-    mainLayout->addLayout(seekLayout);
+    timelineRow->addWidget(m_timeline, 1);
+    timelineRow->addWidget(m_timeLabel, 0);
+    dockLayout->addLayout(timelineRow);
 
-    // 2. Playback buttons & controls row
-    auto *btnRow = new QHBoxLayout();
-    btnRow->setSpacing(8);
+    // 2. Main Cyber Deck Controls Row
+    auto *controlsRow = new QHBoxLayout();
+    controlsRow->setSpacing(10);
 
-    // Media navigation
-    m_prevBtn = new QPushButton("⏮", this);
-    m_prevBtn->setToolTip("Previous Track");
-    m_prevBtn->setFixedSize(34, 34);
+    // Left Wing: Sound Capsule
+    auto *soundCapsule = new QWidget(this);
+    soundCapsule->setObjectName("AuraSoundCapsule");
+    auto *soundLayout = new QHBoxLayout(soundCapsule);
+    soundLayout->setContentsMargins(8, 2, 10, 2);
+    soundLayout->setSpacing(6);
 
-    m_stepBackBtn = new QPushButton("⏪", this);
-    m_stepBackBtn->setToolTip("Step Frame Backward");
-    m_stepBackBtn->setFixedSize(30, 34);
-
-    m_playPauseBtn = new QPushButton("▶", this);
-    m_playPauseBtn->setObjectName("AuraPlayPauseButton");
-    m_playPauseBtn->setToolTip("Play / Pause (Space)");
-    m_playPauseBtn->setFixedSize(42, 38);
-
-    m_stepFwdBtn = new QPushButton("⏩", this);
-    m_stepFwdBtn->setToolTip("Step Frame Forward");
-    m_stepFwdBtn->setFixedSize(30, 34);
-
-    m_nextBtn = new QPushButton("⏭", this);
-    m_nextBtn->setToolTip("Next Track");
-    m_nextBtn->setFixedSize(34, 34);
-
-    m_stopBtn = new QPushButton("⏹", this);
-    m_stopBtn->setToolTip("Stop Playback");
-    m_stopBtn->setFixedSize(34, 34);
-
-    btnRow->addWidget(m_prevBtn);
-    btnRow->addWidget(m_stepBackBtn);
-    btnRow->addWidget(m_playPauseBtn);
-    btnRow->addWidget(m_stepFwdBtn);
-    btnRow->addWidget(m_nextBtn);
-    btnRow->addWidget(m_stopBtn);
-
-    // Volume group
-    btnRow->addSpacing(10);
-    m_muteBtn = new QPushButton("🔊", this);
+    m_muteBtn = new QPushButton("🔊", soundCapsule);
+    m_muteBtn->setObjectName("AuraMutePill");
+    m_muteBtn->setFixedSize(28, 28);
     m_muteBtn->setToolTip("Mute / Unmute (M)");
-    m_muteBtn->setFixedSize(34, 34);
 
-    m_volumeSlider = new QSlider(Qt::Horizontal, this);
-    m_volumeSlider->setObjectName("AuraVolumeSlider");
+    m_volumeSlider = new QSlider(Qt::Horizontal, soundCapsule);
+    m_volumeSlider->setObjectName("AuraFluidVolSlider");
     m_volumeSlider->setRange(0, 200);
     m_volumeSlider->setValue(100);
-    m_volumeSlider->setFixedWidth(90);
-    m_volumeSlider->setToolTip("Volume (0% - 200% Boost)");
+    m_volumeSlider->setFixedWidth(75);
+    m_volumeSlider->setToolTip("Volume (0% - 200% Supercharged Boost)");
 
-    m_volumeLabel = new QLabel("100%", this);
-    m_volumeLabel->setObjectName("AuraVolumeLabel");
-    m_volumeLabel->setFixedWidth(40);
+    m_volumeBadge = new QLabel("100%", soundCapsule);
+    m_volumeBadge->setObjectName("AuraVolBadge");
+    m_volumeBadge->setFixedWidth(36);
 
-    btnRow->addWidget(m_muteBtn);
-    btnRow->addWidget(m_volumeSlider);
-    btnRow->addWidget(m_volumeLabel);
+    soundLayout->addWidget(m_muteBtn);
+    soundLayout->addWidget(m_volumeSlider);
+    soundLayout->addWidget(m_volumeBadge);
+    controlsRow->addWidget(soundCapsule);
 
-    btnRow->addStretch(1);
+    controlsRow->addStretch(1);
 
-    // Speed selector
-    m_speedCombo = new QComboBox(this);
-    m_speedCombo->setToolTip("Playback Speed");
-    m_speedCombo->addItem("0.50x", 0.5);
-    m_speedCombo->addItem("0.75x", 0.75);
-    m_speedCombo->addItem("1.00x", 1.0);
-    m_speedCombo->addItem("1.25x", 1.25);
-    m_speedCombo->addItem("1.50x", 1.5);
-    m_speedCombo->addItem("2.00x", 2.0);
-    m_speedCombo->addItem("3.00x", 3.0);
-    m_speedCombo->addItem("4.00x", 4.0);
-    m_speedCombo->setCurrentIndex(2);
-    m_speedCombo->setFixedWidth(78);
+    // Center Core: Transport Navigation & Pulsing Aura Core Play Button
+    auto *coreCluster = new QWidget(this);
+    coreCluster->setObjectName("AuraCoreCluster");
+    auto *coreLayout = new QHBoxLayout(coreCluster);
+    coreLayout->setContentsMargins(6, 2, 6, 2);
+    coreLayout->setSpacing(8);
 
-    // Audio & Subtitle selectors
-    m_audioCombo = new QComboBox(this);
-    m_audioCombo->setToolTip("Audio Stream");
-    m_audioCombo->addItem("Audio: Auto", -1);
-    m_audioCombo->setMaximumWidth(110);
+    m_prevBtn = new QPushButton("⏮", coreCluster);
+    m_prevBtn->setObjectName("AuraNavBtn");
+    m_prevBtn->setToolTip("Previous Track (P)");
+    m_prevBtn->setFixedSize(30, 30);
 
-    m_subCombo = new QComboBox(this);
-    m_subCombo->setToolTip("Subtitles Track");
-    m_subCombo->addItem("Subs: None", -1);
-    m_subCombo->setMaximumWidth(110);
+    m_stepBackBtn = new QPushButton("‹", coreCluster);
+    m_stepBackBtn->setObjectName("AuraStepBtn");
+    m_stepBackBtn->setToolTip("Step Frame Backward");
+    m_stepBackBtn->setFixedSize(26, 26);
 
-    // Aspect ratio
-    m_aspectCombo = new QComboBox(this);
-    m_aspectCombo->setToolTip("Aspect Ratio");
-    m_aspectCombo->addItem("Aspect: Auto", "default");
-    m_aspectCombo->addItem("16:9", "16:9");
-    m_aspectCombo->addItem("4:3", "4:3");
-    m_aspectCombo->addItem("21:9", "21:9");
-    m_aspectCombo->addItem("Fill", "fill");
-    m_aspectCombo->setMaximumWidth(95);
+    m_playPauseBtn = new QPushButton("▶", coreCluster);
+    m_playPauseBtn->setObjectName("AuraPlayCore");
+    m_playPauseBtn->setToolTip("Play / Pause (Space)");
+    m_playPauseBtn->setFixedSize(48, 48);
 
-    btnRow->addWidget(m_speedCombo);
-    btnRow->addWidget(m_audioCombo);
-    btnRow->addWidget(m_subCombo);
-    btnRow->addWidget(m_aspectCombo);
+    m_stepFwdBtn = new QPushButton("›", coreCluster);
+    m_stepFwdBtn->setObjectName("AuraStepBtn");
+    m_stepFwdBtn->setToolTip("Step Frame Forward");
+    m_stepFwdBtn->setFixedSize(26, 26);
 
-    // Tools & views
-    btnRow->addSpacing(6);
-    m_eqBtn = new QPushButton("🎚️", this);
-    m_eqBtn->setToolTip("Audio / Video Equalizer (E / C)");
-    m_eqBtn->setFixedSize(34, 34);
+    m_nextBtn = new QPushButton("⏭", coreCluster);
+    m_nextBtn->setObjectName("AuraNavBtn");
+    m_nextBtn->setToolTip("Next Track (N)");
+    m_nextBtn->setFixedSize(30, 30);
 
-    m_playlistBtn = new QPushButton("📑", this);
-    m_playlistBtn->setToolTip("Toggle Playlist Drawer (L)");
-    m_playlistBtn->setFixedSize(34, 34);
+    coreLayout->addWidget(m_prevBtn);
+    coreLayout->addWidget(m_stepBackBtn);
+    coreLayout->addWidget(m_playPauseBtn);
+    coreLayout->addWidget(m_stepFwdBtn);
+    coreLayout->addWidget(m_nextBtn);
+    controlsRow->addWidget(coreCluster);
+
+    controlsRow->addStretch(1);
+
+    // Right Wing: Stream Pills & Studio Toggle
+    m_speedPill = new QComboBox(this);
+    m_speedPill->setObjectName("AuraPillCombo");
+    m_speedPill->setToolTip("Playback Speed Multiplier");
+    m_speedPill->addItem("0.5x", 0.5);
+    m_speedPill->addItem("0.75x", 0.75);
+    m_speedPill->addItem("1.0x", 1.0);
+    m_speedPill->addItem("1.25x", 1.25);
+    m_speedPill->addItem("1.5x", 1.5);
+    m_speedPill->addItem("2.0x", 2.0);
+    m_speedPill->addItem("3.0x", 3.0);
+    m_speedPill->addItem("4.0x", 4.0);
+    m_speedPill->setCurrentIndex(2);
+    m_speedPill->setFixedWidth(68);
+
+    m_audioPill = new QComboBox(this);
+    m_audioPill->setObjectName("AuraPillCombo");
+    m_audioPill->setToolTip("Audio Stream Track");
+    m_audioPill->addItem("Audio", -1);
+    m_audioPill->setMaximumWidth(88);
+
+    m_subPill = new QComboBox(this);
+    m_subPill->setObjectName("AuraPillCombo");
+    m_subPill->setToolTip("Subtitle Track");
+    m_subPill->addItem("Subs", -1);
+    m_subPill->setMaximumWidth(88);
+
+    m_studioBtn = new QPushButton("⚡ Studio", this);
+    m_studioBtn->setObjectName("AuraStudioLaunchPill");
+    m_studioBtn->setToolTip("Toggle Aura Studio Panel (L / Tab)");
 
     m_pipBtn = new QPushButton("📌", this);
+    m_pipBtn->setObjectName("AuraUtilityPill");
     m_pipBtn->setToolTip("Always on Top (Picture-in-Picture)");
-    m_pipBtn->setFixedSize(34, 34);
+    m_pipBtn->setFixedSize(32, 32);
 
     m_fullscreenBtn = new QPushButton("⛶", this);
-    m_fullscreenBtn->setToolTip("Fullscreen Toggle (F / F11)");
-    m_fullscreenBtn->setFixedSize(34, 34);
+    m_fullscreenBtn->setObjectName("AuraUtilityPill");
+    m_fullscreenBtn->setToolTip("Immersive Fullscreen (F / F11)");
+    m_fullscreenBtn->setFixedSize(32, 32);
 
-    btnRow->addWidget(m_eqBtn);
-    btnRow->addWidget(m_playlistBtn);
-    btnRow->addWidget(m_pipBtn);
-    btnRow->addWidget(m_fullscreenBtn);
+    controlsRow->addWidget(m_speedPill);
+    controlsRow->addWidget(m_audioPill);
+    controlsRow->addWidget(m_subPill);
+    controlsRow->addWidget(m_studioBtn);
+    controlsRow->addWidget(m_pipBtn);
+    controlsRow->addWidget(m_fullscreenBtn);
 
-    mainLayout->addLayout(btnRow);
+    dockLayout->addLayout(controlsRow);
 
-    // Signal connections
-    connect(m_seekBar, &AuraSeekBar::seekRequested, this, &AuraControls::onSeekRequested);
-    connect(m_seekBar, &AuraSeekBar::hoverPositionChanged, this, [this](double pct, const QPoint &globalPos) {
+    // Timeline event connections
+    connect(m_timeline, &AuraTimeline::seekPercent, this, &AuraControls::onSeekRequested);
+    connect(m_timeline, &AuraTimeline::hoverPercent, this, [this](double pct, const QPoint &pos) {
         if (m_duration > 0.0) {
             double hoverSecs = pct * m_duration;
-            QToolTip::showText(globalPos, formatTime(hoverSecs), m_seekBar);
+            QToolTip::showText(pos, formatTime(hoverSecs), m_timeline);
         }
     });
 
+    // Button connections
     connect(m_playPauseBtn, &QPushButton::clicked, this, [this]() {
         emit userInteracted();
         emit playPauseClicked();
-    });
-    connect(m_stopBtn, &QPushButton::clicked, this, [this]() {
-        emit userInteracted();
-        emit stopClicked();
     });
     connect(m_prevBtn, &QPushButton::clicked, this, [this]() {
         emit userInteracted();
@@ -240,25 +231,17 @@ void AuraControls::setupUi() {
         emit userInteracted();
         emit stepForwardClicked();
     });
+
     connect(m_muteBtn, &QPushButton::clicked, this, &AuraControls::onMuteBtnClicked);
     connect(m_volumeSlider, &QSlider::valueChanged, this, &AuraControls::onVolumeSliderChanged);
 
-    connect(m_speedCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-            this, &AuraControls::onSpeedSelected);
-    connect(m_audioCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &AuraControls::onAudioTrackSelected);
-    connect(m_subCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &AuraControls::onSubtitleTrackSelected);
-    connect(m_aspectCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &AuraControls::onAspectRatioSelected);
+    connect(m_speedPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraControls::onSpeedSelected);
+    connect(m_audioPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraControls::onAudioTrackSelected);
+    connect(m_subPill, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AuraControls::onSubtitleTrackSelected);
 
-    connect(m_eqBtn, &QPushButton::clicked, this, [this]() {
+    connect(m_studioBtn, &QPushButton::clicked, this, [this]() {
         emit userInteracted();
-        emit equalizerClicked();
-    });
-    connect(m_playlistBtn, &QPushButton::clicked, this, [this]() {
-        emit userInteracted();
-        emit playlistToggleClicked();
+        emit studioToggleClicked();
     });
     connect(m_pipBtn, &QPushButton::clicked, this, [this]() {
         emit userInteracted();
@@ -269,9 +252,8 @@ void AuraControls::setupUi() {
         emit fullscreenClicked();
     });
 
-    // Make time label clickable to toggle remaining time
-    // Install event filter for click
-    m_timeLabel->installEventFilter(this);
+    // Make time label interactive
+    m_timeLabel->setMouseTracking(true);
 }
 
 void AuraControls::setPaused(bool paused) {
@@ -280,9 +262,9 @@ void AuraControls::setPaused(bool paused) {
 
 void AuraControls::setPosition(double seconds) {
     m_currentPosition = seconds;
-    if (!m_seekBar->isSliderDown() && m_duration > 0.0) {
+    if (!m_timeline->isSliderDown() && m_duration > 0.0) {
         int sliderVal = static_cast<int>((m_currentPosition / m_duration) * 1000.0);
-        m_seekBar->setValue(std::clamp(sliderVal, 0, 1000));
+        m_timeline->setValue(std::clamp(sliderVal, 0, 1000));
     }
 
     if (m_showRemaining && m_duration > 0.0) {
@@ -302,13 +284,17 @@ void AuraControls::setVolume(double volume) {
     m_volumeSlider->blockSignals(true);
     m_volumeSlider->setValue(static_cast<int>(volume));
     m_volumeSlider->blockSignals(false);
-    m_volumeLabel->setText(QString("%1%").arg(static_cast<int>(volume)));
+    m_volumeBadge->setText(QString("%1%").arg(static_cast<int>(volume)));
+
     if (volume <= 0.0) {
         m_muteBtn->setText("🔇");
+        m_volumeBadge->setStyleSheet("color: #6e7681;");
     } else if (volume > 100.0) {
-        m_muteBtn->setText("📢"); // Volume boosted
+        m_muteBtn->setText("⚡");
+        m_volumeBadge->setStyleSheet("color: #ff9900; font-weight: bold;"); // Supercharged boost indicator
     } else {
         m_muteBtn->setText("🔊");
+        m_volumeBadge->setStyleSheet("color: #00e5ff;");
     }
 }
 
@@ -317,11 +303,11 @@ void AuraControls::setMuted(bool muted) {
 }
 
 void AuraControls::setSpeed(double speed) {
-    for (int i = 0; i < m_speedCombo->count(); ++i) {
-        if (std::abs(m_speedCombo->itemData(i).toDouble() - speed) < 0.05) {
-            m_speedCombo->blockSignals(true);
-            m_speedCombo->setCurrentIndex(i);
-            m_speedCombo->blockSignals(false);
+    for (int i = 0; i < m_speedPill->count(); ++i) {
+        if (std::abs(m_speedPill->itemData(i).toDouble() - speed) < 0.05) {
+            m_speedPill->blockSignals(true);
+            m_speedPill->setCurrentIndex(i);
+            m_speedPill->blockSignals(false);
             break;
         }
     }
@@ -330,14 +316,13 @@ void AuraControls::setSpeed(double speed) {
 void AuraControls::onSeekRequested(double percent) {
     emit userInteracted();
     if (m_engine && m_duration > 0.0) {
-        double targetSecs = percent * m_duration;
-        m_engine->seek(targetSecs);
+        m_engine->seek(percent * m_duration);
     }
 }
 
 void AuraControls::onVolumeSliderChanged(int val) {
     emit userInteracted();
-    m_volumeLabel->setText(QString("%1%").arg(val));
+    setVolume(static_cast<double>(val));
     if (m_engine) {
         m_engine->setVolume(static_cast<double>(val));
     }
@@ -353,8 +338,7 @@ void AuraControls::onMuteBtnClicked() {
 void AuraControls::onSpeedSelected(int index) {
     emit userInteracted();
     if (m_engine && index >= 0) {
-        double spd = m_speedCombo->itemData(index).toDouble();
-        m_engine->setSpeed(spd);
+        m_engine->setSpeed(m_speedPill->itemData(index).toDouble());
     }
 }
 
@@ -362,71 +346,51 @@ void AuraControls::updateTrackMenus() {
     if (!m_engine) return;
     auto tracks = m_engine->getTracks();
 
-    // Audio tracks
-    m_audioCombo->blockSignals(true);
-    m_audioCombo->clear();
-    m_audioCombo->addItem("Audio: Auto", -1);
+    m_audioPill->blockSignals(true);
+    m_audioPill->clear();
+    m_audioPill->addItem("Audio", -1);
     for (const auto &track : tracks) {
         if (track.type == "audio") {
-            QString label = QString("#%1 %2 [%3]").arg(track.id)
-                .arg(track.title.isEmpty() ? (track.language.isEmpty() ? "Audio" : track.language) : track.title)
-                .arg(track.codec.isEmpty() ? "Unknown" : track.codec);
-            m_audioCombo->addItem(label, track.id);
+            QString lang = track.language.isEmpty() ? QString("#%1").arg(track.id) : track.language.toUpper();
+            m_audioPill->addItem(lang, track.id);
             if (track.isSelected) {
-                m_audioCombo->setCurrentIndex(m_audioCombo->count() - 1);
+                m_audioPill->setCurrentIndex(m_audioPill->count() - 1);
             }
         }
     }
-    m_audioCombo->blockSignals(false);
+    m_audioPill->blockSignals(false);
 
-    // Subtitle tracks
-    m_subCombo->blockSignals(true);
-    m_subCombo->clear();
-    m_subCombo->addItem("Subs: None", -1);
+    m_subPill->blockSignals(true);
+    m_subPill->clear();
+    m_subPill->addItem("Subs: Off", -1);
     for (const auto &track : tracks) {
         if (track.type == "sub") {
-            QString label = QString("#%1 %2 [%3]").arg(track.id)
-                .arg(track.title.isEmpty() ? (track.language.isEmpty() ? "Sub" : track.language) : track.title)
-                .arg(track.codec.isEmpty() ? "" : track.codec);
-            m_subCombo->addItem(label, track.id);
+            QString lang = track.language.isEmpty() ? QString("#%1").arg(track.id) : track.language.toUpper();
+            m_subPill->addItem(lang, track.id);
             if (track.isSelected) {
-                m_subCombo->setCurrentIndex(m_subCombo->count() - 1);
+                m_subPill->setCurrentIndex(m_subPill->count() - 1);
             }
         }
     }
-    m_subCombo->blockSignals(false);
+    m_subPill->blockSignals(false);
 }
 
 void AuraControls::onAudioTrackSelected(int index) {
     emit userInteracted();
     if (m_engine && index >= 0) {
-        int trackId = m_audioCombo->itemData(index).toInt();
-        m_engine->setAudioTrack(trackId);
+        m_engine->setAudioTrack(m_audioPill->itemData(index).toInt());
     }
 }
 
 void AuraControls::onSubtitleTrackSelected(int index) {
     emit userInteracted();
     if (m_engine && index >= 0) {
-        int trackId = m_subCombo->itemData(index).toInt();
-        m_engine->setSubtitleTrack(trackId);
+        m_engine->setSubtitleTrack(m_subPill->itemData(index).toInt());
     }
 }
 
 void AuraControls::onAspectRatioSelected(int index) {
-    emit userInteracted();
-    if (m_engine && index >= 0) {
-        QString ratio = m_aspectCombo->itemData(index).toString();
-        m_engine->setAspectRatio(ratio);
-    }
-}
-
-bool AuraControls::eventFilter(QObject *watched, QEvent *event) {
-    if (watched == m_timeLabel && event->type() == QEvent::MouseButtonPress) {
-        onTimeLabelClicked();
-        return true;
-    }
-    return QWidget::eventFilter(watched, event);
+    Q_UNUSED(index);
 }
 
 void AuraControls::onTimeLabelClicked() {
@@ -437,18 +401,12 @@ void AuraControls::onTimeLabelClicked() {
 
 QString AuraControls::formatTime(double seconds) {
     if (seconds < 0.0) seconds = 0.0;
-    int totalSecs = static_cast<int>(seconds);
-    int hrs = totalSecs / 3600;
-    int mins = (totalSecs % 3600) / 60;
-    int secs = totalSecs % 60;
-
-    if (hrs > 0) {
-        return QString("%1:%2:%3")
-            .arg(hrs, 2, 10, QChar('0'))
-            .arg(mins, 2, 10, QChar('0'))
-            .arg(secs, 2, 10, QChar('0'));
+    int total = static_cast<int>(seconds);
+    int h = total / 3600;
+    int m = (total % 3600) / 60;
+    int s = total % 60;
+    if (h > 0) {
+        return QString("%1:%2:%3").arg(h, 2, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 10, QChar('0'));
     }
-    return QString("%1:%2")
-        .arg(mins, 2, 10, QChar('0'))
-        .arg(secs, 2, 10, QChar('0'));
+    return QString("%1:%2").arg(m, 2, 10, QChar('0')).arg(s, 2, 10, QChar('0'));
 }
