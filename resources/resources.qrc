@@ -4,5 +4,25 @@
         <file alias="style.qss">style.qss</file>
         <file alias="icon.svg">icons/orionplayer.svg</file>
         <file alias="icon.png">icons/orionplayer.png</file>
+        <file alias="icons/play.svg">icons/play.svg</file>
+        <file alias="icons/pause.svg">icons/pause.svg</file>
+        <file alias="icons/stop.svg">icons/stop.svg</file>
+        <file alias="icons/prev.svg">icons/prev.svg</file>
+        <file alias="icons/next.svg">icons/next.svg</file>
+        <file alias="icons/fullscreen.svg">icons/fullscreen.svg</file>
+        <file alias="icons/fullscreen_exit.svg">icons/fullscreen_exit.svg</file>
+        <file alias="icons/effects.svg">icons/effects.svg</file>
+        <file alias="icons/playlist.svg">icons/playlist.svg</file>
+        <file alias="icons/repeat_all.svg">icons/repeat_all.svg</file>
+        <file alias="icons/repeat_one.svg">icons/repeat_one.svg</file>
+        <file alias="icons/repeat_off.svg">icons/repeat_off.svg</file>
+        <file alias="icons/shuffle.svg">icons/shuffle.svg</file>
+        <file alias="icons/volume_high.svg">icons/volume_high.svg</file>
+        <file alias="icons/volume_low.svg">icons/volume_low.svg</file>
+        <file alias="icons/volume_mute.svg">icons/volume_mute.svg</file>
+        <file alias="icons/record.svg">icons/record.svg</file>
+        <file alias="icons/snapshot.svg">icons/snapshot.svg</file>
+        <file alias="icons/ab_loop.svg">icons/ab_loop.svg</file>
+        <file alias="icons/frame_step.svg">icons/frame_step.svg</file>
     </qresource>
 </RCC>

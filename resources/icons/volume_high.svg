@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <linearGradient id="volGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F5FF"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+  <polygon points="3,9 8,9 13,5 13,19 8,15 3,15" fill="url(#volGrad)" stroke="#00F5FF" stroke-width="0.8" stroke-linejoin="round"/>
+  <path d="M16 8a5 5 0 0 1 0 8" fill="none" stroke="#00F5FF" stroke-width="2" stroke-linecap="round"/>
+  <path d="M19 5a9 9 0 0 1 0 14" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+</svg>

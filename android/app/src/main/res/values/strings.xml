@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Orion Player</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="open_stream">Open Stream</string>
+    <string name="enter_stream_url">Enter Network Stream URL (HTTP, HTTPS, RTSP, HLS)</string>
+    <string name="about_title">About Orion Player</string>
+    <string name="about_desc">Orion Player for Android\nHardware-Accelerated Mobile Media Player\n\nCopyright © 2026 Abhinav Santhosh. All Rights Reserved.\nAuthor: Abhinav Santhosh (@abhinavsanthoshpp)\nWebsite: abhinavsanthoshpp.github.io/orionplayer</string>
+    <string name="no_videos_found">No videos found on this device.</string>
+    <string name="speed">Speed</string>
+    <string name="aspect_ratio">Aspect Ratio</string>
+    <string name="audio_track">Audio Track</string>
+    <string name="subtitles">Subtitles</string>
+</resources>

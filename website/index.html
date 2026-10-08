@@ -59,13 +59,19 @@
                         <polyline points="7 10 12 15 17 10"></polyline>
                         <line x1="12" y1="15" x2="12" y2="3"></line>
                     </svg>
-                    Download for Linux
+                    Download OrionPlayer
+                </a>
+                <a href="#download" class="btn btn-secondary" onclick="document.querySelector('[data-tab=\'windows\']')?.click()">
+                    🪟 Windows
+                </a>
+                <a href="#download" class="btn btn-secondary" onclick="document.querySelector('[data-tab=\'android\']')?.click()">
+                    📱 Android APK
                 </a>
                 <a href="https://github.com/abhinavsanthoshpp/orionplayer" target="_blank" class="btn btn-secondary">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
-                    Star on GitHub
+                    GitHub
                 </a>
             </div>
 
@@ -347,18 +353,45 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Get OrionPlayer Now</h2>
-                <p class="section-subtitle">Available for Fedora, Ubuntu, Arch, and all Linux distributions.</p>
+                <p class="section-subtitle">Cross-platform releases for Windows 10/11, Android, and all Linux distributions.</p>
             </div>
 
             <div class="download-card">
                 <div class="distro-tabs">
-                    <button class="distro-tab active" data-tab="fedora">Fedora / RHEL</button>
-                    <button class="distro-tab" data-tab="ubuntu">Ubuntu / Debian</button>
-                    <button class="distro-tab" data-tab="arch">Arch Linux</button>
-                    <button class="distro-tab" data-tab="source">Build from Source</button>
+                    <button class="distro-tab active" data-tab="windows">🪟 Windows 10 / 11</button>
+                    <button class="distro-tab" data-tab="android">📱 Android APK</button>
+                    <button class="distro-tab" data-tab="fedora">🐧 Fedora / RHEL</button>
+                    <button class="distro-tab" data-tab="ubuntu">🐧 Ubuntu / Debian</button>
+                    <button class="distro-tab" data-tab="arch">🐧 Arch Linux</button>
+                    <button class="distro-tab" data-tab="source">⚙️ Build from Source</button>
                 </div>
 
-                <div class="tab-content" id="tab-fedora">
+                <div class="tab-content" id="tab-windows">
+                    <h4>Windows 10 / 11 (64-bit)</h4>
+                    <p>Download the official 1-click Windows NSIS setup package or portable release:</p>
+                    <div style="display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap;">
+                        <a href="https://github.com/abhinavsanthoshpp/orionplayer/releases/latest" target="_blank" class="btn btn-primary" style="padding: 10px 18px; font-size: 14px;">
+                            📥 Download Setup Installer (.exe)
+                        </a>
+                        <a href="https://github.com/abhinavsanthoshpp/orionplayer/releases/latest" target="_blank" class="btn btn-secondary" style="padding: 10px 18px; font-size: 14px;">
+                            📦 Download Portable (.zip)
+                        </a>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 13px; color: var(--text-secondary);">Includes full Qt6 runtime, libmpv2 engine, DirectX 11 / D3D11 hardware acceleration, and audio booster.</p>
+                </div>
+
+                <div class="tab-content hidden" id="tab-android">
+                    <h4>Android 7.0+ (Phones, Tablets & Android TV)</h4>
+                    <p>Install Orion Player directly on your Android device via standalone APK:</p>
+                    <div style="display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap;">
+                        <a href="https://github.com/abhinavsanthoshpp/orionplayer/releases/latest" target="_blank" class="btn btn-primary" style="padding: 10px 18px; font-size: 14px;">
+                            📱 Download OrionPlayer-v1.0.0.apk
+                        </a>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 13px; color: var(--text-secondary);">Features MediaCodec hardware acceleration, swipe gestures (volume, brightness, seek ±10s), Picture-in-Picture (PiP), and network streaming.</p>
+                </div>
+
+                <div class="tab-content hidden" id="tab-fedora">
                     <h4>Fedora Linux 41 / 42 / 43</h4>
                     <p>Run the automated installer to build and integrate OrionPlayer into your system launcher:</p>
                     <pre><code>git clone https://github.com/abhinavsanthoshpp/orionplayer.git

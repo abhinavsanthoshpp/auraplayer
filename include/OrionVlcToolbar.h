@@ -57,6 +57,7 @@ public:
     void setVolume(double volume);
     void setMuted(bool muted);
     void setSpeed(double speed);
+    void setFullscreen(bool fs);
     void setAdvancedControlsVisible(bool visible);
     bool isAdvancedControlsVisible() const;
 

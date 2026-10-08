@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Obsidian Dark Theme with glowing Orion Cyan -->
+    <color name="bg_dark">#0A0E17</color>
+    <color name="bg_card">#111827</color>
+    <color name="bg_elevated">#1A2234</color>
+    <color name="accent_cyan">#00E5FF</color>
+    <color name="accent_blue">#2563EB</color>
+    <color name="text_primary">#F0F6FC</color>
+    <color name="text_secondary">#8B949E</color>
+    <color name="border_subtle">#1F2937</color>
+    <color name="osd_background">#E60A0E17</color>
+</resources>
