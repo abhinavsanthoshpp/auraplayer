@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://abhinavsanthoshpp.github.io/orionplayer/"><img src="https://img.shields.io/badge/Website-Live%20Portal-00e5ff.svg" alt="Website"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPLv3"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Copyright-All%20Rights%20Reserved-red.svg" alt="Copyright: All Rights Reserved"></a>
   <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20Fedora%20%7C%20Ubuntu%20%7C%20Arch-orange.svg" alt="Platform">
   <img src="https://img.shields.io/badge/Hardware%20Accel-VA--API%20%2F%20NVDEC%20%2F%20Vulkan-success.svg" alt="Hardware Accel">
   <img src="https://img.shields.io/badge/C%2B%2B-20-blue.svg" alt="C++20">
@@ -142,8 +142,10 @@ orionplayer/
 
 ---
 
-## 📄 License
+## 📄 Copyright & Intellectual Property Protection
 
-This software is released under the **GNU General Public License v3.0 (GPL-3.0)**.
-Copyright (C) 2026 Abhinav Santhosh ([@abhinavsanthoshpp](https://github.com/abhinavsanthoshpp)).
-EOF
+**Copyright (C) 2026 Abhinav Santhosh ([@abhinavsanthoshpp](https://github.com/abhinavsanthoshpp)). All Rights Reserved.**
+
+- **Ownership**: The Orion Player software, compiled binaries, user interface architecture, official website, constellation logo mark, and design assets are the sole and exclusive intellectual property of **Abhinav Santhosh**.
+- **Transparency & Auditing**: The source code is publicly accessible on GitHub for transparency, open inspection, building, and personal non-commercial media playback.
+- **Protection**: Rebranding, unauthorized redistribution, claiming authorship, selling, or commercial appropriation of any part of this software or website is strictly prohibited under international copyright laws. For complete terms, see the [LICENSE](LICENSE) file.

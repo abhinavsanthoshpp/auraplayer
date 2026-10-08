@@ -1,19 +1,12 @@
 /*
- * Orion Player — High-Performance Open-Source Media Player for Linux
- * Copyright (C) 2026 Abhinav Santhosh <abhinavsanthoshpp>
+ * Orion Player — High-Performance Media Player for Linux
+ * Copyright (C) 2026 Abhinav Santhosh (GitHub: @abhinavsanthoshpp)
+ * All Rights Reserved.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * This software and its associated documentation, website, and design assets
+ * are the intellectual property of Abhinav Santhosh. Unauthorized copying,
+ * rebranding, redistribution, or commercial use is strictly prohibited.
+ * See LICENSE file for full terms and conditions.
  */
 
 #include "MainWindow.h"
@@ -480,13 +473,18 @@ void MainWindow::onToggleAdvancedControls() {
 }
 
 void MainWindow::onAbout() {
-    QMessageBox::about(this, "About OrionPlayer",
-        "<h3>OrionPlayer 1.0</h3>"
-        "<p>Professional Open-Source Media Player for Linux.</p>"
-        "<p>Designed with the full versatility and professional controls of VLC Media Player, "
-        "powered by Intel VA-API zero-copy hardware acceleration and libmpv engine.</p>"
-        "<p><b>Author:</b> Abhinav Santhosh (<a href='https://github.com/abhinavsanthoshpp'>@abhinavsanthoshpp</a>)<br>"
-        "<b>License:</b> GNU General Public License v3.0 (GPL-3.0)</p>"
+    QMessageBox::about(this, "About Orion Player",
+        "<h3>Orion Player 1.0</h3>"
+        "<p>High-Performance Hardware-Accelerated Media Player for Linux.</p>"
+        "<p>Designed with VLC-grade ergonomics and zero-copy Intel VA-API acceleration.</p>"
+        "<hr>"
+        "<p><b>Copyright © 2026 Abhinav Santhosh. All Rights Reserved.</b></p>"
+        "<p>Author: <b>Abhinav Santhosh</b> (<a href='https://github.com/abhinavsanthoshpp'>@abhinavsanthoshpp</a>)<br>"
+        "Website: <a href='https://abhinavsanthoshpp.github.io/orionplayer/'>abhinavsanthoshpp.github.io/orionplayer</a></p>"
+        "<p style='font-size: 11px; color: #8b949e;'>"
+        "The software, website, brand, and design assets are the exclusive intellectual property "
+        "of Abhinav Santhosh. Unauthorized reproduction, rebranding, or commercial distribution "
+        "is strictly prohibited under international copyright laws.</p>"
     );
 }
 
