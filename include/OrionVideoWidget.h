@@ -14,12 +14,16 @@ public:
     explicit OrionVideoWidget(OrionEngine *engine, QWidget *parent = nullptr);
     ~OrionVideoWidget() override;
 
+    void ensureRenderContextInitialized();
+    bool isRenderContextReady() const { return m_renderCtx != nullptr; }
+
 signals:
     void doubleClicked();
     void singleClicked();
     void userActivity();
     void fileDropped(const QString &filePath);
     void wheelScrolled(int delta);
+    void renderContextReady();
 
 protected:
     void initializeGL() override;

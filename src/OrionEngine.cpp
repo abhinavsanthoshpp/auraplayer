@@ -49,7 +49,9 @@ bool OrionEngine::initialize() {
     mpv_set_option_string(m_mpv, "input-default-bindings", "no");
     mpv_set_option_string(m_mpv, "input-vo-keyboard", "no");
     mpv_set_option_string(m_mpv, "terminal", "no");
-    mpv_set_option_string(m_mpv, "msg-level", "all=warn");
+    // Strictly force mpv to use the libmpv render API — NEVER create external windows!
+    mpv_set_option_string(m_mpv, "vo", "libmpv");
+    mpv_set_option_string(m_mpv, "wid", "0");
 
     // Fast memory caching pipeline
     mpv_set_option_string(m_mpv, "cache", "yes");

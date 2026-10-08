@@ -46,6 +46,10 @@ OrionVideoWidget::OrionVideoWidget(OrionEngine *engine, QWidget *parent)
             m_hasActiveVideo = false;
             update();
         });
+        connect(m_engine, &OrionEngine::videoReconfigured, this, [this](int w, int h) {
+            m_hasActiveVideo = (w > 0 && h > 0);
+            update();
+        });
     }
 }
 
@@ -59,7 +63,16 @@ OrionVideoWidget::~OrionVideoWidget() {
     doneCurrent();
 }
 
+void OrionVideoWidget::ensureRenderContextInitialized() {
+    if (m_renderCtx) return;
+    if (!isValid() || !context()) return;
+    makeCurrent();
+    initializeGL();
+    doneCurrent();
+}
+
 void OrionVideoWidget::initializeGL() {
+    if (m_renderCtx) return;
     initializeOpenGLFunctions();
 
     if (!m_engine || !m_engine->handle()) return;
@@ -82,6 +95,7 @@ void OrionVideoWidget::initializeGL() {
     }
 
     mpv_render_context_set_update_callback(m_renderCtx, onMpvUpdateCallback, this);
+    emit renderContextReady();
 }
 
 void OrionVideoWidget::resizeGL(int w, int h) {

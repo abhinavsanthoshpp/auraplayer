@@ -24,6 +24,7 @@ public:
     void openMedia(const QString &path);
 
 protected:
+    void showEvent(QShowEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -102,4 +103,5 @@ private:
 
     bool m_isFullscreen = false;
     bool m_isAlwaysOnTop = false;
+    QString m_pendingMedia;
 };

@@ -91,6 +91,15 @@ void OrionPlaylistView::setupUi() {
 void OrionPlaylistView::addFile(const QString &filePath, double duration) {
     if (filePath.isEmpty()) return;
 
+    for (int r = 0; r < m_table->rowCount(); ++r) {
+        auto *item = m_table->item(r, 0);
+        if (item && item->data(Qt::UserRole).toString() == filePath) {
+            m_currentIndex = r;
+            m_table->selectRow(r);
+            return;
+        }
+    }
+
     QFileInfo fi(filePath);
     int row = m_table->rowCount();
     m_table->insertRow(row);

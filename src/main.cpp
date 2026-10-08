@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
 
     MainWindow window;
     window.show();
+    app.processEvents();
 
     const QStringList positionalArgs = parser.positionalArguments();
     if (!positionalArgs.isEmpty()) {

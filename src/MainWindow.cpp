@@ -29,6 +29,17 @@ MainWindow::MainWindow(QWidget *parent)
     createMenuBar();
     applyVlcTheme();
 
+    if (m_videoWidget) {
+        connect(m_videoWidget, &OrionVideoWidget::renderContextReady, this, [this]() {
+            if (!m_pendingMedia.isEmpty()) {
+                QString path = m_pendingMedia;
+                m_pendingMedia.clear();
+                openMedia(path);
+            }
+        });
+        m_videoWidget->ensureRenderContextInitialized();
+    }
+
     connect(m_engine, &OrionEngine::playbackStarted, this, &MainWindow::onPlaybackStarted);
     connect(m_engine, &OrionEngine::playbackStopped, this, &MainWindow::onPlaybackStopped);
     connect(m_engine, &OrionEngine::playbackPaused, this, &MainWindow::onPlaybackPaused);
@@ -40,6 +51,17 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
+    delete m_videoWidget;
+    m_videoWidget = nullptr;
+    delete m_engine;
+    m_engine = nullptr;
+}
+
+void MainWindow::showEvent(QShowEvent *event) {
+    QMainWindow::showEvent(event);
+    if (m_videoWidget) {
+        m_videoWidget->ensureRenderContextInitialized();
+    }
 }
 
 void MainWindow::createCentralLayout() {
@@ -235,6 +257,17 @@ void MainWindow::applyVlcTheme() {
 
 void MainWindow::openMedia(const QString &path) {
     if (path.isEmpty() || !m_engine) return;
+
+    if (m_videoWidget) {
+        m_videoWidget->ensureRenderContextInitialized();
+        if (!m_videoWidget->isRenderContextReady()) {
+            m_pendingMedia = path;
+            m_playlistView->addFile(path);
+            m_stackedWidget->setCurrentIndex(0);
+            setWindowTitle(QString("OrionPlayer — %1").arg(QFileInfo(path).fileName()));
+            return;
+        }
+    }
 
     m_playlistView->addFile(path);
     m_engine->loadFile(path);
