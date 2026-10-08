@@ -85,83 +85,71 @@
             <!-- UI Player Preview Mockup -->
             <div class="mockup-wrapper">
                 <div class="mockup-frame">
-                    <!-- Top Floating Aura Capsule Island -->
-                    <div class="mockup-capsule-island">
-                        <div class="capsule-left">
-                            <span class="capsule-logo">⚡ Aura<strong>Player</strong></span>
-                            <span class="capsule-pill">📁 Open</span>
-                            <span class="capsule-pill">🌐 Stream</span>
-                            <span class="capsule-pill highlight">⚡ Studio</span>
+                    <!-- Professional Menubar -->
+                    <div class="mockup-vlc-menubar">
+                        <div class="vlc-menu-items">
+                            <span><strong>Media</strong></span>
+                            <span>Playback</span>
+                            <span>Audio</span>
+                            <span>Video</span>
+                            <span>Subtitle</span>
+                            <span>Tools</span>
+                            <span>View</span>
+                            <span>Help</span>
                         </div>
-                        <div class="capsule-center">
-                            <span class="capsule-file">Cyberpunk_Neon_4K_60fps.mkv</span>
-                        </div>
-                        <div class="capsule-right">
-                            <span class="capsule-dot vaapi">VA-API Active</span>
-                            <span class="capsule-icon">📌</span>
-                            <span class="capsule-icon">⛶</span>
-                            <span class="capsule-close">✕</span>
-                        </div>
+                        <div class="vlc-window-title">AuraPlayer — Cyberpunk_Neon_4K_60fps.mkv</div>
+                        <div class="vlc-status-pill">Intel VA-API Active</div>
                     </div>
 
                     <div class="mockup-screen">
                         <div class="mockup-video-canvas">
                             <div class="mockup-play-center">▶</div>
                             <div class="mockup-stats-overlay">
+                                <div>Engine: <strong>libmpv Core (Zero-Copy)</strong></div>
                                 <div>CPU Load: <strong>1.8%</strong> (Intel Tiger Lake)</div>
                                 <div>RAM: <strong>38 MB</strong> (77% less than VLC)</div>
                                 <div>Frames Dropped: <strong>0 / 14,400</strong></div>
-                                <div>Zero-Copy: <strong>Direct OpenGL FBO</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Full Professional VLC Bottom Toolbar -->
+                        <div class="mockup-vlc-toolbar">
+                            <!-- Time Row -->
+                            <div class="vlc-time-row">
+                                <span class="vlc-time">00:04:22</span>
+                                <div class="vlc-seekbar">
+                                    <div class="vlc-seek-progress"></div>
+                                    <div class="vlc-seek-thumb"></div>
+                                </div>
+                                <span class="vlc-time">00:12:45</span>
                             </div>
 
-                            <!-- Slide-Out Aura Studio Drawer Mockup (Preview) -->
-                            <div class="mockup-studio-preview">
-                                <div class="msp-header">
-                                    <span>⚡ Aura <strong>Studio</strong></span>
-                                    <span class="msp-tab active">Queue</span>
-                                    <span class="msp-tab">Sound</span>
-                                    <span class="msp-tab">Color</span>
-                                    <span class="msp-tab">HUD</span>
+                            <!-- Controls Row -->
+                            <div class="vlc-controls-row">
+                                <div class="vlc-left-tools">
+                                    <button class="vlc-btn play-btn">▶</button>
+                                    <button class="vlc-btn">⏮</button>
+                                    <button class="vlc-btn">⏹</button>
+                                    <button class="vlc-btn">⏭</button>
+                                    <button class="vlc-btn">⛶</button>
+                                    <button class="vlc-btn" title="Adjustments & Effects (Ctrl+E)">🎛 Effects</button>
+                                    <button class="vlc-btn" title="Playlist (Ctrl+L)">📑 Playlist</button>
+                                    <button class="vlc-btn">🔁</button>
+                                    <button class="vlc-btn">🔀</button>
                                 </div>
-                                <div class="msp-queue">
-                                    <div class="msp-item active">▶ 01. Cyberpunk_Neon_4K.mkv</div>
-                                    <div class="msp-item">02. Synthwave_Drive_1080p.mp4</div>
-                                    <div class="msp-item">03. Interstellar_Theme_FLAC.flac</div>
+                                <div class="vlc-right-audio">
+                                    <span>🔊</span>
+                                    <div class="vlc-vol-bar"></div>
+                                    <span class="vlc-vol-txt">100%</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Floating Cyber Deck Bottom Dock -->
-                        <div class="mockup-cyber-deck">
-                            <div class="mockup-seekbar">
-                                <div class="mockup-seek-progress"></div>
-                                <div class="mockup-seek-thumb"></div>
-                                <div class="mockup-seek-time-badge">04:22 / 12:45</div>
-                            </div>
-                            <div class="mockup-deck-row">
-                                <div class="deck-sound-capsule">
-                                    <span>🔊</span>
-                                    <div class="deck-vol-bar"></div>
-                                    <span class="deck-vol-txt">100%</span>
-                                </div>
-
-                                <div class="deck-core-cluster">
-                                    <span class="deck-btn">⏮</span>
-                                    <span class="deck-btn">‹</span>
-                                    <span class="deck-play-core">▶</span>
-                                    <span class="deck-btn">›</span>
-                                    <span class="deck-btn">⏭</span>
-                                </div>
-
-                                <div class="deck-pills-cluster">
-                                    <span class="deck-pill">1.0x</span>
-                                    <span class="deck-pill">ENG 5.1</span>
-                                    <span class="deck-pill">SRT</span>
-                                    <span class="deck-pill studio-pill">⚡ Studio</span>
-                                    <span class="deck-icon">📌</span>
-                                    <span class="deck-icon">⛶</span>
-                                </div>
-                            </div>
+                        <!-- Bottom Status Bar -->
+                        <div class="mockup-vlc-statusbar">
+                            <span>Status: <strong>Playing</strong></span>
+                            <span>Stream: <strong>3840x2160 (4K 60fps) • AV1</strong></span>
+                            <span>Speed: <strong>1.00x</strong></span>
                         </div>
                     </div>
                 </div>

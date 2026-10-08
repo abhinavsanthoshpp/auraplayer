@@ -76,15 +76,20 @@ public:
     void setAudioDelay(double deltaSeconds);
     double audioDelay() const;
 
+    // Subtitle file loading
+    void loadSubtitleFile(const QString &path);
+
     // Video adjustments
     void setBrightness(int value); // -100 to 100
     void setContrast(int value);   // -100 to 100
     void setSaturation(int value); // -100 to 100
     void setGamma(int value);      // -100 to 100
+    void setHue(int value);        // -100 to 100
+    void setDeinterlace(bool enable);
     void setAspectRatio(const QString &ratio); // "default", "16:9", "4:3", "2.35:1", "fill"
 
     // Audio Equalizer (10 bands in dB, -12 to +12)
-    void setEqualizerBands(const QVector<double> &bands);
+    void setEqualizerBands(const QVector<double> &bands, double preamp = 0.0);
 
     // Snapshot & Info
     void takeScreenshot(const QString &destinationPath = QString());

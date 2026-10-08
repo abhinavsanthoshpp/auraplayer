@@ -75,9 +75,7 @@ void AuraEngine::setupHardwareAcceleration() {
     // Detect and prioritize VA-API for Intel Tiger Lake / AMD, NVDEC for NVIDIA
     mpv_set_option_string(m_mpv, "hwdec", "auto-safe");
     mpv_set_option_string(m_mpv, "hwdec-codecs", "all");
-    mpv_set_option_string(m_mpv, "vo", "gpu,libmpv");
-    mpv_set_option_string(m_mpv, "gpu-context", "auto");
-    mpv_set_option_string(m_mpv, "scale", "bilinear"); // Fast baseline, upgraded on high-end
+    mpv_set_option_string(m_mpv, "scale", "bilinear");
 }
 
 void AuraEngine::observeProperties() {
@@ -366,13 +364,36 @@ void AuraEngine::setAspectRatio(const QString &ratio) {
     }
 }
 
-void AuraEngine::setEqualizerBands(const QVector<double> &bands) {
+void AuraEngine::loadSubtitleFile(const QString &path) {
+    if (!m_mpv || path.isEmpty()) return;
+    QByteArray bytes = path.toUtf8();
+    const char *args[] = {"sub-add", bytes.constData(), "select", nullptr};
+    mpv_command_async(m_mpv, 0, args);
+}
+
+void AuraEngine::setHue(int value) {
     if (!m_mpv) return;
-    // mpv af equalizer: e.g. "equalizer=f=31.25:w=1:g=3.0,equalizer=f=62.5:w=1:g=2.0..."
+    int64_t v = std::clamp(value, -100, 100);
+    mpv_set_property_async(m_mpv, 0, "hue", MPV_FORMAT_INT64, &v);
+}
+
+void AuraEngine::setDeinterlace(bool enable) {
+    if (!m_mpv) return;
+    const char *val = enable ? "yes" : "no";
+    mpv_set_property_string(m_mpv, "deinterlace", val);
+}
+
+void AuraEngine::setEqualizerBands(const QVector<double> &bands, double preamp) {
+    if (!m_mpv) return;
     static const double freqs[] = {31.25, 62.5, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
     QStringList filters;
+
+    if (std::abs(preamp) > 0.1) {
+        filters << QString("volume=volume=%1dB").arg(preamp, 0, 'f', 1);
+    }
+
     for (int i = 0; i < std::min(10, static_cast<int>(bands.size())); ++i) {
-        double gain = std::clamp(bands[i], -12.0, 12.0);
+        double gain = std::clamp(bands[i], -20.0, 20.0);
         filters << QString("equalizer=f=%1:w=1:g=%2").arg(freqs[i]).arg(gain, 0, 'f', 1);
     }
     QString filterChain = filters.join(",");

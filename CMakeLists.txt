@@ -35,10 +35,10 @@ set(SOURCES
     src/main.cpp
     src/AuraEngine.cpp
     src/AuraVideoWidget.cpp
-    src/AuraControls.cpp
-    src/AuraStudioDrawer.cpp
-    src/AuraPlaylist.cpp
-    src/AuraEqualizerDialog.cpp
+    src/AuraVlcToolbar.cpp
+    src/AuraEffectsDialog.cpp
+    src/AuraPlaylistView.cpp
+    src/AuraPreferencesDialog.cpp
     src/AuraMediaInfoDialog.cpp
     src/AuraStreamDialog.cpp
     src/MainWindow.cpp
@@ -47,10 +47,10 @@ set(SOURCES
 set(HEADERS
     include/AuraEngine.h
     include/AuraVideoWidget.h
-    include/AuraControls.h
-    include/AuraStudioDrawer.h
-    include/AuraPlaylist.h
-    include/AuraEqualizerDialog.h
+    include/AuraVlcToolbar.h
+    include/AuraEffectsDialog.h
+    include/AuraPlaylistView.h
+    include/AuraPreferencesDialog.h
     include/AuraMediaInfoDialog.h
     include/AuraStreamDialog.h
     include/MainWindow.h

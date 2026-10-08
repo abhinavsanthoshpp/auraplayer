@@ -2,10 +2,13 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QFileInfo>
+#include <clocale>
 #include "MainWindow.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+    std::setlocale(LC_NUMERIC, "C"); // Strictly required by libmpv
+
     app.setApplicationName("AuraPlayer");
     app.setApplicationVersion("1.0.0");
     app.setOrganizationName("AuraPlayer");

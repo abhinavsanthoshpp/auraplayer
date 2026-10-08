@@ -23,16 +23,19 @@ Traditional media players like VLC are versatile, but they were architected deca
 - 🚀 **Blazing Startup Speed**: Launches in **< 32ms** (15x faster than VLC).
 - 🪶 **Featherweight Footprint**: Consumes only **~38 MB RAM** at idle (77% less than VLC).
 - 🎬 **Hardware Acceleration (Zero-Copy)**: Native **Intel VA-API / NVIDIA NVDEC** hardware video decoding. Smooth 4K/8K 60fps playback with < 2% CPU load and zero frame drops.
-- 🌌 **Original "Dynamic Nebula" UI/UX (Zero-Chrome Canvas)**:
-  - **No 90s Menubars**: Fully frameless, edge-to-edge cinematic canvas with smooth auto-hiding controls.
-  - **Top Aura Capsule Island**: Floating glass island for quick media browsing, stream inputs, and window controls.
-  - **Floating Cyber Deck Dock**: Floating translucent capsule with the circular glowing **Aura Core** play button, holographic timeline, and fluid volume capsule (0%–200% boost with dynamic amber overdrive).
-  - **Integrated Slide-Out Aura Studio Drawer**: Single-panel right drawer with 4 live tabs:
-    - 📑 **Flow Queue**: Searchable playlist queue with drag-and-drop & shuffle.
-    - 🎵 **Acoustic Studio**: 10-band precision graphic equalizer with sound signatures (Flat, Bass+, Cinema, Vocal+, Lo-Fi).
-    - 🎬 **Color Shaders**: Real-time cinematic color grading (Brightness, Contrast, Saturation, Gamma).
-    - ⚡ **Telemetry HUD**: Real-time hardware decoder monitoring (VA-API engine status, FPS, zero-copy buffer).
-- 🌐 **Network Stream Player**: Direct playback from YouTube, Twitch, RTSP feeds, and HLS/DASH streams.
+- 🎛️ **Full Professional VLC Desktop Architecture**:
+  - **Complete Menu Bar**: Full `Media`, `Playback`, `Audio`, `Video`, `Subtitle`, `Tools`, `View`, and `Help` menus with all standard desktop keyboard shortcuts.
+  - **Comprehensive Bottom Control Bar**: Elapsed / duration timestamps, continuous scrub slider, Play/Pause, Stop, Previous, Next, Fullscreen, Loop mode (Off / Repeat All / Repeat One), Random Shuffle, and 0%–200% audio volume booster.
+  - **Toggleable Advanced Controls Toolbar**: One-click Record, Video Frame Snapshot, A-B Looping, and Frame-by-frame step.
+  - **Adjustments & Effects Dialog (Ctrl+E)**:
+    - 10-Band Graphic Equalizer with Preamp (-20dB to +20dB) and **18 VLC Presets** (*Flat, Classical, Club, Dance, Full Bass, Full Bass & Treble, Full Treble, Headphones, Large Hall, Live, Party, Pop, Reggae, Rock, Ska, Soft, Soft Rock, Techno*).
+    - Image Adjustments (Brightness, Contrast, Saturation, Gamma, Hue with reset).
+    - Audio/Video & Subtitle Track Synchronization (with precision millisecond spinboxes).
+  - **Full Playlist & Media Library View (Ctrl+L)**: Category sidebar (*Playlist, Media Library, My Videos, My Music, Network Streams*), detailed multi-column table (*Title, Duration, Artist, Location*), search filter, Add Files/Folders, and sorting.
+  - **Media Information Dialog (Ctrl+I)**: Stream metadata, video resolution, FPS, bitrates, audio channels, and hardware decoder stats.
+  - **Simple Preferences Dialog (Ctrl+P)**: Configurable interface, audio outputs, video deinterlacing, subtitle font styling, and hardware acceleration drivers.
+  - **Subtitle Engine**: On-the-fly external subtitle loading (`.srt`, `.ass`, `.vtt`, `.sub`) and delay sync.
+  - **Network Stream Engine (Ctrl+N)**: Direct playback from YouTube, Twitch, RTSP feeds, and HLS/DASH streams.
 - 🐧 **Linux-First Desktop Integration**: Wayland & X11 native, MPRIS2 D-Bus controls (lock screen & hardware media keys), and dark mode sync.
 - 🛡️ **100% Free & Open Source**: Transparent, privacy-respecting, zero telemetry, zero bundled bloat.
 
