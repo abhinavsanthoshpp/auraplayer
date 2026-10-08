@@ -10,6 +10,7 @@
  */
 
 #include "OrionStreamDialog.h"
+#include <QIcon>
 
 OrionStreamDialog::OrionStreamDialog(QWidget *parent)
     : QDialog(parent) {
@@ -38,7 +39,8 @@ OrionStreamDialog::OrionStreamDialog(QWidget *parent)
     btnRow->addStretch(1);
 
     m_cancelBtn = new QPushButton("Cancel", this);
-    m_playBtn = new QPushButton("▶ Play Stream", this);
+    m_playBtn = new QPushButton(QIcon(":/icons/play.svg"), " Play Stream", this);
+    m_playBtn->setIconSize(QSize(14, 14));
     m_playBtn->setStyleSheet("background: #1f6feb; color: white; font-weight: bold; padding: 6px 14px;");
 
     btnRow->addWidget(m_cancelBtn);

@@ -71,18 +71,18 @@ QMenu::separator {
 /* Time Slider */
 QSlider#OrionVlcTimeSlider::groove:horizontal {
     height: 6px;
-    background: #21262d;
+    background: #1c222d;
     border-radius: 3px;
 }
 
 QSlider#OrionVlcTimeSlider::sub-page:horizontal {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1f6feb, stop:1 #ff7b00);
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1e3a8a, stop:0.5 #2563eb, stop:1 #00f5ff);
     border-radius: 3px;
 }
 
 QSlider#OrionVlcTimeSlider::handle:horizontal {
     background: #ffffff;
-    border: 2px solid #ff7b00;
+    border: 2px solid #00f5ff;
     width: 14px;
     height: 14px;
     margin: -4px 0;
@@ -90,7 +90,7 @@ QSlider#OrionVlcTimeSlider::handle:horizontal {
 }
 
 QSlider#OrionVlcTimeSlider::handle:horizontal:hover {
-    background: #ff7b00;
+    background: #00f5ff;
     border: 2px solid #ffffff;
 }
 
@@ -106,7 +106,7 @@ QPushButton {
 
 QPushButton:hover {
     background-color: #30363d;
-    border-color: #58a6ff;
+    border-color: #00f5ff;
     color: #ffffff;
 }
 
@@ -115,33 +115,67 @@ QPushButton:pressed {
 }
 
 QPushButton#OrionVlcPlayPauseBtn {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1f6feb, stop:1 #00b4d8);
-    border: 1px solid #58a6ff;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1e3a8a, stop:0.5 #2563eb, stop:1 #00d2ff);
+    border: 1px solid #00f5ff;
+    border-radius: 6px;
+    padding: 2px;
 }
 
 QPushButton#OrionVlcPlayPauseBtn:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #388bfd, stop:1 #48cae4);
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #2563eb, stop:0.5 #3b82f6, stop:1 #00f5ff);
+    border: 1px solid #ffffff;
+}
+
+QPushButton#OrionVlcPlayPauseBtn:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1e3a8a, stop:1 #1d4ed8);
 }
 
 QPushButton#OrionVlcToolBtn {
-    background: #21262d;
-    border: 1px solid #30363d;
-    border-radius: 4px;
-    font-size: 12px;
+    background: #1c222d;
+    border: 1px solid #2e3846;
+    border-radius: 6px;
+    padding: 3px;
 }
 
 QPushButton#OrionVlcToolBtn:hover {
-    background: #30363d;
-    border-color: #58a6ff;
+    background: #252e3d;
+    border-color: #00d2ff;
+}
+
+QPushButton#OrionVlcToolBtn:pressed {
+    background: #141820;
+    border-color: #0077b6;
 }
 
 QPushButton#OrionVlcMuteBtn {
     background: transparent;
-    border: none;
-    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+QPushButton#OrionVlcMuteBtn:hover {
+    background: #21262d;
+    border-color: #30363d;
+}
+
+#OrionVlcAdvancedBar QPushButton {
+    background: #1a202c;
+    border: 1px solid #2d3748;
+    border-radius: 5px;
+    padding: 2px 8px;
+    color: #cbd5e1;
+    font-size: 11px;
+}
+
+#OrionVlcAdvancedBar QPushButton:hover {
+    background: #2d3748;
+    border-color: #00f5ff;
+    color: #ffffff;
+}
+
+#OrionVlcAdvancedBar QPushButton:pressed {
+    background: #11151c;
 }
 
 /* Volume Slider */

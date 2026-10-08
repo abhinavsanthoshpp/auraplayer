@@ -284,7 +284,13 @@ void OrionVlcToolbar::setupUi() {
 }
 
 void OrionVlcToolbar::setPaused(bool paused) {
-    m_playPauseBtn->setText(paused ? "▶" : "⏸");
+    m_playPauseBtn->setIcon(QIcon(paused ? ":/icons/play.svg" : ":/icons/pause.svg"));
+    m_playPauseBtn->setToolTip(paused ? "Play (Space)" : "Pause (Space)");
+}
+
+void OrionVlcToolbar::setFullscreen(bool fs) {
+    m_fullscreenBtn->setIcon(QIcon(fs ? ":/icons/fullscreen_exit.svg" : ":/icons/fullscreen.svg"));
+    m_fullscreenBtn->setToolTip(fs ? "Exit Fullscreen (F11 / Esc)" : "Toggle Fullscreen (F11 / F)");
 }
 
 void OrionVlcToolbar::setPosition(double seconds) {
@@ -316,16 +322,27 @@ void OrionVlcToolbar::setVolume(double volume) {
     m_volumeLabel->setText(QString("%1%").arg(static_cast<int>(volume)));
 
     if (volume <= 0.0) {
-        m_muteBtn->setText("🔇");
-    } else if (volume > 100.0) {
-        m_muteBtn->setText("📢");
+        m_muteBtn->setIcon(QIcon(":/icons/volume_mute.svg"));
+    } else if (volume < 50.0) {
+        m_muteBtn->setIcon(QIcon(":/icons/volume_low.svg"));
     } else {
-        m_muteBtn->setText("🔊");
+        m_muteBtn->setIcon(QIcon(":/icons/volume_high.svg"));
     }
 }
 
 void OrionVlcToolbar::setMuted(bool muted) {
-    m_muteBtn->setText(muted ? "🔇" : "🔊");
+    if (muted) {
+        m_muteBtn->setIcon(QIcon(":/icons/volume_mute.svg"));
+    } else {
+        double vol = m_volumeSlider->value();
+        if (vol <= 0.0) {
+            m_muteBtn->setIcon(QIcon(":/icons/volume_mute.svg"));
+        } else if (vol < 50.0) {
+            m_muteBtn->setIcon(QIcon(":/icons/volume_low.svg"));
+        } else {
+            m_muteBtn->setIcon(QIcon(":/icons/volume_high.svg"));
+        }
+    }
 }
 
 void OrionVlcToolbar::setSpeed(double speed) {
@@ -370,15 +387,15 @@ void OrionVlcToolbar::onMuteClicked() {
 void OrionVlcToolbar::onLoopClicked() {
     if (m_loopMode == LoopMode::None) {
         m_loopMode = LoopMode::RepeatAll;
-        m_loopBtn->setText("🔁");
+        m_loopBtn->setIcon(QIcon(":/icons/repeat_all.svg"));
         m_loopBtn->setToolTip("Loop Mode: Repeat All");
     } else if (m_loopMode == LoopMode::RepeatAll) {
         m_loopMode = LoopMode::RepeatOne;
-        m_loopBtn->setText("🔂");
+        m_loopBtn->setIcon(QIcon(":/icons/repeat_one.svg"));
         m_loopBtn->setToolTip("Loop Mode: Repeat One Track");
     } else {
         m_loopMode = LoopMode::None;
-        m_loopBtn->setText("➡️");
+        m_loopBtn->setIcon(QIcon(":/icons/repeat_off.svg"));
         m_loopBtn->setToolTip("Loop Mode: Normal (No Repeat)");
     }
     emit loopModeChanged(m_loopMode);
@@ -387,12 +404,6 @@ void OrionVlcToolbar::onLoopClicked() {
 void OrionVlcToolbar::onDurationLabelClicked() {
     m_showRemaining = !m_showRemaining;
     setPosition(m_position);
-}
-
-void OrionVlcToolbar::setFullscreen(bool fs) {
-    if (m_fullscreenBtn) {
-        m_fullscreenBtn->setToolTip(fs ? "Exit Fullscreen (F11 / Esc)" : "Toggle Fullscreen (F11 / F)");
-    }
 }
 
 QString OrionVlcToolbar::formatVlcTime(double seconds) {

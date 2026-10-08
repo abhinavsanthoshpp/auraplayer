@@ -548,6 +548,9 @@ void MainWindow::onTakeSnapshot() {
 
 void MainWindow::onToggleFullscreen() {
     m_isFullscreen = !m_isFullscreen;
+    if (m_toolbar) {
+        m_toolbar->setFullscreen(m_isFullscreen);
+    }
     if (m_isFullscreen) {
         menuBar()->hide();
         m_toolbar->hide();
