@@ -2,5 +2,7 @@
 <RCC version="1.0">
     <qresource prefix="/">
         <file alias="style.qss">style.qss</file>
+        <file alias="icon.svg">icons/orionplayer.svg</file>
+        <file alias="icon.png">icons/orionplayer.png</file>
     </qresource>
 </RCC>

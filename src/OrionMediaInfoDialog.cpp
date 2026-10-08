@@ -1,3 +1,21 @@
+/*
+ * Orion Player — High-Performance Open-Source Media Player for Linux
+ * Copyright (C) 2026 Abhinav Santhosh <abhinavsanthoshpp>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "OrionMediaInfoDialog.h"
 #include <QHeaderView>
 #include <QLabel>
@@ -55,10 +73,12 @@ void OrionMediaInfoDialog::addRow(int &row, const QString &property, const QStri
 
 QString OrionMediaInfoDialog::formatBytes(int64_t bytes) {
     if (bytes <= 0) return "N/A";
-    if (bytes >= (1024ULL * 1024ULL * 1024ULL)) {
+    constexpr int64_t oneGB = 1024LL * 1024LL * 1024LL;
+    constexpr int64_t oneMB = 1024LL * 1024LL;
+    if (bytes >= oneGB) {
         return QString("%1 GB").arg(bytes / (1024.0 * 1024.0 * 1024.0), 0, 'f', 2);
     }
-    if (bytes >= (1024ULL * 1024ULL)) {
+    if (bytes >= oneMB) {
         return QString("%1 MB").arg(bytes / (1024.0 * 1024.0), 0, 'f', 2);
     }
     return QString("%1 KB").arg(bytes / 1024.0, 0, 'f', 1);

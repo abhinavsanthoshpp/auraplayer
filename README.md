@@ -1,14 +1,22 @@
-# ⚡ OrionPlayer
+<p align="center">
+  <img src="resources/icons/orionplayer.svg" width="130" height="130" alt="Orion Player Logo" />
+</p>
 
-> **The Next-Generation Ultra-Fast Open-Source Media Player for Linux**  
-> Engineered for pure speed, zero-latency rendering, minimal memory footprint, and modern desktop aesthetics.
+<h1 align="center">Orion Player</h1>
 
-[![Website: Online](https://img.shields.io/badge/Website-Live%20Portal-00e5ff.svg)](https://abhinavsanthoshpp.github.io/orionplayer/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Fedora%20%7C%20Ubuntu%20%7C%20Arch-orange.svg)]()
-[![Hardware Acceleration](https://img.shields.io/badge/Hardware%20Accel-VA--API%20%2F%20NVDEC%20%2F%20Vulkan-success.svg)]()
-[![C++](https://img.shields.io/badge/C%2B%2B-20-blue.svg)]()
-[![Qt](https://img.shields.io/badge/GUI-Qt6-brightgreen.svg)]()
+<p align="center">
+  <strong>Ultra-Fast, Hardware-Accelerated Open-Source Media Player for Linux</strong><br>
+  Engineered with C++20, Qt6, and libmpv for zero-latency playback, minimal memory footprint, and full VLC-grade desktop controls.
+</p>
+
+<p align="center">
+  <a href="https://abhinavsanthoshpp.github.io/orionplayer/"><img src="https://img.shields.io/badge/Website-Live%20Portal-00e5ff.svg" alt="Website"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPLv3"></a>
+  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20Fedora%20%7C%20Ubuntu%20%7C%20Arch-orange.svg" alt="Platform">
+  <img src="https://img.shields.io/badge/Hardware%20Accel-VA--API%20%2F%20NVDEC%20%2F%20Vulkan-success.svg" alt="Hardware Accel">
+  <img src="https://img.shields.io/badge/C%2B%2B-20-blue.svg" alt="C++20">
+  <img src="https://img.shields.io/badge/GUI-Qt6-brightgreen.svg" alt="Qt6">
+</p>
 
 🌐 **Official Showcase & Download Website:** [https://abhinavsanthoshpp.github.io/orionplayer/](https://abhinavsanthoshpp.github.io/orionplayer/)
 

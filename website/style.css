@@ -90,18 +90,44 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     text-decoration: none;
     color: var(--text-primary);
     font-size: 20px;
     font-weight: 700;
 }
 
-.logo-icon {
-    font-size: 22px;
+.logo-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    filter: drop-shadow(0 2px 10px rgba(0, 245, 255, 0.4));
+    transition: transform 0.25s ease;
 }
 
-.logo-text strong {
+.logo:hover .logo-img {
+    transform: scale(1.08) rotate(3deg);
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.footer-logo-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    filter: drop-shadow(0 2px 8px rgba(0, 245, 255, 0.3));
+}
+
+.logo-text strong,
+.footer-brand strong {
     color: var(--accent-cyan);
 }
 

@@ -1,3 +1,21 @@
+/*
+ * Orion Player — High-Performance Open-Source Media Player for Linux
+ * Copyright (C) 2026 Abhinav Santhosh <abhinavsanthoshpp>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "OrionVideoWidget.h"
 #include "mpv/render.h"
 #include "mpv/render_gl.h"
@@ -125,8 +143,7 @@ void OrionVideoWidget::paintGL() {
 
         mpv_render_context_render(m_renderCtx, params);
     } else {
-        // Draw futuristic Ambient Cyber Cinema idle canvas
-        glClearColor(0.035f, 0.045f, 0.07f, 1.0f);
+        glClearColor(0.04f, 0.05f, 0.08f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         QPainter painter(this);
@@ -135,65 +152,43 @@ void OrionVideoWidget::paintGL() {
         QRect r = rect();
         QPoint center = r.center();
 
-        // 1. Central Radial Ambient Glow
+        // Subtle ambient radial backdrop
         QRadialGradient glow(center, std::min(r.width(), r.height()) * 0.45);
-        glow.setColorAt(0.0, QColor(0, 240, 255, 38));
-        glow.setColorAt(0.5, QColor(31, 111, 235, 18));
-        glow.setColorAt(1.0, QColor(7, 9, 14, 0));
+        glow.setColorAt(0.0, QColor(0, 229, 255, 25));
+        glow.setColorAt(0.5, QColor(37, 99, 235, 12));
+        glow.setColorAt(1.0, QColor(10, 14, 23, 0));
         painter.fillRect(r, glow);
 
-        // 2. Neon Orbital Halo Rings
-        painter.setPen(QPen(QColor(0, 240, 255, 60), 2, Qt::DashLine));
-        painter.setBrush(Qt::NoBrush);
-        int ringR = 68;
-        painter.drawEllipse(center + QPoint(0, -35), ringR, ringR);
+        // Draw official Orion vector logo
+        QIcon appIcon(":/icon.svg");
+        if (!appIcon.isNull()) {
+            QPixmap iconPix = appIcon.pixmap(110, 110);
+            painter.drawPixmap(center.x() - 55, center.y() - 95, iconPix);
+        }
 
-        painter.setPen(QPen(QColor(139, 92, 246, 120), 1.5));
-        painter.drawEllipse(center + QPoint(0, -35), ringR - 14, ringR - 14);
-
-        // Glowing center core play icon
-        painter.setPen(Qt::NoPen);
-        QLinearGradient coreGrad(center.x() - 15, center.y() - 50, center.x() + 20, center.y() - 20);
-        coreGrad.setColorAt(0.0, QColor(0, 240, 255));
-        coreGrad.setColorAt(1.0, QColor(31, 111, 235));
-        painter.setBrush(coreGrad);
-
-        QPolygon playPoly;
-        playPoly << QPoint(center.x() - 10, center.y() - 50)
-                 << QPoint(center.x() + 18, center.y() - 35)
-                 << QPoint(center.x() - 10, center.y() - 20);
-        painter.drawPolygon(playPoly);
-
-        // 3. Futuristic Typography & Badges
-        painter.setPen(QColor(255, 255, 255));
-        QFont titleFont("Inter", 24, QFont::Bold);
+        // Project title
+        painter.setPen(QColor(240, 246, 252));
+        QFont titleFont = font();
+        titleFont.setPointSize(20);
+        titleFont.setBold(true);
         painter.setFont(titleFont);
-        painter.drawText(r.adjusted(0, 50, 0, 0), Qt::AlignHCenter | Qt::AlignTop, "OrionPlayer");
-
-        // Pill badge
-        QRect badgeRect(center.x() - 140, center.y() + 90, 280, 24);
-        painter.setPen(QPen(QColor(0, 240, 255, 90), 1));
-        painter.setBrush(QColor(0, 240, 255, 20));
-        painter.drawRoundedRect(badgeRect, 12, 12);
-
-        painter.setPen(QColor(0, 240, 255));
-        QFont badgeFont("Inter", 9, QFont::Bold);
-        painter.setFont(badgeFont);
-        painter.drawText(badgeRect, Qt::AlignCenter, "HARDWARE ACCELERATED • ZERO-CHROME CANVAS");
+        painter.drawText(r.adjusted(0, 35, 0, 0), Qt::AlignHCenter | Qt::AlignTop, "Orion Player");
 
         // Drag and drop guidance
         painter.setPen(QColor(139, 148, 158));
-        QFont subFont("Inter", 12);
+        QFont subFont = font();
+        subFont.setPointSize(11);
         painter.setFont(subFont);
-        painter.drawText(r.adjusted(0, 130, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
-                         "Drag and drop any video or stream here to start playing");
+        painter.drawText(r.adjusted(0, 70, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
+                         "Drop a media file or stream here to start playback");
 
-        // Keyboard hotkey pills row
-        painter.setPen(QColor(100, 110, 130));
-        QFont hintFont("Inter", 10);
+        // Shortcut hint line
+        painter.setPen(QColor(95, 105, 120));
+        QFont hintFont = font();
+        hintFont.setPointSize(9);
         painter.setFont(hintFont);
-        painter.drawText(r.adjusted(0, 170, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
-                         "[Space] Play/Pause    [←/→] Keyframe Seek    [↑/↓] 200% Vol    [Tab] Studio Drawer");
+        painter.drawText(r.adjusted(0, 105, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
+                         "Space: Play/Pause  •  Ctrl+O: Open File  •  Ctrl+L: Playlist  •  Ctrl+E: Effects  •  F11: Fullscreen");
     }
 }
 

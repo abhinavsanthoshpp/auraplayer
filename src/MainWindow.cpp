@@ -1,3 +1,21 @@
+/*
+ * Orion Player — High-Performance Open-Source Media Player for Linux
+ * Copyright (C) 2026 Abhinav Santhosh <abhinavsanthoshpp>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "MainWindow.h"
 #include <QMenuBar>
 #include <QMenu>
@@ -14,11 +32,13 @@
 #include <QVBoxLayout>
 #include <QFileInfo>
 #include <QApplication>
+#include <QIcon>
 #include <cmath>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
     setWindowTitle("OrionPlayer — VLC-Grade Professional Media Player");
+    setWindowIcon(QIcon(":/icon.svg"));
     resize(1000, 680);
     setAcceptDrops(true);
 
@@ -140,58 +160,58 @@ void MainWindow::createCentralLayout() {
 void MainWindow::createMenuBar() {
     auto *mb = menuBar();
 
-    // ================= 1. MEDIA MENU =================
+    // Media menu
     auto *mediaMenu = mb->addMenu("&Media");
-    mediaMenu->addAction("&Open File...", this, &MainWindow::onOpenFile, QKeySequence::Open);
-    mediaMenu->addAction("Open &Multiple Files...", this, &MainWindow::onOpenMultipleFiles, QKeySequence("Ctrl+Shift+O"));
-    mediaMenu->addAction("Open &Folder...", this, &MainWindow::onOpenFolder, QKeySequence("Ctrl+F"));
-    mediaMenu->addAction("Open &Network Stream...", this, &MainWindow::onOpenNetworkStream, QKeySequence("Ctrl+N"));
-    mediaMenu->addAction("Open &Location from Clipboard...", this, &MainWindow::onOpenClipboardLocation, QKeySequence("Ctrl+V"));
+    mediaMenu->addAction("&Open File...", QKeySequence::Open, this, &MainWindow::onOpenFile);
+    mediaMenu->addAction("Open &Multiple Files...", QKeySequence("Ctrl+Shift+O"), this, &MainWindow::onOpenMultipleFiles);
+    mediaMenu->addAction("Open &Folder...", QKeySequence("Ctrl+F"), this, &MainWindow::onOpenFolder);
+    mediaMenu->addAction("Open &Network Stream...", QKeySequence("Ctrl+N"), this, &MainWindow::onOpenNetworkStream);
+    mediaMenu->addAction("Open &Location from Clipboard...", QKeySequence("Ctrl+V"), this, &MainWindow::onOpenClipboardLocation);
     mediaMenu->addSeparator();
-    mediaMenu->addAction("&Quit", this, &QWidget::close, QKeySequence::Quit);
+    mediaMenu->addAction("&Quit", QKeySequence::Quit, this, &QWidget::close);
 
-    // ================= 2. PLAYBACK MENU =================
+    // Playback menu
     auto *playMenu = mb->addMenu("&Playback");
-    m_actPlayPause = playMenu->addAction("Play", this, &MainWindow::onTogglePlayPause, Qt::Key_Space);
-    playMenu->addAction("&Stop", this, &MainWindow::onStop, Qt::Key_S);
-    playMenu->addAction("&Previous", this, &MainWindow::onPrevious, Qt::Key_P);
-    playMenu->addAction("&Next", this, &MainWindow::onNext, Qt::Key_N);
+    m_actPlayPause = playMenu->addAction("Play", Qt::Key_Space, this, &MainWindow::onTogglePlayPause);
+    playMenu->addAction("&Stop", Qt::Key_S, this, &MainWindow::onStop);
+    playMenu->addAction("&Previous", Qt::Key_P, this, &MainWindow::onPrevious);
+    playMenu->addAction("&Next", Qt::Key_N, this, &MainWindow::onNext);
     playMenu->addSeparator();
 
     auto *speedMenu = playMenu->addMenu("&Speed");
-    speedMenu->addAction("&Faster", this, &MainWindow::onSpeedFaster, Qt::Key_BracketRight);
-    speedMenu->addAction("&Slower", this, &MainWindow::onSpeedSlower, Qt::Key_BracketLeft);
-    speedMenu->addAction("&Normal Speed", this, &MainWindow::onSpeedNormal, Qt::Key_Equal);
+    speedMenu->addAction("&Faster", Qt::Key_BracketRight, this, &MainWindow::onSpeedFaster);
+    speedMenu->addAction("&Slower", Qt::Key_BracketLeft, this, &MainWindow::onSpeedSlower);
+    speedMenu->addAction("&Normal Speed", Qt::Key_Equal, this, &MainWindow::onSpeedNormal);
 
     auto *jumpMenu = playMenu->addMenu("&Jump");
-    jumpMenu->addAction("Very Short Forward (+3 sec)", this, [this]() { onJumpRelative(3.0); }, QKeySequence("Shift+Right"));
-    jumpMenu->addAction("Very Short Backward (-3 sec)", this, [this]() { onJumpRelative(-3.0); }, QKeySequence("Shift+Left"));
-    jumpMenu->addAction("Short Forward (+10 sec)", this, [this]() { onJumpRelative(10.0); }, QKeySequence("Alt+Right"));
-    jumpMenu->addAction("Short Backward (-10 sec)", this, [this]() { onJumpRelative(-10.0); }, QKeySequence("Alt+Left"));
-    jumpMenu->addAction("Medium Forward (+1 min)", this, [this]() { onJumpRelative(60.0); }, QKeySequence("Ctrl+Right"));
-    jumpMenu->addAction("Medium Backward (-1 min)", this, [this]() { onJumpRelative(-60.0); }, QKeySequence("Ctrl+Left"));
-    jumpMenu->addAction("Long Forward (+5 min)", this, [this]() { onJumpRelative(300.0); }, QKeySequence("Ctrl+Alt+Right"));
-    jumpMenu->addAction("Long Backward (-5 min)", this, [this]() { onJumpRelative(-300.0); }, QKeySequence("Ctrl+Alt+Left"));
+    jumpMenu->addAction("Very Short Forward (+3 sec)", QKeySequence("Shift+Right"), this, [this]() { onJumpRelative(3.0); });
+    jumpMenu->addAction("Very Short Backward (-3 sec)", QKeySequence("Shift+Left"), this, [this]() { onJumpRelative(-3.0); });
+    jumpMenu->addAction("Short Forward (+10 sec)", QKeySequence("Alt+Right"), this, [this]() { onJumpRelative(10.0); });
+    jumpMenu->addAction("Short Backward (-10 sec)", QKeySequence("Alt+Left"), this, [this]() { onJumpRelative(-10.0); });
+    jumpMenu->addAction("Medium Forward (+1 min)", QKeySequence("Ctrl+Right"), this, [this]() { onJumpRelative(60.0); });
+    jumpMenu->addAction("Medium Backward (-1 min)", QKeySequence("Ctrl+Left"), this, [this]() { onJumpRelative(-60.0); });
+    jumpMenu->addAction("Long Forward (+5 min)", QKeySequence("Ctrl+Alt+Right"), this, [this]() { onJumpRelative(300.0); });
+    jumpMenu->addAction("Long Backward (-5 min)", QKeySequence("Ctrl+Alt+Left"), this, [this]() { onJumpRelative(-300.0); });
 
     playMenu->addSeparator();
-    playMenu->addAction("Step Forward Frame-by-Frame", this, &MainWindow::onFrameStep, Qt::Key_E);
+    playMenu->addAction("Step Forward Frame-by-Frame", Qt::Key_E, this, &MainWindow::onFrameStep);
 
-    // ================= 3. AUDIO MENU =================
+    // Audio menu
     auto *audioMenu = mb->addMenu("&Audio");
-    audioMenu->addAction("Volume &Up (+5%)", this, [this]() { onVolumeDelta(5.0); }, QKeySequence("Ctrl+Up"));
-    audioMenu->addAction("Volume &Down (-5%)", this, [this]() { onVolumeDelta(-5.0); }, QKeySequence("Ctrl+Down"));
-    audioMenu->addAction("&Mute", this, [this]() { if (m_engine) m_engine->toggleMute(); }, Qt::Key_M);
+    audioMenu->addAction("Volume &Up (+5%)", QKeySequence("Ctrl+Up"), this, [this]() { onVolumeDelta(5.0); });
+    audioMenu->addAction("Volume &Down (-5%)", QKeySequence("Ctrl+Down"), this, [this]() { onVolumeDelta(-5.0); });
+    audioMenu->addAction("&Mute", Qt::Key_M, this, [this]() { if (m_engine) m_engine->toggleMute(); });
     audioMenu->addSeparator();
-    audioMenu->addAction("Audio &Track Delay (+50ms)", this, [this]() {
+    audioMenu->addAction("Audio &Track Delay (+50ms)", Qt::Key_K, this, [this]() {
         if (m_engine) m_engine->setAudioDelay(m_engine->audioDelay() + 0.05);
-    }, Qt::Key_K);
-    audioMenu->addAction("Audio Track Delay (-50ms)", this, [this]() {
+    });
+    audioMenu->addAction("Audio Track Delay (-50ms)", Qt::Key_J, this, [this]() {
         if (m_engine) m_engine->setAudioDelay(m_engine->audioDelay() - 0.05);
-    }, Qt::Key_J);
+    });
 
-    // ================= 4. VIDEO MENU =================
+    // Video menu
     auto *videoMenu = mb->addMenu("&Video");
-    m_actFullscreen = videoMenu->addAction("&Fullscreen", this, &MainWindow::onToggleFullscreen, Qt::Key_F11);
+    m_actFullscreen = videoMenu->addAction("&Fullscreen", Qt::Key_F11, this, &MainWindow::onToggleFullscreen);
     m_actAlwaysOnTop = videoMenu->addAction("Always on &Top", this, &MainWindow::onToggleAlwaysOnTop);
     m_actAlwaysOnTop->setCheckable(true);
     videoMenu->addSeparator();
@@ -210,29 +230,29 @@ void MainWindow::createMenuBar() {
     deintMenu->addAction("On", this, [this]() { if (m_engine) m_engine->setDeinterlace(true); });
 
     videoMenu->addSeparator();
-    videoMenu->addAction("Take &Snapshot", this, &MainWindow::onTakeSnapshot, QKeySequence("Shift+S"));
+    videoMenu->addAction("Take &Snapshot", QKeySequence("Shift+S"), this, &MainWindow::onTakeSnapshot);
 
-    // ================= 5. SUBTITLE MENU =================
+    // Subtitle menu
     auto *subMenu = mb->addMenu("&Subtitle");
     subMenu->addAction("&Add Subtitle File...", this, &MainWindow::onAddSubtitleFile);
     subMenu->addSeparator();
-    subMenu->addAction("Subtitle Delay (+50ms)", this, [this]() {
+    subMenu->addAction("Subtitle Delay (+50ms)", Qt::Key_X, this, [this]() {
         if (m_engine) m_engine->setSubtitleDelay(m_engine->subtitleDelay() + 0.05);
-    }, Qt::Key_X);
-    subMenu->addAction("Subtitle Delay (-50ms)", this, [this]() {
+    });
+    subMenu->addAction("Subtitle Delay (-50ms)", Qt::Key_Z, this, [this]() {
         if (m_engine) m_engine->setSubtitleDelay(m_engine->subtitleDelay() - 0.05);
-    }, Qt::Key_Z);
+    });
 
-    // ================= 6. TOOLS MENU =================
+    // Tools menu
     auto *toolsMenu = mb->addMenu("&Tools");
-    toolsMenu->addAction("&Effects and Filters", this, &MainWindow::onShowEffects, QKeySequence("Ctrl+E"));
-    toolsMenu->addAction("&Media Information", this, &MainWindow::onShowMediaInfo, QKeySequence("Ctrl+I"));
+    toolsMenu->addAction("&Effects and Filters", QKeySequence("Ctrl+E"), this, &MainWindow::onShowEffects);
+    toolsMenu->addAction("&Media Information", QKeySequence("Ctrl+I"), this, &MainWindow::onShowMediaInfo);
     toolsMenu->addSeparator();
-    toolsMenu->addAction("&Preferences", this, &MainWindow::onShowPreferences, QKeySequence("Ctrl+P"));
+    toolsMenu->addAction("&Preferences", QKeySequence("Ctrl+P"), this, &MainWindow::onShowPreferences);
 
-    // ================= 7. VIEW MENU =================
+    // View menu
     auto *viewMenu = mb->addMenu("&View");
-    viewMenu->addAction("&Playlist", this, &MainWindow::onTogglePlaylist, QKeySequence("Ctrl+L"));
+    viewMenu->addAction("&Playlist", QKeySequence("Ctrl+L"), this, &MainWindow::onTogglePlaylist);
     m_actAdvanced = viewMenu->addAction("&Advanced Controls", this, &MainWindow::onToggleAdvancedControls);
     m_actAdvanced->setCheckable(true);
     m_actAdvanced->setChecked(false);
@@ -241,9 +261,9 @@ void MainWindow::createMenuBar() {
         statusBar()->setVisible(checked);
     })->setCheckable(true);
 
-    // ================= 8. HELP MENU =================
+    // Help menu
     auto *helpMenu = mb->addMenu("&Help");
-    helpMenu->addAction("&About OrionPlayer", this, &MainWindow::onAbout, QKeySequence("Shift+F1"));
+    helpMenu->addAction("&About OrionPlayer", QKeySequence("Shift+F1"), this, &MainWindow::onAbout);
 }
 
 void MainWindow::applyVlcTheme() {
