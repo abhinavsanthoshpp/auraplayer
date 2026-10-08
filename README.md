@@ -18,7 +18,13 @@
   <img src="https://img.shields.io/badge/GUI-Qt6-brightgreen.svg" alt="Qt6">
 </p>
 
-🌐 **Official Showcase & Download Website:** [https://abhinavsanthoshpp.github.io/orionplayer/](https://abhinavsanthoshpp.github.io/orionplayer/)
+<p align="center">
+  <a href="https://abhinavsanthoshpp.github.io/orionplayer/donate.html"><img src="https://img.shields.io/badge/💖%20Donate-Support%20Creator-ff69b4?style=for-the-badge" alt="Donate"></a>
+  <a href="https://buymeacoffee.com/abhinavsanthoshpp" target="_blank"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
+  <a href="https://github.com/sponsors/abhinavsanthoshpp" target="_blank"><img src="https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-EA4AAA?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="GitHub Sponsors"></a>
+</p>
+
+🌐 **Official Showcase & Download Website:** [https://abhinavsanthoshpp.github.io/orionplayer/](https://abhinavsanthoshpp.github.io/orionplayer/) • **💖 [Donate Portal](https://abhinavsanthoshpp.github.io/orionplayer/donate.html)**
 
 ---
 
@@ -139,6 +145,20 @@ orionplayer/
 ├── docs/                       # GitHub Pages live hosting root
 └── .github/workflows/          # GitHub Actions CI/CD release workflow
 ```
+
+---
+
+## 💖 Support the Creator & Donate
+
+Orion Player is 100% free, source-available, and ad-free software built and maintained by **Abhinav Santhosh**. Your contributions directly fund hardware acceleration research, Windows/Android cross-platform builds, and independent development!
+
+### Payment Options:
+- ☕ **Buy Me a Coffee (Cards, Apple Pay, PayPal):** [buymeacoffee.com/abhinavsanthoshpp](https://buymeacoffee.com/abhinavsanthoshpp)
+- 💖 **GitHub Sponsors:** [github.com/sponsors/abhinavsanthoshpp](https://github.com/sponsors/abhinavsanthoshpp)
+- ⚡ **UPI (Instant Direct Bank Transfer • 0% Intermediary Fee):**
+  - **UPI ID:** `abhinava6525@naviaxis`
+  - *(Compatible with Google Pay, PhonePe, Paytm, Navi, Cred, BHIM & all Indian banking apps)*
+  - **Live Web Portal:** [https://abhinavsanthoshpp.github.io/orionplayer/donate.html](https://abhinavsanthoshpp.github.io/orionplayer/donate.html)
 
 ---
 
