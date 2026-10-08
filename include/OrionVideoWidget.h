@@ -14,6 +14,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QTimer>
+#include <QLabel>
 #include "OrionEngine.h"
 
 struct mpv_render_context;
@@ -28,9 +29,12 @@ public:
     void ensureRenderContextInitialized();
     bool isRenderContextReady() const { return m_renderCtx != nullptr; }
 
+    void showOsd(const QString &text, int durationMs = 1200);
+
 signals:
     void doubleClicked();
     void singleClicked();
+    void contextMenuRequested(const QPoint &globalPos);
     void userActivity();
     void fileDropped(const QString &filePath);
     void wheelScrolled(int delta);
@@ -40,6 +44,7 @@ protected:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int w, int h) override;
+    void resizeEvent(QResizeEvent *event) override;
 
     void mousePressEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -47,6 +52,7 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void onMpvRenderUpdate();
@@ -59,4 +65,7 @@ private:
     mpv_render_context *m_renderCtx = nullptr;
     bool m_hasActiveVideo = false;
     QTimer m_clickTimer;
+
+    QLabel *m_osdLabel = nullptr;
+    QTimer m_osdTimer;
 };

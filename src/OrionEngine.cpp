@@ -368,6 +368,11 @@ void OrionEngine::setGamma(int value) {
 
 void OrionEngine::setAspectRatio(const QString &ratio) {
     if (!m_mpv) return;
+    m_currentAspectRatio = ratio;
+    static const QStringList ratios = {"default", "16:9", "4:3", "1:1", "16:10", "2.21:1", "2.35:1"};
+    int idx = ratios.indexOf(ratio);
+    if (idx >= 0) m_aspectRatioIndex = idx;
+
     if (ratio == "default" || ratio == "-1") {
         const char *val = "-1";
         mpv_set_property_string(m_mpv, "video-aspect-override", val);
@@ -375,6 +380,68 @@ void OrionEngine::setAspectRatio(const QString &ratio) {
         QByteArray b = ratio.toUtf8();
         mpv_set_property_string(m_mpv, "video-aspect-override", b.constData());
     }
+}
+
+QString OrionEngine::cycleAspectRatio() {
+    static const QStringList ratios = {"default", "16:9", "4:3", "1:1", "16:10", "2.21:1", "2.35:1"};
+    m_aspectRatioIndex = (m_aspectRatioIndex + 1) % ratios.size();
+    QString chosen = ratios[m_aspectRatioIndex];
+    setAspectRatio(chosen);
+    return chosen;
+}
+
+QString OrionEngine::cycleAudioTrack() {
+    if (!m_mpv) return QString();
+    QVector<MediaTrack> tracks = getTracks();
+    QVector<MediaTrack> audioTracks;
+    int currentIndex = -1;
+    for (const auto &t : tracks) {
+        if (t.type == "audio") {
+            if (t.isSelected) currentIndex = audioTracks.size();
+            audioTracks.append(t);
+        }
+    }
+    if (audioTracks.isEmpty()) return "None";
+
+    // Cycle: 0, 1, ..., N-1, Disable (-1)
+    int nextIndex = (currentIndex + 1) % (audioTracks.size() + 1);
+    if (nextIndex == audioTracks.size()) {
+        setAudioTrack(-1);
+        return "Disabled";
+    }
+
+    const auto &nextTrack = audioTracks[nextIndex];
+    setAudioTrack(nextTrack.id);
+    if (!nextTrack.title.isEmpty()) return nextTrack.title;
+    if (!nextTrack.language.isEmpty()) return QString("Track %1 [%2]").arg(nextTrack.id).arg(nextTrack.language);
+    return QString("Track %1 (%2)").arg(nextTrack.id).arg(nextTrack.codec);
+}
+
+QString OrionEngine::cycleSubtitleTrack() {
+    if (!m_mpv) return QString();
+    QVector<MediaTrack> tracks = getTracks();
+    QVector<MediaTrack> subTracks;
+    int currentIndex = -1;
+    for (const auto &t : tracks) {
+        if (t.type == "sub") {
+            if (t.isSelected) currentIndex = subTracks.size();
+            subTracks.append(t);
+        }
+    }
+    if (subTracks.isEmpty()) return "None";
+
+    // Cycle: 0, 1, ..., N-1, Disable (-1)
+    int nextIndex = (currentIndex + 1) % (subTracks.size() + 1);
+    if (nextIndex == subTracks.size()) {
+        setSubtitleTrack(-1);
+        return "Disabled";
+    }
+
+    const auto &nextTrack = subTracks[nextIndex];
+    setSubtitleTrack(nextTrack.id);
+    if (!nextTrack.title.isEmpty()) return nextTrack.title;
+    if (!nextTrack.language.isEmpty()) return QString("Track %1 [%2]").arg(nextTrack.id).arg(nextTrack.language);
+    return QString("Track %1 (%2)").arg(nextTrack.id).arg(nextTrack.codec);
 }
 
 void OrionEngine::loadSubtitleFile(const QString &path) {
@@ -392,8 +459,15 @@ void OrionEngine::setHue(int value) {
 
 void OrionEngine::setDeinterlace(bool enable) {
     if (!m_mpv) return;
+    m_deinterlace = enable;
     const char *val = enable ? "yes" : "no";
     mpv_set_property_string(m_mpv, "deinterlace", val);
+}
+
+bool OrionEngine::toggleDeinterlace() {
+    m_deinterlace = !m_deinterlace;
+    setDeinterlace(m_deinterlace);
+    return m_deinterlace;
 }
 
 void OrionEngine::setEqualizerBands(const QVector<double> &bands, double preamp) {

@@ -37,6 +37,7 @@ public:
 protected:
     void showEvent(QShowEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -63,10 +64,18 @@ private slots:
     // Video & Audio
     void onAddSubtitleFile();
     void onSetAspectRatio(const QString &ratio);
+    void onCycleAspectRatio();
+    void onCycleAudioTrack();
+    void onCycleSubtitleTrack();
+    void onToggleDeinterlace();
+    void onAudioDelayDelta(double delta);
+    void onSubtitleDelayDelta(double delta);
     void onTakeSnapshot();
     void onToggleFullscreen();
     void onToggleAlwaysOnTop();
+    void onToggleMute();
     void onVolumeDelta(double delta);
+    void showVideoContextMenu(const QPoint &globalPos);
 
     // Tools & View
     void onShowEffects();

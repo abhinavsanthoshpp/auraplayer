@@ -15,17 +15,23 @@ find_package(Qt6 REQUIRED COMPONENTS
     OpenGLWidgets
 )
 
-# Search for libmpv shared library (support unversioned and versioned sonames)
-find_library(MPV_LIBRARY NAMES mpv PATHS /usr/lib64 /usr/lib /usr/local/lib)
-if(NOT MPV_LIBRARY)
-    find_file(MPV_LIBRARY NAMES libmpv.so.2 libmpv.so.1 libmpv.so PATHS /usr/lib64 /usr/lib /usr/local/lib)
+# Search for libmpv shared library across Linux and Windows
+if(WIN32)
+    find_library(MPV_LIBRARY NAMES mpv-2 mpv libmpv-2 libmpv PATHS ${CMAKE_CURRENT_SOURCE_DIR}/windows/lib ${CMAKE_PREFIX_PATH})
+    if(NOT MPV_LIBRARY)
+        set(MPV_LIBRARY mpv)
+    endif()
+else()
+    find_library(MPV_LIBRARY NAMES mpv PATHS /usr/lib64 /usr/lib /usr/local/lib)
+    if(NOT MPV_LIBRARY)
+        find_file(MPV_LIBRARY NAMES libmpv.so.2 libmpv.so.1 libmpv.so PATHS /usr/lib64 /usr/lib /usr/local/lib)
+    endif()
+    if(NOT MPV_LIBRARY)
+        message(FATAL_ERROR "Could not find libmpv! Please verify mpv is installed.")
+    endif()
 endif()
 
-if(NOT MPV_LIBRARY)
-    message(FATAL_ERROR "Could not find libmpv! Please verify mpv is installed.")
-endif()
-
-message(STATUS "Found libmpv: ${MPV_LIBRARY}")
+message(STATUS "Using libmpv: ${MPV_LIBRARY}")
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -60,11 +66,24 @@ set(RESOURCES
     resources/resources.qrc
 )
 
-add_executable(orionplayer
-    ${SOURCES}
-    ${HEADERS}
-    ${RESOURCES}
-)
+# Windows resource script with icon and version metadata
+if(WIN32)
+    list(APPEND SOURCES resources/orionplayer.rc)
+endif()
+
+if(WIN32)
+    add_executable(orionplayer WIN32
+        ${SOURCES}
+        ${HEADERS}
+        ${RESOURCES}
+    )
+else()
+    add_executable(orionplayer
+        ${SOURCES}
+        ${HEADERS}
+        ${RESOURCES}
+    )
+endif()
 
 target_link_libraries(orionplayer PRIVATE
     Qt6::Core
@@ -75,15 +94,35 @@ target_link_libraries(orionplayer PRIVATE
     ${MPV_LIBRARY}
 )
 
-# Compiler optimization flags for maximum performance
+if(WIN32)
+    target_link_libraries(orionplayer PRIVATE
+        dwmapi
+        winmm
+        imm32
+        version
+        shell32
+        user32
+        gdi32
+    )
+endif()
+
+# Compiler optimization flags
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(orionplayer PRIVATE
         -O3
-        -march=native
         -pipe
         -Wall
         -Wextra
         -Wno-unused-parameter
+    )
+    if(NOT WIN32)
+        target_compile_options(orionplayer PRIVATE -march=native)
+    endif()
+elseif(MSVC)
+    target_compile_options(orionplayer PRIVATE
+        /O2
+        /W3
+        /permissive-
     )
 endif()
 

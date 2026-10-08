@@ -48,6 +48,26 @@ OrionVideoWidget::OrionVideoWidget(OrionEngine *engine, QWidget *parent)
     m_clickTimer.setInterval(220);
     connect(&m_clickTimer, &QTimer::timeout, this, &OrionVideoWidget::singleClicked);
 
+    // VLC-style On-Screen Display (OSD) overlay
+    m_osdLabel = new QLabel(this);
+    m_osdLabel->setObjectName("OrionOsdBadge");
+    m_osdLabel->setStyleSheet(
+        "QLabel#OrionOsdBadge {"
+        "  background-color: rgba(10, 14, 23, 0.90);"
+        "  color: #00e5ff;"
+        "  font-size: 15px;"
+        "  font-weight: 700;"
+        "  border: 1px solid rgba(0, 229, 255, 0.45);"
+        "  border-radius: 8px;"
+        "  padding: 8px 16px;"
+        "}"
+    );
+    m_osdLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    m_osdLabel->hide();
+
+    m_osdTimer.setSingleShot(true);
+    connect(&m_osdTimer, &QTimer::timeout, m_osdLabel, &QLabel::hide);
+
     if (m_engine) {
         connect(m_engine, &OrionEngine::playbackStarted, this, [this]() {
             m_hasActiveVideo = true;
@@ -181,8 +201,37 @@ void OrionVideoWidget::paintGL() {
         hintFont.setPointSize(9);
         painter.setFont(hintFont);
         painter.drawText(r.adjusted(0, 105, 0, 0), Qt::AlignHCenter | Qt::AlignTop,
-                         "Space: Play/Pause  •  Ctrl+O: Open File  •  Ctrl+L: Playlist  •  Ctrl+E: Effects  •  F11: Fullscreen");
+                         "← / →: Seek ±10s  •  ↑ / ↓: Volume  •  Space: Play/Pause  •  F: Fullscreen  •  Right-Click: VLC Menu");
     }
+}
+
+void OrionVideoWidget::showOsd(const QString &text, int durationMs) {
+    if (!m_osdLabel) return;
+    m_osdLabel->setText(text);
+    m_osdLabel->adjustSize();
+    int pad = 24;
+    int x = width() - m_osdLabel->width() - pad;
+    int y = pad;
+    if (x < 10) x = 10;
+    m_osdLabel->move(x, y);
+    m_osdLabel->show();
+    m_osdLabel->raise();
+    m_osdTimer.start(durationMs);
+}
+
+void OrionVideoWidget::resizeEvent(QResizeEvent *event) {
+    QOpenGLWidget::resizeEvent(event);
+    if (m_osdLabel && m_osdLabel->isVisible()) {
+        int pad = 24;
+        int x = width() - m_osdLabel->width() - pad;
+        if (x < 10) x = 10;
+        m_osdLabel->move(x, pad);
+    }
+}
+
+void OrionVideoWidget::keyPressEvent(QKeyEvent *event) {
+    // Bubble up to parent / eventFilter so VLC hotkeys are never blocked
+    event->ignore();
 }
 
 void OrionVideoWidget::onMpvRenderUpdate() {
@@ -192,6 +241,10 @@ void OrionVideoWidget::onMpvRenderUpdate() {
 void OrionVideoWidget::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         m_clickTimer.start();
+    } else if (event->button() == Qt::RightButton) {
+        m_clickTimer.stop();
+        emit contextMenuRequested(event->globalPosition().toPoint());
+        return;
     }
     emit userActivity();
     QOpenGLWidget::mousePressEvent(event);

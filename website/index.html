@@ -419,72 +419,107 @@ make -j$(nproc)
                         <tr>
                             <td><kbd>Space</kbd></td>
                             <td>Play / Pause</td>
-                            <td>Instantly toggle playback</td>
+                            <td>Instantly toggle playback anywhere</td>
                         </tr>
                         <tr>
                             <td><kbd>←</kbd> / <kbd>→</kbd></td>
-                            <td>Seek -5s / +5s</td>
-                            <td>Instant keyframe seek</td>
+                            <td>Seek -10s / +10s</td>
+                            <td>Standard VLC 10-second skip forward/backward</td>
                         </tr>
                         <tr>
                             <td><kbd>Shift</kbd> + <kbd>←</kbd> / <kbd>→</kbd></td>
-                            <td>Fine Seek -1s / +1s</td>
-                            <td>Frame-level exact seek</td>
+                            <td>Very Short Seek -3s / +3s</td>
+                            <td>Fine precision seek with on-screen OSD badge</td>
                         </tr>
                         <tr>
                             <td><kbd>Ctrl</kbd> + <kbd>←</kbd> / <kbd>→</kbd></td>
-                            <td>Fast Seek -30s / +30s</td>
-                            <td>Jump 30 seconds back or forward</td>
+                            <td>Medium Seek -1m / +1m</td>
+                            <td>Jump 1 minute backward or forward</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>←</kbd> / <kbd>→</kbd></td>
+                            <td>Long Seek -5m / +5m</td>
+                            <td>Jump 5 minutes backward or forward</td>
                         </tr>
                         <tr>
                             <td><kbd>↑</kbd> / <kbd>↓</kbd></td>
                             <td>Volume Adjust</td>
-                            <td>Increase or decrease volume by 5% (up to 200%)</td>
+                            <td>Increase or decrease volume by 5% (up to 200% VLC booster)</td>
                         </tr>
                         <tr>
                             <td><kbd>M</kbd></td>
                             <td>Mute / Unmute</td>
-                            <td>Toggle audio mute</td>
+                            <td>Toggle audio mute with OSD HUD indicator</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>F</kbd> / <kbd>F11</kbd></td>
+                            <td>Fullscreen Toggle</td>
+                            <td>Seamless immersive fullscreen mode</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>S</kbd></td>
+                            <td>Stop</td>
+                            <td>Stop playback and reset stream position</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>N</kbd> / <kbd>P</kbd></td>
+                            <td>Next / Previous</td>
+                            <td>Advance or return in playlist queue</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>E</kbd></td>
+                            <td>Frame Step</td>
+                            <td>Advance playback frame-by-frame</td>
                         </tr>
                         <tr>
                             <td><kbd>[</kbd> / <kbd>]</kbd></td>
                             <td>Speed -0.1x / +0.1x</td>
-                            <td>Adjust playback speed with pitch preservation</td>
+                            <td>Pitch-perfect playback speed adjustment (scaletempo2)</td>
                         </tr>
                         <tr>
-                            <td><kbd>Backspace</kbd></td>
-                            <td>Reset Speed</td>
-                            <td>Reset speed to 1.0x</td>
+                            <td><kbd>=</kbd> / <kbd>Backspace</kbd></td>
+                            <td>Normal Speed</td>
+                            <td>Reset speed to standard 1.00x</td>
                         </tr>
                         <tr>
-                            <td><kbd>Z</kbd> / <kbd>X</kbd></td>
-                            <td>Subtitle Sync</td>
-                            <td>Adjust subtitle delay by ±100 ms</td>
+                            <td><kbd>A</kbd></td>
+                            <td>Cycle Aspect Ratio</td>
+                            <td>Cycle Default → 16:9 → 4:3 → 1:1 → 16:10 → 2.35:1</td>
                         </tr>
                         <tr>
-                            <td><kbd>J</kbd> / <kbd>K</kbd></td>
-                            <td>Audio Sync</td>
-                            <td>Adjust audio stream delay by ±100 ms</td>
+                            <td><kbd>V</kbd></td>
+                            <td>Cycle Subtitles</td>
+                            <td>Cycle embedded/external subtitle streams or disable</td>
                         </tr>
                         <tr>
-                            <td><kbd>S</kbd></td>
-                            <td>Screenshot</td>
-                            <td>Capture video frame to ~/Pictures</td>
+                            <td><kbd>B</kbd></td>
+                            <td>Cycle Audio Track</td>
+                            <td>Cycle multiple audio language tracks or disable</td>
                         </tr>
                         <tr>
-                            <td><kbd>E</kbd> / <kbd>C</kbd></td>
-                            <td>Equalizer / Video FX</td>
-                            <td>Open 10-band audio EQ & color adjustments</td>
+                            <td><kbd>D</kbd></td>
+                            <td>Toggle Deinterlace</td>
+                            <td>Hardware deinterlacing for broadcast/DVD media</td>
                         </tr>
                         <tr>
-                            <td><kbd>L</kbd></td>
-                            <td>Playlist Drawer</td>
-                            <td>Toggle playlist queue panel</td>
+                            <td><kbd>Shift</kbd> + <kbd>S</kbd></td>
+                            <td>Video Snapshot</td>
+                            <td>Capture native full-resolution frame to ~/Pictures</td>
                         </tr>
                         <tr>
-                            <td><kbd>F</kbd> or <kbd>F11</kbd></td>
-                            <td>Fullscreen</td>
-                            <td>Toggle immersive fullscreen</td>
+                            <td><kbd>Ctrl</kbd> + <kbd>E</kbd></td>
+                            <td>Effects & Filters</td>
+                            <td>Open 10-band equalizer and video adjustment dialog</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>L</kbd></td>
+                            <td>Playlist View</td>
+                            <td>Toggle integrated drag-and-drop playlist view</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Right-Click</kbd></td>
+                            <td>VLC Context Menu</td>
+                            <td>Full VLC context menu at cursor position</td>
                         </tr>
                     </tbody>
                 </table>

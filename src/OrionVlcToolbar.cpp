@@ -84,18 +84,22 @@ void OrionVlcToolbar::setupUi() {
     m_recordBtn = new QPushButton("🔴 Record", m_advancedBar);
     m_recordBtn->setToolTip("Record current playback stream");
     m_recordBtn->setFixedHeight(26);
+    m_recordBtn->setFocusPolicy(Qt::NoFocus);
 
     m_snapshotBtn = new QPushButton("📷 Snapshot", m_advancedBar);
     m_snapshotBtn->setToolTip("Take video frame snapshot (Shift+S)");
     m_snapshotBtn->setFixedHeight(26);
+    m_snapshotBtn->setFocusPolicy(Qt::NoFocus);
 
     m_abLoopBtn = new QPushButton("🔁 Loop A-B", m_advancedBar);
     m_abLoopBtn->setToolTip("Loop continuously between point A and point B");
     m_abLoopBtn->setFixedHeight(26);
+    m_abLoopBtn->setFocusPolicy(Qt::NoFocus);
 
     m_frameStepBtn = new QPushButton("⏭ Frame", m_advancedBar);
     m_frameStepBtn->setToolTip("Step forward frame-by-frame (E)");
     m_frameStepBtn->setFixedHeight(26);
+    m_frameStepBtn->setFocusPolicy(Qt::NoFocus);
 
     advLayout->addWidget(m_recordBtn);
     advLayout->addWidget(m_snapshotBtn);
@@ -115,11 +119,13 @@ void OrionVlcToolbar::setupUi() {
     m_elapsedLabel->setObjectName("OrionVlcElapsedLabel");
 
     m_timeSlider = new OrionVlcSlider(Qt::Horizontal, this);
+    m_timeSlider->setFocusPolicy(Qt::NoFocus);
 
     m_durationLabel = new QLabel("00:00:00", this);
     m_durationLabel->setObjectName("OrionVlcDurationLabel");
     m_durationLabel->setCursor(Qt::PointingHandCursor);
     m_durationLabel->setToolTip("Click to toggle remaining time countdown");
+    m_durationLabel->setFocusPolicy(Qt::NoFocus);
 
     timeRow->addWidget(m_elapsedLabel);
     timeRow->addWidget(m_timeSlider, 1);
@@ -135,46 +141,55 @@ void OrionVlcToolbar::setupUi() {
     m_playPauseBtn->setObjectName("OrionVlcPlayPauseBtn");
     m_playPauseBtn->setFixedSize(32, 30);
     m_playPauseBtn->setToolTip("Play/Pause (Space)");
+    m_playPauseBtn->setFocusPolicy(Qt::NoFocus);
 
     m_prevBtn = new QPushButton("⏮", this);
     m_prevBtn->setObjectName("OrionVlcToolBtn");
     m_prevBtn->setFixedSize(28, 28);
     m_prevBtn->setToolTip("Previous track in playlist (P)");
+    m_prevBtn->setFocusPolicy(Qt::NoFocus);
 
     m_stopBtn = new QPushButton("⏹", this);
     m_stopBtn->setObjectName("OrionVlcToolBtn");
     m_stopBtn->setFixedSize(28, 28);
     m_stopBtn->setToolTip("Stop playback (S)");
+    m_stopBtn->setFocusPolicy(Qt::NoFocus);
 
     m_nextBtn = new QPushButton("⏭", this);
     m_nextBtn->setObjectName("OrionVlcToolBtn");
     m_nextBtn->setFixedSize(28, 28);
     m_nextBtn->setToolTip("Next track in playlist (N)");
+    m_nextBtn->setFocusPolicy(Qt::NoFocus);
 
     m_fullscreenBtn = new QPushButton("⛶", this);
     m_fullscreenBtn->setObjectName("OrionVlcToolBtn");
     m_fullscreenBtn->setFixedSize(28, 28);
     m_fullscreenBtn->setToolTip("Toggle Fullscreen (F11 / F)");
+    m_fullscreenBtn->setFocusPolicy(Qt::NoFocus);
 
     m_effectsBtn = new QPushButton("🎛", this);
     m_effectsBtn->setObjectName("OrionVlcToolBtn");
     m_effectsBtn->setFixedSize(28, 28);
     m_effectsBtn->setToolTip("Show Extended Settings: Equalizer, Video FX, and Audio/Sub Sync (Ctrl+E)");
+    m_effectsBtn->setFocusPolicy(Qt::NoFocus);
 
     m_playlistBtn = new QPushButton("📑", this);
     m_playlistBtn->setObjectName("OrionVlcToolBtn");
     m_playlistBtn->setFixedSize(28, 28);
     m_playlistBtn->setToolTip("Toggle Playlist View (Ctrl+L)");
+    m_playlistBtn->setFocusPolicy(Qt::NoFocus);
 
     m_loopBtn = new QPushButton("➡️", this);
     m_loopBtn->setObjectName("OrionVlcToolBtn");
     m_loopBtn->setFixedSize(28, 28);
     m_loopBtn->setToolTip("Loop Mode: Normal (Click to toggle Repeat All / Repeat One)");
+    m_loopBtn->setFocusPolicy(Qt::NoFocus);
 
     m_shuffleBtn = new QPushButton("🔀", this);
     m_shuffleBtn->setObjectName("OrionVlcToolBtn");
     m_shuffleBtn->setFixedSize(28, 28);
     m_shuffleBtn->setToolTip("Random / Shuffle Playlist Mode");
+    m_shuffleBtn->setFocusPolicy(Qt::NoFocus);
 
     controlRow->addWidget(m_playPauseBtn);
     controlRow->addWidget(m_prevBtn);
@@ -193,6 +208,7 @@ void OrionVlcToolbar::setupUi() {
     m_muteBtn->setObjectName("OrionVlcMuteBtn");
     m_muteBtn->setFixedSize(26, 26);
     m_muteBtn->setToolTip("Mute / Unmute audio (M)");
+    m_muteBtn->setFocusPolicy(Qt::NoFocus);
 
     m_volumeSlider = new QSlider(Qt::Horizontal, this);
     m_volumeSlider->setObjectName("OrionVlcVolSlider");
@@ -200,10 +216,12 @@ void OrionVlcToolbar::setupUi() {
     m_volumeSlider->setValue(100);
     m_volumeSlider->setFixedWidth(90);
     m_volumeSlider->setToolTip("Volume (0% - 200% with VLC audio booster)");
+    m_volumeSlider->setFocusPolicy(Qt::NoFocus);
 
     m_volumeLabel = new QLabel("100%", this);
     m_volumeLabel->setObjectName("OrionVlcVolLabel");
     m_volumeLabel->setFixedWidth(42);
+    m_volumeLabel->setFocusPolicy(Qt::NoFocus);
 
     controlRow->addWidget(m_muteBtn);
     controlRow->addWidget(m_volumeSlider);

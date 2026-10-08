@@ -102,6 +102,19 @@ public:
     // Audio Equalizer (10 bands in dB, -12 to +12)
     void setEqualizerBands(const QVector<double> &bands, double preamp = 0.0);
 
+    // Playback state queries
+    double position() const { return m_position; }
+    double duration() const { return m_duration; }
+    bool isPaused() const { return m_paused; }
+    bool isDeinterlaceEnabled() const { return m_deinterlace; }
+    QString currentAspectRatio() const { return m_currentAspectRatio; }
+
+    // VLC cycling operations
+    QString cycleAudioTrack();
+    QString cycleSubtitleTrack();
+    QString cycleAspectRatio();
+    bool toggleDeinterlace();
+
     // Snapshot & Info
     void takeScreenshot(const QString &destinationPath = QString());
     MediaMetadata getMetadata() const;
@@ -142,5 +155,8 @@ private:
     double m_speed = 1.0;
     bool m_paused = false;
     bool m_muted = false;
+    bool m_deinterlace = false;
+    QString m_currentAspectRatio = "default";
+    int m_aspectRatioIndex = 0;
     QMutex m_mutex;
 };

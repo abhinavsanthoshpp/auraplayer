@@ -1,0 +1,65 @@
+name: Build Windows Release
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Qt 6
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.6.2'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+
+      - name: Download libmpv dev library
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path windows/lib
+          # Download libmpv Windows shared builds from official repository
+          Invoke-WebRequest -Uri "https://downloads.sourceforge.net/project/mpv-player-windows/libmpv/mpv-dev-x86_64-20240114-git-0a3be18.7z" -OutFile "windows/mpv-dev.7z" -UserAgent "NativeHost"
+          7z x windows/mpv-dev.7z -owindows/lib -y
+          Copy-Item windows/lib/include/* include/ -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Configure CMake
+        run: |
+          cmake -B build-win -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="windows/lib;$env:Qt6_DIR"
+
+      - name: Build Orion Player
+        run: |
+          cmake --build build-win --config Release --parallel
+
+      - name: Deploy Qt Dependencies
+        run: |
+          New-Item -ItemType Directory -Force -Path windows/dist
+          Copy-Item build-win/Release/orionplayer.exe windows/dist/
+          Copy-Item windows/lib/mpv-2.dll windows/dist/ -ErrorAction SilentlyContinue
+          windeployqt --release windows/dist/orionplayer.exe
+
+      - name: Create ZIP Package
+        shell: pwsh
+        run: |
+          Compress-Archive -Path windows/dist/* -DestinationPath OrionPlayer-v1.0.0-windows-x64.zip -Force
+
+      - name: Build NSIS Installer
+        uses: joncloud/makensis-action@v4
+        with:
+          script-file: "windows/installer.nsi"
+
+      - name: Upload Windows Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrionPlayer-Windows-x64
+          path: |
+            OrionPlayer-v1.0.0-windows-x64.zip
+            windows/OrionPlayer-Setup-v1.0.0.exe
