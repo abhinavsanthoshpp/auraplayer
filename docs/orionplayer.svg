@@ -1,116 +1,90 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <!-- Background Gradient -->
-    <radialGradient id="bgGrad" cx="50%" cy="30%" r="75%">
-      <stop offset="0%" stop-color="#141B2D"/>
-      <stop offset="50%" stop-color="#0A0E17"/>
-      <stop offset="100%" stop-color="#04060A"/>
-    </radialGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111625"/>
+      <stop offset="50%" stop-color="#0A0D15"/>
+      <stop offset="100%" stop-color="#040609"/>
+    </linearGradient>
 
-    <!-- Outer Glow Filter -->
-    <filter id="coreGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="14" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
+    <!-- Outer Rim Gradient -->
+    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8"/>
+      <stop offset="45%" stop-color="#1E293B" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.7"/>
+    </linearGradient>
 
-    <filter id="starGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-
-    <!-- Prism Gradient (Electric Cyan to Cosmic Purple) -->
-    <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Orbital 'O' Crescent Gradient -->
+    <linearGradient id="crescentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00F5FF"/>
-      <stop offset="45%" stop-color="#2563EB"/>
-      <stop offset="100%" stop-color="#7C3AED"/>
+      <stop offset="40%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
     </linearGradient>
 
-    <!-- Top Optical Facet Highlight -->
-    <linearGradient id="facetHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
-      <stop offset="50%" stop-color="#67E8F9" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.0"/>
+    <!-- Play Prism Top Facet Gradient -->
+    <linearGradient id="topFacetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="40%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
     </linearGradient>
 
-    <!-- Bottom Facet Shadow -->
-    <linearGradient id="facetShadow" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#1E1B4B" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#4338CA" stop-opacity="0.0"/>
+    <!-- Play Prism Bottom Facet Gradient -->
+    <linearGradient id="bottomFacetGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="60%" stop-color="#172554"/>
+      <stop offset="100%" stop-color="#0F172A"/>
     </linearGradient>
 
-    <!-- Starlight Constellation Ring -->
-    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F5FF" stop-opacity="0.6"/>
-      <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#A855F7" stop-opacity="0.5"/>
+    <!-- Center Spine Highlight -->
+    <linearGradient id="spineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#BAE6FD" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0284C7" stop-opacity="0.0"/>
     </linearGradient>
+
+    <!-- Glow Filter for Ambient Core -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
   </defs>
 
-  <!-- Base Squircle -->
-  <rect x="20" y="20" width="472" height="472" rx="116" ry="116" fill="url(#bgGrad)" stroke="#1F293D" stroke-width="3.5"/>
+  <!-- Base Rounded Squircle Chassis -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bgGrad)" stroke="url(#rimGrad)" stroke-width="2.5"/>
 
-  <!-- Celestial Coordinate Rings -->
-  <circle cx="256" cy="256" r="176" fill="none" stroke="url(#ringGrad)" stroke-width="2" stroke-dasharray="8 6" opacity="0.65"/>
-  <circle cx="256" cy="256" r="148" fill="none" stroke="#2563EB" stroke-width="1.2" opacity="0.25"/>
+  <!-- Ambient Soft Core Sheen -->
+  <circle cx="256" cy="256" r="140" fill="#0284C7" opacity="0.12" filter="url(#softGlow)"/>
 
-  <!-- Constellation Starlight Vectors (Orion's Skeleton) -->
-  <g stroke="#38BDF8" stroke-width="2.2" opacity="0.45" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Betelgeuse to Bellatrix -->
-    <line x1="168" y1="140" x2="344" y2="152"/>
-    <!-- Betelgeuse to Alnitak (Belt start) -->
-    <line x1="168" y1="140" x2="216" y2="280"/>
-    <!-- Bellatrix to Mintaka (Belt end) -->
-    <line x1="344" y1="152" x2="296" y2="232"/>
-    <!-- Belt line -->
-    <line x1="216" y1="280" x2="256" y2="256"/>
-    <line x1="256" y1="256" x2="296" y2="232"/>
-    <!-- Saiph to Alnitak -->
-    <line x1="188" y1="372" x2="216" y2="280"/>
-    <!-- Rigel to Mintaka -->
-    <line x1="334" y1="362" x2="296" y2="232"/>
-    <!-- Saiph to Rigel bottom crossbar -->
-    <line x1="188" y1="372" x2="334" y2="362"/>
+  <!-- Outer Orbital 'O' (The Orion Loop) -->
+  <path d="M 310,120
+           A 168,168 0 1,0 310,392
+           A 18,18 0 0,0 326,366
+           A 132,132 0 1,1 326,146
+           A 18,18 0 0,0 310,120 Z"
+        fill="url(#crescentGrad)"/>
+
+  <!-- Forward Action Play Prism (Integrated Core) -->
+  <g>
+    <!-- Top Main Facet -->
+    <polygon points="176,146 392,256 252,256" fill="url(#topFacetGrad)"/>
+
+    <!-- Bottom Main Facet -->
+    <polygon points="176,366 392,256 252,256" fill="url(#bottomFacetGrad)"/>
+
+    <!-- Left Core Base -->
+    <polygon points="176,146 252,256 176,366" fill="#1E293B"/>
+
+    <!-- Optical Specular Reflection (Sharp Bevel Sheen) -->
+    <polygon points="176,146 392,256 252,256" fill="url(#spineGrad)" opacity="0.4"/>
+
+    <!-- Precision Central Dividing Vector -->
+    <line x1="176" y1="256" x2="392" y2="256" stroke="#93C5FD" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+
+    <!-- Three Precision Belt Slits (Orion's Belt Signature) -->
+    <g stroke="#00F5FF" stroke-width="3" stroke-linecap="round">
+      <line x1="200" y1="210" x2="216" y2="242"/>
+      <line x1="222" y1="210" x2="238" y2="242"/>
+      <line x1="244" y1="210" x2="260" y2="242"/>
+    </g>
   </g>
-
-  <!-- Ambient Glow Behind Play Triangle -->
-  <polygon points="214,152 366,256 214,360" fill="url(#prismGrad)" opacity="0.35" filter="url(#coreGlow)"/>
-
-  <!-- Solid Play Prism -->
-  <polygon points="214,152 366,256 214,360" fill="url(#prismGrad)"/>
-
-  <!-- Top Geometric Facet (High-Tech Crystal Bevel) -->
-  <polygon points="214,152 366,256 260,256" fill="url(#facetHighlight)"/>
-
-  <!-- Bottom Geometric Facet -->
-  <polygon points="214,360 366,256 260,256" fill="url(#facetShadow)"/>
-
-  <!-- Constellation Anchor Stars (Glow and Core) -->
-  <!-- Betelgeuse (Alpha Orionis - Supergiant) -->
-  <circle cx="168" cy="140" r="9" fill="#F59E0B" opacity="0.4" filter="url(#starGlow)"/>
-  <circle cx="168" cy="140" r="4.5" fill="#FDE68A"/>
-
-  <!-- Bellatrix -->
-  <circle cx="344" cy="152" r="7" fill="#00F5FF" opacity="0.4" filter="url(#starGlow)"/>
-  <circle cx="344" cy="152" r="3.5" fill="#E0F2FE"/>
-
-  <!-- Rigel (Beta Orionis - Brilliant Blue Supergiant) -->
-  <circle cx="334" cy="362" r="9" fill="#38BDF8" opacity="0.4" filter="url(#starGlow)"/>
-  <circle cx="334" cy="362" r="4.5" fill="#F0F9FF"/>
-
-  <!-- Saiph -->
-  <circle cx="188" cy="372" r="6" fill="#818CF8" opacity="0.4" filter="url(#starGlow)"/>
-  <circle cx="188" cy="372" r="3" fill="#E0E7FF"/>
-
-  <!-- The Three Belt Stars (Aligned through the Play Center) -->
-  <g filter="url(#starGlow)">
-    <circle cx="216" cy="280" r="4.5" fill="#FFFFFF"/>
-    <circle cx="256" cy="256" r="6" fill="#FFFFFF"/>
-    <circle cx="296" cy="232" r="4.5" fill="#FFFFFF"/>
-  </g>
-  <circle cx="216" cy="280" r="2.5" fill="#00F5FF"/>
-  <circle cx="256" cy="256" r="3.5" fill="#00F5FF"/>
-  <circle cx="296" cy="232" r="2.5" fill="#00F5FF"/>
-
-  <!-- 4-Point Starlight Flare on the Central Star (Alnilam) -->
-  <path d="M 256 242 Q 256 256 270 256 Q 256 256 256 270 Q 256 256 242 256 Q 256 256 256 242 Z" fill="#FFFFFF" opacity="0.9"/>
 </svg>

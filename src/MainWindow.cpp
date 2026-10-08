@@ -279,7 +279,7 @@ void MainWindow::createMenuBar() {
 
     // Help menu
     auto *helpMenu = mb->addMenu("&Help");
-    helpMenu->addAction("💖 &Donate to Creator...", QKeySequence("Shift+D"), this, &MainWindow::onShowDonate);
+    helpMenu->addAction("&Donate to Creator...", QKeySequence("Shift+D"), this, &MainWindow::onShowDonate);
     helpMenu->addSeparator();
     helpMenu->addAction("&About OrionPlayer", QKeySequence("Shift+F1"), this, &MainWindow::onAbout);
 }
@@ -637,7 +637,7 @@ void MainWindow::onAbout() {
         "<p><b>Copyright © 2026 Abhinav Santhosh. All Rights Reserved.</b></p>"
         "<p>Author: <b>Abhinav Santhosh</b> (<a href='https://github.com/abhinavsanthoshpp'>@abhinavsanthoshpp</a>)<br>"
         "Website: <a href='https://abhinavsanthoshpp.github.io/orionplayer/'>abhinavsanthoshpp.github.io/orionplayer</a><br>"
-        "Support Creator: <a href='https://buymeacoffee.com/abhinavsanthoshpp'>☕ Buy Me a Coffee</a> | <b>UPI:</b> <code>abhinava6525@naviaxis</code></p>"
+        "Support Creator: <a href='https://buymeacoffee.com/abhinavsanthoshpp'>Buy Me a Coffee</a> | <b>UPI:</b> <code>abhinava6525@naviaxis</code></p>"
         "<p style='font-size: 11px; color: #8b949e;'>"
         "The software, website, brand, and design assets are the exclusive intellectual property "
         "of Abhinav Santhosh. Unauthorized reproduction, rebranding, or commercial distribution "
@@ -1055,7 +1055,7 @@ void MainWindow::showVideoContextMenu(const QPoint &globalPos) {
 
     menu.addAction("Playlist", QKeySequence("Ctrl+L"), this, &MainWindow::onTogglePlaylist);
     menu.addSeparator();
-    menu.addAction("💖 Support & Donate...", QKeySequence("Shift+D"), this, &MainWindow::onShowDonate);
+    menu.addAction("Support & Donate...", QKeySequence("Shift+D"), this, &MainWindow::onShowDonate);
     menu.addSeparator();
     menu.addAction("Quit", QKeySequence("Ctrl+Q"), this, &QWidget::close);
 

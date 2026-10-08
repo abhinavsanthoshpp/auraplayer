@@ -23,7 +23,7 @@ OrionMediaInfoDialog::OrionMediaInfoDialog(OrionEngine *engine, QWidget *parent)
     layout->setContentsMargins(14, 14, 14, 14);
     layout->setSpacing(10);
 
-    auto *headerLabel = new QLabel("📋 Stream & Codec Metadata", this);
+    auto *headerLabel = new QLabel("Stream & Codec Metadata", this);
     headerLabel->setStyleSheet("font-weight: bold; font-size: 15px; color: #58a6ff;");
     layout->addWidget(headerLabel);
 

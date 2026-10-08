@@ -33,11 +33,11 @@ void OrionPreferencesDialog::setupUi() {
     // Left category icons list
     m_categoryList = new QListWidget(this);
     m_categoryList->setFixedWidth(140);
-    m_categoryList->addItem("🖥️ Interface");
-    m_categoryList->addItem("🎵 Audio");
-    m_categoryList->addItem("🎬 Video");
-    m_categoryList->addItem("💬 Subtitles / OSD");
-    m_categoryList->addItem("⚙️ Input / Codecs");
+    m_categoryList->addItem("Interface");
+    m_categoryList->addItem("Audio");
+    m_categoryList->addItem("Video");
+    m_categoryList->addItem("Subtitles / OSD");
+    m_categoryList->addItem("Input / Codecs");
     m_categoryList->setCurrentRow(0);
     mainSplit->addWidget(m_categoryList);
 
